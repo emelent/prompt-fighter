@@ -4,7 +4,7 @@ A fighting game where you don't press buttons: you write a fight script in a sma
 
 ## Host the game
 
-You need Go 1.27 or later. The web app is already built and embedded, so Node isn't needed.
+Download `pf` for your platform from the GitHub Releases page, or build it yourself with Go 1.27 or later. The web app is already built and embedded, so Node isn't needed.
 
 ```sh
 go build -o pf ./cmd/pf
