@@ -5,11 +5,13 @@ import { matchRows, newRoundToOpen, POLL_BACKOFF_MS, POLL_MS } from './match';
 import { Playback } from './playback';
 import { eventLines, frameHash, lastFrame, parseFrameHash, parseLog, SPEEDS, type Speed, validateLog } from './replay';
 import { roundLabel } from './callouts';
+import { COUNTDOWN_SECONDS, Countdown, endButton, loadSimpleSettings, saveSimpleSettings, type EndButton } from './spectate';
 import { buildScene } from './scene';
 import { mountStage } from './stage';
 import type { GameEvent, Log, MatchView } from './types';
 import { alertBox, el, fetchJSON, show } from './dom';
 import { lobbyPage, playPage } from './play';
+import { watchPage } from './watch';
 
 // --- round player -----------------------------------------------------------
 
@@ -21,7 +23,27 @@ interface PlayerContext {
   autoplay?: boolean;
   /** The stored round number, for the intro ("ROUND n"); absent for local files. */
   round?: number;
+  /**
+   * full: the analysis viewer. simple: a player's own round, opened from the
+   * play page. spectator: a watch-page round. The simple modes hide everything
+   * but play/pause and rewind behind a settings menu.
+   */
+  mode?: 'full' | 'simple' | 'spectator';
+  /** The match, for the spectator's end-of-replay button. */
+  match?: MatchView;
 }
+
+/** One part of the simple player that the settings menu can show or hide. */
+type Part = 'scripts' | 'feed' | 'timeline' | 'speed' | 'toggles';
+
+const PART_LABELS: Record<Part | 'sound', string> = {
+  scripts: 'Scripts',
+  feed: 'Event feed',
+  timeline: 'Timeline and frame steps',
+  speed: 'Playback speed',
+  toggles: 'Checks and ranges',
+  sound: 'Sound',
+};
 
 const SOUND_PREF = 'pf.sound';
 
@@ -53,6 +75,9 @@ function renderPlayer(log: Log, ctx: PlayerContext): void {
   const start = parseFrameHash(location.hash);
   const last = lastFrame(log);
   const pb = new Playback(last);
+  const mode = ctx.mode ?? 'full';
+  const simple = mode !== 'full';
+  const settings = simple ? loadSimpleSettings() : null;
   let showChecks = false;
   let showRanges = false;
 
@@ -74,29 +99,98 @@ function renderPlayer(log: Log, ctx: PlayerContext): void {
   const speed = el('select', { 'aria-label': 'Playback speed' }, ...SPEEDS.map((s) => el('option', { value: String(s) }, `${s}×`)));
   speed.value = '1';
   speed.addEventListener('change', () => pb.setSpeed(Number(speed.value) as Speed));
+  if (settings) pb.setSpeed(settings.playbackSpeed);
   const frameOut = el('output', { class: 'frame-out', 'aria-label': 'Current frame' });
   const checksBox = el('input', { type: 'checkbox', 'aria-label': 'Show sensor checks in the event feed' });
   const rangesBox = el('input', { type: 'checkbox', 'aria-label': 'Show attack ranges' });
   const soundBox = el('input', { type: 'checkbox', 'aria-label': 'Play sound effects and music' });
   soundBox.checked = loadSoundPref();
   soundBox.addEventListener('change', () => saveSoundPref(soundBox.checked));
-  const controls = el(
-    'div',
-    { class: 'controls', role: 'toolbar', 'aria-label': 'Playback controls' },
-    btn('⏮', 'First frame', () => pb.step(-last)),
-    btn('−10', 'Back 10 frames', () => pb.step(-10)),
-    btn('−1', 'Back 1 frame', () => pb.step(-1)),
-    playBtn,
-    btn('+1', 'Forward 1 frame', () => pb.step(1)),
-    btn('+10', 'Forward 10 frames', () => pb.step(10)),
-    btn('⏭', 'Last frame', () => pb.step(last)),
-    scrub,
-    frameOut,
-    el('label', {}, 'speed ', speed),
-    el('label', {}, checksBox, ' checks'),
-    el('label', {}, rangesBox, ' ranges'),
-    el('label', {}, soundBox, ' sound'),
-  );
+  // The simple modes group the controls so the settings menu can show or hide
+  // each group; the full mode keeps its single row.
+  const groups: Record<Part, HTMLElement | null> = { scripts: null, feed: null, timeline: null, speed: null, toggles: null };
+  let settingsBox: HTMLElement | null = null;
+  let controls: HTMLElement;
+  if (!simple) {
+    controls = el(
+      'div',
+      { class: 'controls', role: 'toolbar', 'aria-label': 'Playback controls' },
+      btn('⏮', 'First frame', () => pb.step(-last)),
+      btn('−10', 'Back 10 frames', () => pb.step(-10)),
+      btn('−1', 'Back 1 frame', () => pb.step(-1)),
+      playBtn,
+      btn('+1', 'Forward 1 frame', () => pb.step(1)),
+      btn('+10', 'Forward 10 frames', () => pb.step(10)),
+      btn('⏭', 'Last frame', () => pb.step(last)),
+      scrub,
+      frameOut,
+      el('label', {}, 'speed ', speed),
+      el('label', {}, checksBox, ' checks'),
+      el('label', {}, rangesBox, ' ranges'),
+      el('label', {}, soundBox, ' sound'),
+    );
+  } else {
+    // Rewind returns to the start and keeps playing if it was playing.
+    const rewind = btn('⏮', 'Rewind to the start', () => {
+      const wasPlaying = pb.playing;
+      pb.seek(0);
+      if (wasPlaying && !pb.playing) pb.play();
+    });
+    groups.timeline = el(
+      'span',
+      { class: 'ctl-group ctl-timeline' },
+      btn('−10', 'Back 10 frames', () => pb.step(-10)),
+      btn('−1', 'Back 1 frame', () => pb.step(-1)),
+      btn('+1', 'Forward 1 frame', () => pb.step(1)),
+      btn('+10', 'Forward 10 frames', () => pb.step(10)),
+      btn('⏭', 'Last frame', () => pb.step(last)),
+      scrub,
+      frameOut,
+    );
+    groups.speed = el('label', { class: 'ctl-group' }, 'speed ', speed);
+    groups.toggles = el('span', { class: 'ctl-group' }, el('label', {}, checksBox, ' checks'), el('label', {}, rangesBox, ' ranges'));
+    const gear = el('button', { type: 'button', class: 'gear', 'aria-label': 'Settings', title: 'Settings', 'aria-expanded': 'false', 'aria-controls': 'player-settings' }, '⚙');
+    const menu = el('div', { class: 'settings-pop', id: 'player-settings', role: 'dialog', 'aria-label': 'Replay settings', hidden: 'hidden' });
+    for (const part of [...(Object.keys(groups) as Part[]), 'sound'] as const) {
+      const box = el('input', { type: 'checkbox' });
+      box.checked = settings![part];
+      box.addEventListener('change', () => {
+        settings![part] = box.checked;
+        saveSimpleSettings(settings!);
+        applyParts();
+      });
+      menu.append(el('label', {}, box, ` ${PART_LABELS[part]}`));
+    }
+    const close = () => {
+      menu.hidden = true;
+      gear.setAttribute('aria-expanded', 'false');
+    };
+    gear.addEventListener('click', () => {
+      menu.hidden = !menu.hidden;
+      gear.setAttribute('aria-expanded', String(!menu.hidden));
+      if (!menu.hidden) menu.querySelector('input')?.focus();
+    });
+    menu.addEventListener('keydown', (k) => {
+      if (k.key === 'Escape') {
+        close();
+        gear.focus();
+      }
+    });
+    document.addEventListener('pointerdown', (e) => {
+      if (!menu.hidden && e.target instanceof Node && !menu.contains(e.target) && !gear.contains(e.target)) close();
+    });
+    settingsBox = el('span', { class: 'settings' }, gear, menu);
+    controls = el(
+      'div',
+      { class: 'controls simple', role: 'toolbar', 'aria-label': 'Playback controls' },
+      el('span', { class: 'ctl-group ctl-core' }, rewind, playBtn),
+      groups.timeline,
+      groups.speed,
+      groups.toggles,
+      settingsBox,
+    );
+  }
+  const soundOn = () => (settings ? settings.sound : soundBox.checked);
 
   // Script panels
   const panels = log.players.map((p, i) => {
@@ -149,6 +243,11 @@ function renderPlayer(log: Log, ctx: PlayerContext): void {
     scrub.value = String(f);
     frameOut.textContent = `f ${f} / ${last}`;
     if (Number(speed.value) !== pb.speed) speed.value = String(pb.speed);
+    if (settings && pb.speed !== settings.playbackSpeed) {
+      settings.playbackSpeed = pb.speed;
+      saveSimpleSettings(settings);
+    }
+    updateEnd();
     // Script highlighting
     const sc = buildScene(log, f);
     sc.fighters.forEach((fd, i) => {
@@ -178,19 +277,97 @@ function renderPlayer(log: Log, ctx: PlayerContext): void {
   let ready = false; // no hash writes until the initial frame is applied
   pb.onChange(sync);
 
+  const feedPanel = el('section', { class: 'panel events', 'aria-label': 'Event feed' }, el('h2', {}, 'Events'), feedList);
+  const keysHint = el('p', { class: 'hint' }, 'Keys: Space play/pause · ←/→ 1 frame · Shift+←/→ 10 frames · Home/End · [ ] speed');
+  const endBar = el('div', { class: 'end-bar', role: 'status', 'aria-live': 'polite', hidden: 'hidden' });
+  // The hint keeps its space when it fades out, so the first click (which
+  // unlocks audio and hides it) does not shift the controls under the pointer.
+  const soundHint = el('p', { class: 'hint sound-hint quiet' }, 'Click or press a key for sound.');
   const layout = el(
     'div',
-    { class: 'player' },
+    { class: simple ? 'player simple' : 'player' },
     header,
     stageBox,
+    endBar,
+    soundHint,
     controls,
-    el('div', { class: 'panels' }, panels[0]!.panel, panels[1]!.panel, el('section', { class: 'panel events', 'aria-label': 'Event feed' }, el('h2', {}, 'Events'), feedList)),
-    el('p', { class: 'hint' }, 'Keys: Space play/pause · ←/→ 1 frame · Shift+←/→ 10 frames · Home/End · [ ] speed'),
+    el('div', { class: simple ? 'panels simple' : 'panels' }, panels[0]!.panel, panels[1]!.panel, feedPanel),
+    keysHint,
   );
+  // Show or hide the simple player's optional parts from the settings.
+  const applyParts = () => {
+    if (!settings) return;
+    for (const p of panels) p.panel.hidden = !settings.scripts;
+    feedPanel.hidden = !settings.feed;
+    for (const part of ['timeline', 'speed', 'toggles'] as const) groups[part]!.hidden = !settings[part];
+    keysHint.hidden = !settings.timeline;
+    soundHint.classList.toggle('quiet', !settings.sound || audioUnlocked);
+  };
+  let audioUnlocked = false;
+  const unlock = () => {
+    audioUnlocked = true;
+    soundHint.classList.add('quiet');
+  };
+  document.addEventListener('pointerdown', unlock, { once: true });
+  document.addEventListener('keydown', unlock, { once: true });
+
+  // End of the replay (simple modes): Done, or for spectators Next round with
+  // a countdown once the next round has been played. Polls while it waits.
+  const countdown = new Countdown();
+  let endKey = '';
+  let matchView: MatchView | null = ctx.match ?? null;
+  let poll: ReturnType<typeof setInterval> | null = null;
+  const stopPoll = () => {
+    if (poll !== null) clearInterval(poll);
+    poll = null;
+  };
+  const startPoll = () => {
+    if (poll !== null || !matchView) return;
+    const id = matchView.match_id;
+    poll = setInterval(() => {
+      void fetchJSON<MatchView>(`/matches/${encodeURIComponent(id)}`).then((r) => {
+        if (!r.ok) return;
+        matchView = r.data;
+        updateEnd();
+      });
+    }, POLL_MS);
+  };
+  const updateEnd = () => {
+    if (!simple) return;
+    const atEnd = pb.frame === last && !pb.playing && pb.intro === null;
+    if (!atEnd) {
+      if (endKey) {
+        endKey = '';
+        countdown.cancel();
+        stopPoll();
+        endBar.hidden = true;
+        endBar.replaceChildren();
+      }
+      return;
+    }
+    const doneHref = ctx.matchLink ?? '/play';
+    const spec: EndButton = mode === 'spectator' && matchView && ctx.round ? endButton(matchView, ctx.round) : { kind: 'done', href: doneHref };
+    const key = `${spec.kind} ${spec.href}`;
+    if (key === endKey) return;
+    endKey = key;
+    countdown.cancel();
+    const go = el('button', { type: 'button', class: 'end-btn' }, spec.kind === 'next' ? 'Next round' : 'Done');
+    go.addEventListener('click', () => location.assign(spec.href));
+    const note = el('span', { class: 'countdown' });
+    endBar.replaceChildren(go, note);
+    endBar.hidden = false;
+    if (spec.kind === 'next') {
+      stopPoll();
+      countdown.start(COUNTDOWN_SECONDS, (left) => (note.textContent = `Round ${spec.round} starting in ${left}`), () => location.assign(spec.href));
+    } else if (mode === 'spectator' && matchView?.status !== 'finished') {
+      startPoll();
+    }
+  };
   show(layout);
+  applyParts();
   buildFeed();
 
-  const { scene } = mountStage(stageBox, { log, playback: pb, showRanges: () => showRanges, roundLabel: roundLabel(ctx.round ?? null), soundOn: () => soundBox.checked });
+  const { scene } = mountStage(stageBox, { log, playback: pb, showRanges: () => showRanges, roundLabel: roundLabel(ctx.round ?? null), soundOn });
   stageScene = scene;
 
   pb.seek(start ?? 0);
@@ -237,11 +414,12 @@ function renderPlayer(log: Log, ctx: PlayerContext): void {
   });
 }
 
-async function roundPage(id: string, n: number): Promise<void> {
+async function roundPage(id: string, n: number, watching = false): Promise<void> {
   show(el('p', {}, `Loading match ${id}, round ${n}…`));
   const params = new URLSearchParams(location.search);
   const fromPlay = params.get('from') === 'play';
-  const matchURL = fromPlay ? `/play/matches/${encodeURIComponent(id)}` : `/view/matches/${encodeURIComponent(id)}`;
+  const enc = encodeURIComponent(id);
+  const matchURL = watching ? `/watch/matches/${enc}?after=${n}` : fromPlay ? `/play/matches/${enc}` : `/view/matches/${enc}`;
   const [logRes, matchRes] = await Promise.all([
     fetchJSON<unknown>(`/matches/${encodeURIComponent(id)}/rounds/${n}`),
     fetchJSON<MatchView>(`/matches/${encodeURIComponent(id)}`),
@@ -272,7 +450,15 @@ async function roundPage(id: string, n: number): Promise<void> {
       heading += ` · seat ${r.p1}${seat ? ` (${seat.name})` : ''} played p1`;
     }
   }
-  renderPlayer(log, { heading, matchLink: matchURL, backLabel: fromPlay ? '← back to the match' : '← back to match', autoplay: params.get('autoplay') === '1', round: n });
+  renderPlayer(log, {
+    heading,
+    matchLink: matchURL,
+    backLabel: watching ? '← waiting screen' : fromPlay ? '← back to the match' : '← back to match',
+    autoplay: params.get('autoplay') === '1',
+    round: n,
+    mode: watching ? 'spectator' : fromPlay ? 'simple' : 'full',
+    ...(matchRes.ok ? { match: matchRes.data } : {}),
+  });
 }
 
 // --- live match page ----------------------------------------------------------
@@ -368,9 +554,10 @@ function homePage(): void {
 function route(): void {
   const path = location.pathname.replace(/\/+$/, '');
   const playing = path === '/play' || path.startsWith('/play/');
+  const watching = path.startsWith('/watch/');
   const subtitle = document.querySelector('.subtitle');
-  if (subtitle) subtitle.textContent = playing ? 'play' : 'replay viewer';
-  document.title = playing ? 'Prompt Fighter — Play' : 'Prompt Fighter — Replay viewer';
+  if (subtitle) subtitle.textContent = playing ? 'play' : watching ? 'watch' : 'replay viewer';
+  document.title = playing ? 'Prompt Fighter — Play' : watching ? 'Prompt Fighter — Watch' : 'Prompt Fighter — Replay viewer';
   if (path === '/play') {
     lobbyPage();
     return;
@@ -378,6 +565,16 @@ function route(): void {
   const pm = /^\/play\/matches\/([^/]+)$/.exec(path);
   if (pm?.[1]) {
     playPage(decodeURIComponent(pm[1]));
+    return;
+  }
+  const wr = /^\/watch\/matches\/([^/]+)\/rounds\/(\d+)$/.exec(path);
+  if (wr?.[1] && wr[2]) {
+    void roundPage(decodeURIComponent(wr[1]), Number(wr[2]), true);
+    return;
+  }
+  const wm = /^\/watch\/matches\/([^/]+)$/.exec(path);
+  if (wm?.[1]) {
+    watchPage(decodeURIComponent(wm[1]));
     return;
   }
   let m = /^\/view\/matches\/([^/]+)\/rounds\/(\d+)$/.exec(path);

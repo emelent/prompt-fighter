@@ -85,6 +85,8 @@ func New(opts Options) (*Server, error) {
 	s.route("/view/matches/{id}", s.handleViewerPage, http.MethodGet)
 	s.route("/view/matches/{id}/rounds/{n}", s.handleViewerPage, http.MethodGet)
 	s.route("/view/static/{file}", s.handleViewerAsset, http.MethodGet)
+	s.route("/watch/matches/{id}", s.handleViewerPage, http.MethodGet)
+	s.route("/watch/matches/{id}/rounds/{n}", s.handleViewerPage, http.MethodGet)
 	s.route("/play", s.handleViewerPage, http.MethodGet)
 	s.route("/play/matches/{id}", s.handleViewerPage, http.MethodGet)
 	s.route("/{$}", s.handleRoot, http.MethodGet)

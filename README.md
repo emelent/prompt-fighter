@@ -13,6 +13,8 @@ go build -o pf ./cmd/pf
 
 Open http://127.0.0.1:8080/ to reach the lobby. Create a match, write or pick a script, and send the invite link to your opponent. Each round's replay plays in the browser when the round is played.
 
+Anyone else can watch: paste a match id or link into the lobby's **Watch a match** box, or share the watch link from the play page (`/watch/matches/{id}`). Spectators see a waiting screen between rounds and each round in a simple player, with more views behind its ⚙ settings menu.
+
 To let others on your network join, bind to all interfaces:
 
 ```sh

@@ -34,7 +34,7 @@ func checkViewerHeaders(t *testing.T, path string, h map[string][]string) {
 
 func TestViewPagesAreHTML(t *testing.T) {
 	s := newTestServer(t)
-	for _, p := range []string{"/view", "/view/matches/0123456789abcdef", "/view/matches/0123456789abcdef/rounds/2"} {
+	for _, p := range []string{"/view", "/view/matches/0123456789abcdef", "/view/matches/0123456789abcdef/rounds/2", "/watch/matches/0123456789abcdef", "/watch/matches/0123456789abcdef/rounds/2"} {
 		rec := do(t, s, "GET", p, "")
 		if rec.Code != 200 || rec.Header().Get("Content-Type") != "text/html; charset=utf-8" {
 			t.Errorf("%s: %d %q", p, rec.Code, rec.Header().Get("Content-Type"))

@@ -6,6 +6,8 @@ import { otherSeat, playState, seatView, type PlayState, type StoredSeat } from 
 import { SAMPLES, sample } from './samples';
 import { browserSeatStore, LOBBY_DRAFT, type SeatStore } from './seats';
 import type { Log, MatchView, Seat } from './types';
+import { loadSimpleSettings, matchIdFrom, saveSimpleSettings } from './spectate';
+import menuMusicUrl from './audio/menu.mp3';
 
 interface SeatResponse {
   match_id: string;
@@ -65,6 +67,68 @@ function persistenceNotice(store: SeatStore): HTMLElement | null {
   return store.persistent ? null : el('p', { class: 'notice' }, 'This browser does not allow local storage: your seat and drafts will be lost if you reload the page.');
 }
 
+// --- watch link and menu music ---------------------------------------------------
+
+/** The shareable spectator link for a match, with a copy button. */
+function watchLinkRow(id: string): HTMLElement {
+  const url = `${location.origin}/watch/matches/${encodeURIComponent(id)}`;
+  const input = el('input', { type: 'text', readonly: 'readonly', value: url, 'aria-label': 'Watch link', class: 'invite' });
+  const copy = el('button', { type: 'button' }, 'Copy watch link');
+  copy.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(url);
+      copy.textContent = 'Copied ✓';
+    } catch {
+      input.select();
+    }
+  });
+  return el('p', { class: 'watch-link hint' }, 'Spectators: ', input, copy);
+}
+
+let menuAudio: HTMLAudioElement | null = null;
+
+/**
+ * Loops the menu music while the lobby is open, from the first click or key
+ * press (browsers block audio until then), with a sound toggle that shares
+ * the replay player's sound setting.
+ */
+function menuMusic(): HTMLElement {
+  const settings = loadSimpleSettings();
+  const audio = new Audio(menuMusicUrl);
+  audio.loop = true;
+  audio.volume = 0.4;
+  menuAudio = audio;
+  const tryPlay = () => {
+    if (settings.sound && audio.paused) void audio.play().catch(() => {});
+  };
+  const gesture = () => {
+    tryPlay();
+    if (!audio.paused || !settings.sound) {
+      document.removeEventListener('pointerdown', gesture);
+      document.removeEventListener('keydown', gesture);
+    }
+  };
+  document.addEventListener('pointerdown', gesture);
+  document.addEventListener('keydown', gesture);
+  tryPlay(); // works when the browser already allows audio
+  const box = el('input', { type: 'checkbox', 'aria-label': 'Play the menu music' });
+  box.checked = settings.sound;
+  box.addEventListener('change', () => {
+    const latest = loadSimpleSettings();
+    latest.sound = settings.sound = box.checked;
+    saveSimpleSettings(latest);
+    if (box.checked) tryPlay();
+    else audio.pause();
+  });
+  return el('label', { class: 'menu-sound' }, box, ' sound');
+}
+
+/** Stops the menu music (when the lobby is left within the page). */
+export function stopMenuMusic(): void {
+  menuAudio?.pause();
+  menuAudio = null;
+}
+
 // --- lobby ---------------------------------------------------------------------
 
 export function lobbyPage(): void {
@@ -103,15 +167,26 @@ export function lobbyPage(): void {
     if (id) location.assign(`/play/matches/${encodeURIComponent(id)}`);
   });
 
+  const watchInput = el('input', { type: 'text', 'aria-label': 'Match id or link to watch', placeholder: 'match id or link', autocomplete: 'off', spellcheck: 'false' });
+  const watchErr = el('p', { class: 'notice', 'aria-live': 'polite' });
+  const watch = el('form', { class: 'open-match' }, watchInput, el('button', { type: 'submit' }, 'Watch'));
+  watch.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const wid = matchIdFrom(watchInput.value);
+    if (wid) location.assign(`/watch/matches/${wid}`);
+    else watchErr.textContent = 'That is not a match id or a match link (a match id is 16 characters, 0-9 and a-f).';
+  });
+
   show(
     el(
       'div',
       { class: 'play' },
-      el('h1', {}, 'Play Prompt Fighter'),
+      el('div', { class: 'lobby-head' }, el('h1', {}, 'Play Prompt Fighter'), menuMusic()),
       el('p', { class: 'hint' }, 'Write your fighter’s script, create a match, and send the invite link to your opponent. Best of 3: you may revise your script before every round.'),
       persistenceNotice(store),
       el('section', { class: 'card' }, el('h2', {}, 'Create a match'), el('label', { class: 'field' }, 'Name ', name), panel, el('div', { class: 'actions' }, create), createErr),
       el('section', { class: 'card' }, el('h2', {}, 'Join a match'), el('p', { class: 'hint' }, 'Open an invite link, or paste its match id:'), open),
+      el('section', { class: 'card' }, el('h2', {}, 'Watch a match'), el('p', { class: 'hint' }, 'Paste a match id or any link to the match to watch it as a spectator:'), watch, watchErr),
       el('p', { class: 'hint' }, 'Rules and language: see the player guide. Replays of any match: ', el('a', { href: '/view' }, 'replay viewer'), '.'),
     ),
   );
@@ -121,6 +196,7 @@ export function lobbyPage(): void {
 // --- play page -----------------------------------------------------------------
 
 export function playPage(id: string): void {
+  stopMenuMusic();
   const store = browserSeatStore();
   const enc = encodeURIComponent(id);
   let view: MatchView | null = null;
@@ -244,7 +320,7 @@ export function playPage(id: string): void {
     const v = s.view;
     const mine = s.kind === 'join' || s.kind === 'spectator' ? null : s.seat;
     const head: HTMLElement[] = [el('h1', {}, `Match ${id}`), el('ul', { class: 'seats' }, seatLine(v, 'a', mine), seatLine(v, 'b', mine))];
-    if (mine) head.push(el('p', { class: 'hint' }, `You are seat ${mine.seat} (${mine.name}) on this browser · `, forgetButton()));
+    if (mine) head.push(el('p', { class: 'hint' }, `You are seat ${mine.seat} (${mine.name}) on this browser · `, forgetButton()), watchLinkRow(id));
     header.replaceChildren(...head);
     roundsList.replaceChildren(
       v.rounds.length
@@ -263,7 +339,7 @@ export function playPage(id: string): void {
         );
         break;
       case 'spectator':
-        body.replaceChildren(el('section', { class: 'card' }, el('h2', {}, 'This match is full'), el('p', {}, 'Both seats are taken. You can watch it in the replay viewer: ', el('a', { href: `/view/matches/${enc}` }, 'open the match'), '.')));
+        body.replaceChildren(el('section', { class: 'card' }, el('h2', {}, 'This match is full'), el('p', {}, 'Both seats are taken. You can still ', el('a', { href: `/watch/matches/${enc}` }, 'watch the match'), ' as a spectator.')));
         break;
       case 'waitingOpponent': {
         const inviteInput = el('input', { type: 'text', readonly: 'readonly', value: invite, 'aria-label': 'Invite link', class: 'invite' });

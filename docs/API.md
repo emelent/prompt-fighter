@@ -46,6 +46,8 @@ The [player guide](PLAYER_GUIDE.md) is what the model should read first. It's av
 | GET | `/view/static/{file}` | viewer assets (JS/CSS) |
 | GET | `/play` | lobby: create or join a match (HTML) |
 | GET | `/play/matches/{id}` | play page: write, validate and submit scripts; waits and auto-plays each round (HTML) |
+| GET | `/watch/matches/{id}` | spectator waiting screen: round, score, who has submitted; counts down into each new round (HTML) |
+| GET | `/watch/matches/{id}/rounds/{n}` | spectator round replay in the simple player (HTML) |
 | GET | `/{$}` | the exact root `/`: redirects to `/play` |
 
 All API requests and responses are JSON, and unknown JSON fields are rejected. The `/view` pages and assets are the only non-JSON responses (see Replay viewer).
@@ -162,7 +164,7 @@ Returns the stored event log of played round `n`. It's byte-identical to `sim.Si
 
 | URL | page |
 |---|---|
-| `/play` | **lobby**: create a match (name + round-1 script) or open one by id |
+| `/play` | **lobby**: create a match (name + round-1 script), open one by id, or watch one (id or any match link). Plays the menu music on a loop after the first click; the "sound" toggle turns it off |
 | `/play/matches/{id}` | **play page**: the page each player keeps open during a match. It's also the invite link to send your opponent. |
 
 **What the play page shows,** depending on the match and on whether this browser holds a seat:
@@ -192,6 +194,22 @@ Returns the stored event log of played round `n`. It's byte-identical to `sim.Si
 - The token is what lets you submit for your seat, so don't share it.
 
 The pages use only the API above; no extra endpoints exist for them. They're served with the same strict Content-Security-Policy as the viewer. The editor renders inside a shadow root, so its styles need no CSP exception.
+
+## Watching a match
+
+Anyone can watch a match without a seat or token. Open the lobby's **Watch a match** box, or the watch link each player sees on their play page (`/watch/matches/{id}`, with a copy button). Spectators only read `GET /matches/{id}` and the round logs; they can't change anything.
+
+| URL | page |
+|---|---|
+| `/watch/matches/{id}` | **waiting screen**: the round being waited for, the score, who has submitted and who we're waiting for, and links to played rounds. It polls every 2 s. When a round is played it shows "Round N starting in 5… 1" (with a **Watch now** button) and opens it. When the match is over it shows the result. Opened directly, it counts the rounds already played as watched and waits for the next one |
+| `/watch/matches/{id}/rounds/{n}` | **spectator replay** in the simple round player. At the last frame: **Next round** with a 5-second countdown if the next round has been played (the page keeps polling, so this appears as soon as it is), otherwise **Done**, back to the waiting screen |
+
+**The simple round player** is used by spectator replays and by players watching their own rounds from the play page (`?from=play`, where **Done** returns to the play page):
+- Only play/pause, rewind (back to the start) and a ⚙ settings button are shown. Playback starts at 0.5× with sound on, and the scripts are hidden.
+- The settings menu turns on the scripts, event feed, timeline and frame steps, speed control, checks and ranges, and sound.
+- Choices and the chosen speed are remembered in the browser (`localStorage`, key `pf.simple`). Keyboard shortcuts still work.
+
+The `/view` pages below keep the full controls.
 
 ## Replay viewer
 

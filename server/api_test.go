@@ -55,7 +55,7 @@ func TestDecodeOversizedBody(t *testing.T) {
 
 func TestRoutesList(t *testing.T) {
 	s := newTestServer(t)
-	want := "GET /healthz,GET /matches/{id},GET /matches/{id}/rounds/{n},GET /play,GET /play/matches/{id},GET /view,GET /view/matches/{id},GET /view/matches/{id}/rounds/{n},GET /view/static/{file},GET /{$},POST /matches,POST /matches/{id}/join,POST /matches/{id}/scripts,POST /sim,POST /validate"
+	want := "GET /healthz,GET /matches/{id},GET /matches/{id}/rounds/{n},GET /play,GET /play/matches/{id},GET /view,GET /view/matches/{id},GET /view/matches/{id}/rounds/{n},GET /view/static/{file},GET /watch/matches/{id},GET /watch/matches/{id}/rounds/{n},GET /{$},POST /matches,POST /matches/{id}/join,POST /matches/{id}/scripts,POST /sim,POST /validate"
 	if got := strings.Join(s.Routes(), ","); got != want {
 		t.Errorf("routes %s", got)
 	}

@@ -91,3 +91,17 @@ Implemented by the OpenSpec change `anti-passivity-rules` (config `2026.11-3`): 
 - **Stale reach can drop below the minimum distance:** a throw (range 5) at 70% reach is 3, below the 4-unit minimum separation, so it can never connect again. That's intended as a strong penalty, but the guide could say so explicitly.
 - **Golden coverage:** the golden pairs include stale attacks and a boost (`ducker_vs_lazy`) but no guard break. The rule is covered by `sim/guardbreak_test.go` and synthetic viewer tests. A sample pair that breaks a guard would make the replay fixtures show it too.
 - **Rushdown is strong:** after the retune it beats four of five samples and loses only to `ducker`. Balance holds by the test's definition (at least one win and one loss each), but the spread is uneven.
+
+## Spectator mode
+
+Implemented by the OpenSpec change `add-spectator-mode`:
+- watch pages (`/watch/matches/{id}` and its rounds) with a waiting screen and countdowns between rounds
+- the simple round player, with a settings menu, for spectators and for players' own replays
+- the lobby's Watch box and the play page's watch link
+- looping menu music in the lobby
+
+### Follow-ups
+- **Live matches in the lobby:** spectators still need an id or link. Listing matches in progress needs a list endpoint (see Phase 5).
+- **Spectator count:** players can't see that anyone is watching. That needs server-side presence, such as counting watch-page polls.
+- **Sound on every page:** browsers require a click per page before audio plays, and each round is a new page, so a spectator clicks once per round. Keeping one page alive across rounds (swapping the stage instead of navigating) would remove that.
+- **Menu music beyond the lobby:** the waiting screen is silent. It could reuse the menu track.
