@@ -21,7 +21,16 @@ All six review issues were decided and implemented in the OpenSpec change `phase
 
 ## Phase 2: HTTP server
 
-- **Optional `--config` override for `pf sim`:** a JSON override for balance experiments. This is CLI-only, so it needs no spec change and can land in any phase (carried over from the Phase 1 design's open questions).
+Implemented by the OpenSpec change `add-http-server`: `pf serve`, the stateless `/validate` and `/sim` endpoints, and best-of-3 matches with revision between rounds, stored as JSON files on disk. The API is described in `docs/API.md`.
+
+### Follow-ups (not blocking Phase 3)
+- **Idle-seat forfeit or timeout:** a seat that never submits stalls its match forever. A rule could forfeit a round, or the match, after N minutes. It can be added as a new requirement without changing the existing endpoints.
+- **Match cleanup:** matches are never deleted or expired, so disk use grows without bound. Needed before any public deployment (Phase 5).
+- **Multi-process locking:** per-match locks are in-process only, so two `pf serve` processes on the same data directory could play a round twice. A lock file, or a database, would fix it. Only needed if the server is ever scaled out.
+
+## Any phase
+
+- **Optional `--config` override for `pf sim`:** a JSON override for balance experiments. It is CLI-only and needs no spec change (carried over from the Phase 1 design's open questions).
 
 ## Phase 3: MCP server and player guide
 

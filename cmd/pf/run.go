@@ -18,7 +18,8 @@ import (
 const usage = `usage:
   pf validate <file>...
   pf sim <a.pf> <b.pf> [--json] [--frames N] [-v]
-  pf selfplay <dir>`
+  pf selfplay <dir>
+  pf serve [--addr HOST:PORT] [--data DIR]`
 
 func run(args []string, stdout, stderr io.Writer) int {
 	if len(args) == 0 {
@@ -32,6 +33,8 @@ func run(args []string, stdout, stderr io.Writer) int {
 		return cmdSim(args[1:], stdout, stderr)
 	case "selfplay":
 		return cmdSelfplay(args[1:], stdout, stderr)
+	case "serve":
+		return cmdServeSignals(args[1:], stdout, stderr)
 	case "-h", "--help", "help":
 		fmt.Fprintln(stdout, usage)
 		return 0
