@@ -75,7 +75,7 @@ Sensors SHALL report the following, from the reading fighter's perspective:
 - An overlay SHALL NOT reset or pause the stance's timer. An overlay attack occupies the interpreter until it finishes.
 - Any other action, including a second air attack, SHALL wait until the stance has fully ended (including landing or duck recovery) and then execute normally.
 
-An air attack still in progress when the fighter lands SHALL end on landing. If a `low_jab` is in progress when the duck hold would expire, the hold SHALL extend until the `low_jab` finishes.
+An air attack still in progress when the fighter lands SHALL end on landing, unless it started in the landing-low zone (airborne frames 17–20). Such an attack SHALL continue to completion after touchdown, with landing recovery running at the same time, and the interpreter SHALL wait until both have finished. If a `low_jab` is in progress when the duck hold would expire, the hold SHALL extend until the `low_jab` finishes.
 
 #### Scenario: Jump kick overlay
 - **WHEN** a script is `jump_forward kick`
@@ -96,6 +96,14 @@ An air attack still in progress when the fighter lands SHALL end on landing. If 
 #### Scenario: Checks run during a stance
 - **WHEN** a script is `jump_forward if distance < 12 { kick }`
 - **THEN** the jump starts on airborne frame 1, the `distance` read happens on airborne frames 2–3, and, if the read is true, `jump_kick` starts on airborne frame 4
+
+#### Scenario: Falling air attack ends on landing
+- **WHEN** a script is `jump wait 14 kick wait 1`, so the `jump_kick` starts on airborne frame 16
+- **THEN** the jump kick ends at touchdown before finishing its active frames
+
+#### Scenario: Landing-low attack carries through touchdown
+- **WHEN** a script is `jump wait 16 kick wait 1`, so the `jump_kick` starts on airborne frame 18
+- **THEN** the jump kick keeps all 5 of its active frames after touchdown, and the `wait` starts only after both the attack and landing recovery have finished
 
 ### Requirement: Interrupts and handlers
 When a fighter is hit (entering hitstun or knockdown, including from a throw), its current action and any active stance SHALL be abandoned and its interpreter frozen. When it becomes actionable again, it SHALL run `on_hit` if defined, then resume at the statement after the interrupted one. When a fighter's own attack is blocked, its attack SHALL be abandoned and it SHALL enter blockstun. When that blockstun ends, it SHALL run `on_block` if defined, then resume at the statement after the interrupted one.

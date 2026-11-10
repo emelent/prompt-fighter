@@ -104,16 +104,34 @@ func TestStanceWaitIsConcurrent(t *testing.T) {
 	}
 }
 
-func TestStanceAirAttackEndsOnLanding(t *testing.T) {
-	// kick on airborne frame 16 (frame 16): jump_kick would last to frame 23
-	// but the jump lands at frame 20.
-	l := run(t, "jump wait 15 kick wait 1", "", frames(30))
-	if got := animRow(l, 0, 16, 22); got != "jump_kick/s jump_kick/s jump_kick/s jump_kick/a landing landing idle" {
+func TestStanceFallingAirAttackEndsOnLanding(t *testing.T) {
+	// kick on frame 15 = airborne frame 16 (falling overhead): active from
+	// frame 18, cut off at touchdown (frame 20) after 2 of its 5 active frames.
+	l := run(t, "jump wait 14 kick wait 1", "", frames(30))
+	if got := animRow(l, 0, 15, 21); got != "jump_kick/s jump_kick/s jump_kick/s jump_kick/a jump_kick/a landing landing" {
 		t.Errorf("got %s", got)
 	}
 	// The trailing wait runs concurrently with landing recovery (frame 20).
 	if got := events(l, "script_end", "p1"); len(got) != 1 || got[0].Frame != 21 {
 		t.Errorf("script_end = %v, want frame 21", got)
+	}
+}
+
+func TestStanceLandingLowCarriesThrough(t *testing.T) {
+	// kick on frame 17 = airborne frame 18 (landing low): startup 17-19 in the
+	// air, then all 5 active frames 20-24 on the ground.
+	l := run(t, "jump wait 16 kick wait 1", "", frames(30))
+	if got := animRow(l, 0, 17, 25); got != "jump_kick/s jump_kick/s jump_kick/s jump_kick/a jump_kick/a jump_kick/a jump_kick/a jump_kick/a wait" {
+		t.Errorf("got %s", got)
+	}
+	for f := 20; f <= 24; f++ {
+		if ff := p(l, f, 0); ff.State != "attack" || ff.Y != 0 {
+			t.Errorf("frame %d: %+v, want grounded attack", f, ff)
+		}
+	}
+	// The wait starts only after the attack (and landing recovery) finished.
+	if e := events(l, "script_end", "p1"); len(e) != 1 || e[0].Frame != 26 {
+		t.Errorf("script_end = %v, want frame 26", e)
 	}
 }
 

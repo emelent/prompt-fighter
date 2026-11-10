@@ -66,8 +66,9 @@ func TestComboKnockdownCap(t *testing.T) {
 }
 
 func TestComboResetsWhenActionable(t *testing.T) {
-	// Default hitstun is too short for punch combos: every hit is combo 1.
-	l := run(t, "repeat 3 { punch }", "", startX(30, 36), frames(40), func(c *Config) { c.HitPushback = 0 })
+	// With a short hitstun the defender is actionable between punches, so every
+	// hit starts a new combo.
+	l := run(t, "repeat 3 { punch }", "", startX(30, 36), frames(40), func(c *Config) { c.Hitstun, c.HitPushback = 5, 0 })
 	for _, h := range events(l, "hit", "p1") {
 		if h.Detail.Combo != 1 {
 			t.Errorf("hit %s combo %d, want 1", evStr(h), h.Detail.Combo)
@@ -76,13 +77,14 @@ func TestComboResetsWhenActionable(t *testing.T) {
 }
 
 func TestKnockdownInvulnerable(t *testing.T) {
-	// throw knocks down at frame 5 (through frame 25); the punch is active 24-25.
-	l := run(t, "throw punch", "", startX(30, 34), frames(40))
+	// throw (24 frames) knocks down at frame 5; with a 40-frame knockdown
+	// (through frame 45) the following punch is active 27-28 on a downed target.
+	l := run(t, "throw punch", "", startX(30, 34), frames(50), func(c *Config) { c.KnockdownFrames = 40 })
 	w := whiffs(l, "p1")
-	if len(w) != 1 || w[0] != `f25 p1 whiff {"attack":"punch","reason":"invulnerable"}` {
+	if len(w) != 1 || w[0] != `f28 p1 whiff {"attack":"punch","reason":"invulnerable"}` {
 		t.Errorf("whiffs = %v", w)
 	}
-	for f := 5; f <= 25; f++ {
+	for f := 5; f <= 45; f++ {
 		if ff := p(l, f, 1); ff.State != "knockdown" || !ff.Invulnerable {
 			t.Errorf("frame %d: %+v", f, ff)
 		}

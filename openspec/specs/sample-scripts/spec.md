@@ -13,6 +13,7 @@ The repository SHALL include at least these valid scripts in `/scripts`, each wi
 - `jumper.pf`: relies primarily on jumps and air attacks.
 - `thrower.pf`: closes distance and uses throws as its main damage.
 - `lazy.pf`: contains no sensor reads at all.
+- `ducker.pf`: relies on `duck` to avoid grounded high attacks and counters with low attacks (`low_jab`, `sweep`).
 
 #### Scenario: All samples validate
 - **WHEN** `pf validate scripts/*.pf` is run
@@ -21,6 +22,10 @@ The repository SHALL include at least these valid scripts in `/scripts`, each wi
 #### Scenario: Lazy has no checks
 - **WHEN** `lazy.pf` is simulated against any opponent
 - **THEN** the log contains no `check` events with actor equal to lazy's player id
+
+#### Scenario: Ducker ducks
+- **WHEN** `ducker.pf` is simulated against any other sample
+- **THEN** its fighter is in the `duck` state on at least one frame
 
 ### Requirement: Non-transitive balance among samples
 Under the default config, each sample script SHALL beat at least one other sample and lose to at least one other sample. A script "beats" another when it has more wins than losses against it across both side assignments in `pf selfplay`. This SHALL be enforced by an automated test.

@@ -14,23 +14,23 @@ func TestHitAppliesHitstunAndPushback(t *testing.T) {
 	if h[0].Target != "p2" {
 		t.Errorf("target %q", h[0].Target)
 	}
-	if d := p(l, 3, 1).X - p(l, 3, 0).X; d != 9 {
-		t.Errorf("distance after hit = %d, want 9", d)
+	if d := p(l, 3, 1).X - p(l, 3, 0).X; d != 8 {
+		t.Errorf("distance after hit = %d, want 8 (pushback 2)", d)
 	}
-	for f := 3; f <= 8; f++ {
+	for f := 3; f <= 16; f++ {
 		if p(l, f, 1).State != "hitstun" || p(l, f, 1).ScriptLine != 0 {
 			t.Errorf("frame %d: %+v, want hitstun with no script input", f, p(l, f, 1))
 		}
 	}
-	if p(l, 9, 1).State == "hitstun" {
-		t.Errorf("hitstun lasts 5 frames after the hit frame")
+	if p(l, 17, 1).State == "hitstun" {
+		t.Errorf("hitstun lasts 13 frames after the hit frame")
 	}
 }
 
 func TestHitPushbackTransfersAtWall(t *testing.T) {
 	l := run(t, "", "punch", startX(3, 9), frames(10))
-	if a, b := p(l, 3, 0).X, p(l, 3, 1).X; a != 2 || b != 11 {
-		t.Errorf("x = %d,%d, want 2,11", a, b)
+	if a, b := p(l, 3, 0).X, p(l, 3, 1).X; a != 2 || b != 10 {
+		t.Errorf("x = %d,%d, want 2,10", a, b)
 	}
 }
 

@@ -42,11 +42,12 @@ type act struct {
 	// attacks
 	attack        dsl.Attack
 	spec          AttackSpec
+	zone          AirZoneKind // air attacks: fixed at start from the airborne frame
 	connected     bool
 	reachedActive bool
 	reason        string
 
-	// blocks
+	// blocks: guarded height; attacks: effective hit height
 	block  dsl.Action
 	height Height
 	hold   int
@@ -278,10 +279,14 @@ func (f *fighter) begin(a *act) {
 }
 
 func (f *fighter) startAttack(atk dsl.Attack, line int) {
+	spec := f.cfg().Attacks[atk]
+	a := &act{kind: akAttack, stmt: true, line: line, attack: atk, spec: spec, height: spec.Height}
 	if isAirAttack(atk) {
 		f.airUsed = true
+		a.zone = f.cfg().airZone(f.stanceK(f.w.t))
+		a.height = a.zone.height()
 	}
-	f.begin(&act{kind: akAttack, stmt: true, line: line, attack: atk, spec: f.cfg().Attacks[atk]})
+	f.begin(a)
 }
 
 func (f *fighter) tryAction(st *dsl.ActionStmt) bool {
@@ -423,7 +428,7 @@ func (f *fighter) frame(t int) FighterFrame {
 		} else {
 			ff.Anim, key = "jump", f.stID
 		}
-	case f.landing(t):
+	case f.landing(t) && !(a != nil && a.kind == akAttack):
 		ff.State, ff.Anim, key = "landing", "landing", f.stID
 	case f.stance == stDuck:
 		ff.State = "duck"

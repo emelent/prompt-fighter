@@ -25,6 +25,52 @@ func (h Height) String() string {
 // MarshalText makes heights readable in the encoded config.
 func (h Height) MarshalText() ([]byte, error) { return []byte(h.String()), nil }
 
+// AirZoneKind classifies an air attack by the airborne frame it starts on.
+type AirZoneKind int
+
+const (
+	ZoneNone AirZoneKind = iota // not an air attack
+	ZoneRisingOverhead
+	ZoneAirToAir
+	ZoneFallingOverhead
+	ZoneLandingLow
+)
+
+func (z AirZoneKind) String() string {
+	switch z {
+	case ZoneRisingOverhead:
+		return "rising_overhead"
+	case ZoneAirToAir:
+		return "air_to_air"
+	case ZoneFallingOverhead:
+		return "falling_overhead"
+	case ZoneLandingLow:
+		return "landing_low"
+	}
+	return "none"
+}
+
+// MarshalText makes zones readable in the encoded config.
+func (z AirZoneKind) MarshalText() ([]byte, error) { return []byte(z.String()), nil }
+
+// height is the hit height an air attack takes from its zone.
+func (z AirZoneKind) height() Height {
+	switch z {
+	case ZoneRisingOverhead, ZoneFallingOverhead:
+		return HeightHigh
+	case ZoneLandingLow:
+		return HeightLow
+	}
+	return HeightNone
+}
+
+// AirZone maps the airborne start frames From..To (inclusive, 1-based) to a zone.
+type AirZone struct {
+	From int         `json:"from"`
+	To   int         `json:"to"`
+	Kind AirZoneKind `json:"kind"`
+}
+
 // AttackSpec is the frame data for one attack.
 type AttackSpec struct {
 	Startup   int    `json:"startup"`
@@ -51,7 +97,12 @@ type Config struct {
 	FrameBudget int    `json:"frame_budget"`
 
 	// Attacks is indexed by dsl.Attack (punch, kick, sweep, throw, jump_kick, dive_punch, low_jab).
+	// The Height of jump_kick and dive_punch is unused: air attacks take it from AirZones.
 	Attacks [dsl.NumAttacks]AttackSpec `json:"attacks"`
+
+	// AirZones decides what an air attack can hit from the airborne frame it
+	// starts on. Ordered by frame; must cover 1..JumpRise+JumpFall exactly once.
+	AirZones []AirZone `json:"air_zones"`
 
 	JumpRise      int `json:"jump_rise"`        // airborne frames going up
 	JumpFall      int `json:"jump_fall"`        // airborne frames coming down
@@ -83,7 +134,7 @@ type Config struct {
 
 // DefaultVersion is the version string of DefaultConfig. Bump it whenever a
 // default value changes (TestConfigHashPinned enforces this).
-const DefaultVersion = "2026.11-1"
+const DefaultVersion = "2026.11-2"
 
 // DefaultConfig returns the build-spec defaults plus the gap-fill values
 // documented in docs/RULES.md.
@@ -109,8 +160,8 @@ func DefaultConfig() Config {
 		DefaultHold:   10,
 		WalkSpeed:     1,
 
-		Hitstun:         5,
-		HitPushback:     3,
+		Hitstun:         13,
+		HitPushback:     2,
 		Blockstun:       3,
 		BlockPushback:   2,
 		KnockdownFrames: 20,
@@ -121,13 +172,20 @@ func DefaultConfig() Config {
 
 		SensorCost: 2,
 		Limits:     dsl.DefaultLimits(),
+
+		AirZones: []AirZone{
+			{From: 1, To: 6, Kind: ZoneRisingOverhead},
+			{From: 7, To: 13, Kind: ZoneAirToAir},
+			{From: 14, To: 16, Kind: ZoneFallingOverhead},
+			{From: 17, To: 20, Kind: ZoneLandingLow},
+		},
 	}
 	c.Attacks[dsl.AtkPunch] = AttackSpec{Startup: 3, Active: 2, Recovery: 5, Height: HeightHigh, Damage: 5, Range: 8}
 	c.Attacks[dsl.AtkKick] = AttackSpec{Startup: 6, Active: 3, Recovery: 9, Height: HeightHigh, Damage: 9, Range: 12}
 	c.Attacks[dsl.AtkSweep] = AttackSpec{Startup: 8, Active: 3, Recovery: 14, Height: HeightLow, Damage: 8, Range: 12, Knockdown: true}
-	c.Attacks[dsl.AtkThrow] = AttackSpec{Startup: 5, Active: 1, Recovery: 15, Height: HeightNone, Damage: 12, Range: 5, Knockdown: true}
-	c.Attacks[dsl.AtkJumpKick] = AttackSpec{Startup: 3, Active: 5, Recovery: 0, Height: HeightHigh, Damage: 10, Range: 10}
-	c.Attacks[dsl.AtkDivePunch] = AttackSpec{Startup: 2, Active: 4, Recovery: 0, Height: HeightHigh, Damage: 6, Range: 8}
+	c.Attacks[dsl.AtkThrow] = AttackSpec{Startup: 5, Active: 1, Recovery: 18, Height: HeightNone, Damage: 12, Range: 5, Knockdown: true}
+	c.Attacks[dsl.AtkJumpKick] = AttackSpec{Startup: 3, Active: 5, Recovery: 0, Height: HeightNone, Damage: 10, Range: 10}
+	c.Attacks[dsl.AtkDivePunch] = AttackSpec{Startup: 2, Active: 4, Recovery: 0, Height: HeightNone, Damage: 6, Range: 8}
 	c.Attacks[dsl.AtkLowJab] = AttackSpec{Startup: 3, Active: 2, Recovery: 5, Height: HeightLow, Damage: 4, Range: 7}
 	return c
 }
@@ -145,4 +203,14 @@ func ActionOrder() []dsl.Action {
 func InRangeAttacks() []string { return dsl.AttackNames() }
 
 func (c *Config) airFrames() int { return c.JumpRise + c.JumpFall }
-func (c *Config) minSep() int    { return 2 * c.HalfWidth }
+
+// airZone returns the zone for an air attack starting on airborne frame k.
+func (c *Config) airZone(k int) AirZoneKind {
+	for _, z := range c.AirZones {
+		if k >= z.From && k <= z.To {
+			return z.Kind
+		}
+	}
+	return ZoneAirToAir
+}
+func (c *Config) minSep() int { return 2 * c.HalfWidth }

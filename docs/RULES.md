@@ -1,6 +1,6 @@
-# Prompt Fighter — Engine Rules (config `2026.11-1`, log format `1`)
+# Prompt Fighter — Engine Rules (config `2026.11-2`, log format `1`)
 
-This is the reference for how the Phase 1 simulation engine behaves. It records every rule, including each decision taken where the build spec was silent; those are marked **[gap-fill]**. All tunables live in `sim.DefaultConfig()`. Changing any default bumps the config version.
+This is the reference for how the Phase 1 simulation engine behaves. It records every rule, including each decision taken where the build spec was silent; those are marked **[gap-fill]**. All tunables live in `sim.DefaultConfig()`. Changing any default bumps the config version. Open balance questions are tracked in [`ISSUES.md`](ISSUES.md).
 
 ## 1. Stage and round
 
@@ -29,9 +29,9 @@ Phases run in the order startup → active → recovery. Range is centre-to-cent
 | punch | 3 | 2 | 5 | 10 | high | 5 | 8 | |
 | kick | 6 | 3 | 9 | 18 | high | 9 | 12 | |
 | sweep | 8 | 3 | 14 | 25 | low | 8 | 12 | yes |
-| throw | 5 | 1 | 15 | 21 | — (unblockable) | 12 | 5 | yes |
-| jump_kick (overlay) | 3 | 5 | 0 | 8 | high | 10 | 10 | |
-| dive_punch (overlay) | 2 | 4 | 0 | 6 | high | 6 | 8 | |
+| throw | 5 | 1 | 18 | 24 | — (unblockable) | 12 | 5 | yes |
+| jump_kick (overlay) | 3 | 5 | 0 | 8 | by zone (§5) | 10 | 10 | |
+| dive_punch (overlay) | 2 | 4 | 0 | 6 | by zone (§5) | 6 | 8 | |
 | low_jab (overlay) | 3 | 2 | 5 | 10 | low | 4 | 7 | |
 
 The jump_kick, dive_punch and low_jab rows are **[gap-fill]** values. jump_kick has to fit inside a 20-frame jump. dive_punch is faster but weaker. low_jab mirrors punch.
@@ -43,8 +43,8 @@ The jump_kick, dive_punch and low_jab rows are **[gap-fill]** values. jump_kick 
 | duck | 2 startup + hold + 2 recovery. Only the hold phase counts as ducking |
 | high_block / low_block | 1 startup + hold + 1 recovery. Only the hold phase guards |
 | default hold (when `hold N` is omitted) | 10 frames **[gap-fill]** |
-| hitstun | 5 frames after the hit frame, with no script input |
-| hit pushback | 3 units |
+| hitstun | 13 frames after the hit frame, with no script input (long enough for short combos, §6) |
+| hit pushback | 2 units |
 | defender blockstun | 3 frames. The defender keeps guarding, and its hold is extended to cover the blockstun |
 | block pushback | 2 units |
 | knockdown | 20 frames after the knockdown frame. Invulnerable, no script input |
@@ -56,7 +56,7 @@ The jump_kick, dive_punch and low_jab rows are **[gap-fill]** values. jump_kick 
 Every frame both fighters are processed simultaneously and symmetrically. Each phase computes results for both fighters from the same input before anything changes, so swapping sides mirrors the round exactly.
 
 1. **Snapshot.** Each fighter's sensor-visible state at the end of the previous frame is captured. All sensor reads this frame see this snapshot.
-2. **Stance bookkeeping.** Jumps and ducks that have finished end. A `low_jab` in progress extends the duck hold. Air attacks still in progress end on landing **[gap-fill]**.
+2. **Stance bookkeeping.** Jumps and ducks that have finished end. A `low_jab` in progress extends the duck hold. Air attacks still in progress end on landing **[gap-fill]**, except landing-low attacks (§5), which carry through touchdown and finish on the ground.
 3. **Think.** Each fighter that is not stunned and not busy advances its script until something occupies it for the frame: an action, a sensor read, or an idle frame.
 4. **Move.** Both fighters compute their new x (walking and jump drift), clamped to the stage. If the new positions would be closer than 4, every fighter that moved toward the other this frame has its move cancelled.
 5. **Connect.** Each active attack that has not yet connected is checked against the post-move positions (§5).
@@ -79,14 +79,14 @@ Events are ordered by frame, then p1's events before p2's, then in emission orde
 ### Stances and overlays
 While a stance is active:
 - Sensor reads, `wait` and control flow carry on as normal.
-- While airborne, the first `kick` becomes `jump_kick` and the first `punch` becomes `dive_punch`. Only one air attack is allowed per jump.
+- While airborne, the first `kick` becomes `jump_kick` and the first `punch` becomes `dive_punch`. Only one air attack is allowed per jump. What the air attack can hit depends on the airborne frame it starts on (§5, air-attack zones).
 - While in the duck hold, `punch` becomes `low_jab`, and any number of jabs is allowed.
 - An overlay never pauses the stance's timer.
 - Any other action, including a second air attack, waits until the stance has fully ended (including landing or duck recovery) and then runs normally. Those waiting frames show the stance animation.
 
 ### Interrupts and handlers
 - **Hit** (hitstun, or knockdown including from a throw). The current action and stance are abandoned. When the fighter can act again, `on_hit` runs if it is defined, and then the script resumes at the statement after the interrupted one. Waking up from a knockdown counts as leaving the interrupt, so `on_hit` runs then too **[gap-fill]**.
-- **Your attack was blocked** **[gap-fill, see §6]**. The attack is abandoned and you enter blockstun. When the blockstun ends, `on_block` runs, then the script resumes after the attack.
+- **Your attack was blocked** **[gap-fill, confirmed in the Phase 1 review; see §6]**. The attack is abandoned and you enter blockstun. When the blockstun ends, `on_block` runs, then the script resumes after the attack.
 - **"The statement after"** is worked out structurally. Inside a block it is the next statement. If the interrupt came during an `if`/`elif` condition, the whole `if` chain is skipped. If the interrupted statement was the last one in a `repeat` or `loop`, the next iteration starts (or the `repeat` ends).
 - **Interrupted inside a handler.** The handler is abandoned, then restarts from the top after the new stun. The resume point stays the one saved by the first interrupt.
 - `handler_enter` is emitted every time a handler starts. Handlers still run after `script_end`, and afterwards the fighter goes back to idling.
@@ -104,7 +104,7 @@ While a stance is active:
 | `enemy.attacking` | bool | the enemy has an attack (overlays included) in startup or active. Recovery doesn't count **[gap-fill]** |
 | `enemy.knocked_down` | bool | the enemy is in knockdown |
 
-**Reaction windows.** Because reads cost 2 frames and see the previous frame's state, a script that polls `loop { if enemy.attacking { high_block } }` blocks every kick and every sweep (using `low_block` for the sweep), whatever frame the attack starts on. It can never react to a punch: 3 startup frames is shorter than the read plus the block startup. The engine tests confirm this.
+**Reaction windows (intended).** Because reads cost 2 frames and see the previous frame's state, a script that polls `loop { if enemy.attacking { high_block } }` blocks every kick and every sweep (using `low_block` for the sweep), whatever frame the attack starts on. It can never react to a punch: 3 startup frames is shorter than the read plus the block startup. The engine tests confirm this. This is intended: punch is the one attack you can't react to, so it is the fast poke, and you have to predict it (decided in the Phase 1 review).
 
 ## 5. Connection and whiffs
 
@@ -114,9 +114,22 @@ On each active frame, an attack that has not yet connected connects if the targe
 |---|---|
 | `out_of_range` | distance > range |
 | `invulnerable` | target is knocked down |
-| `ducked` | high attack against a target in the duck hold |
-| `airborne` | low attack or throw against an airborne target |
+| `ducked` | grounded high attack (`punch`, `kick`) against a target in the duck hold. Air attacks are not dodged by ducking |
+| `grounded` | air-to-air attack against a target that is not airborne |
+| `airborne` | overhead air attack, low attack (including landing low) or throw against an airborne target |
 | `stunned` | throw against a target in hitstun |
+
+### Air-attack zones
+`jump_kick` and `dive_punch` take their zone from the airborne frame (1–20) on which they **start**, and keep it for their whole duration. One air attack is still allowed per jump.
+
+| start frame | zone | hits | guarded by |
+|---|---|---|---|
+| 1–6 | rising overhead | grounded targets, ducking ones included. The jump continues normally | `high_block` |
+| 7–13 | peak air-to-air | airborne targets only. Against a grounded target it whiffs `grounded` | — (airborne fighters can't block) |
+| 14–16 | falling overhead | grounded targets, ducking ones included. Ends at touchdown | `high_block` |
+| 17–20 | landing low | grounded targets. **Carries through touchdown** and finishes all its active frames on the ground (shown as `state: attack`), with landing recovery running alongside. The next statement waits for both | `low_block` |
+
+The zone table is the config's `air_zones` and is tunable. Any hit on an airborne target knocks it down (§6).
 
 An attack connects at most once. If its active frames end without connecting, it emits `whiff` with the reason from its last active frame.
 
@@ -126,14 +139,20 @@ All connections on a frame are resolved together from the pre-resolution state.
 
 - **Attack beats throw.** If a fighter is hit before or on its throw's active frame, the throw is abandoned. If an attack and a throw would both connect on the same frame, only the attack applies.
 - **Throw tech.** If both throws connect on the same frame, there is no damage and both fighters are pushed back 2. Each emits `throw` with outcome `tech`, and both throws continue into recovery **[gap-fill]**.
-- **Hit.** The target takes damage, enters hitstun (or knockdown, if the attack knocks down) and is pushed back 3.
+- **Hit.** The target takes damage, enters hitstun (or knockdown, if the attack knocks down) and is pushed back 2.
 - **Anti-air.** Any attack that hits an airborne target knocks it down and snaps its y to 0. There are no air juggles **[gap-fill]**.
 - **Block.** An attack that meets a target guarding its height during the hold phase is blocked.
   - Defender: no damage, 3 frames of blockstun with the guard held, pushed back 2. The defender is not interrupted.
   - Attacker: the attack is abandoned, and the attacker is stunned for the attack's **recovery** length. It then runs `on_block` **[gap-fill]**.
 
-  This reading of the build spec ("`on_block` runs after blockstun when *your* attack was blocked") keeps blocks beating attacks. A flat 3-frame stun would make a blocked attack recover faster than a whiff. A block of the wrong height does not guard. Throws ignore blocks.
-- **Throw success.** 12 damage and a knockdown **[gap-fill]**. The thrower recovers on the frame after its 15 recovery frames, 5 frames before the target wakes up. An immediately repeated throw therefore becomes active exactly on the wake-up frame. **Balance note:** at the defaults, `loop { throw }` throw-loops an idle opponent, and also one running `loop { jump }`, to a KO. Attacking on wake-up escapes it, because attacks beat throws. This is flagged for the Phase 1 review. Design D8 assumed the opposite.
+  This reading of the build spec, confirmed in the Phase 1 review ("`on_block` runs after blockstun when *your* attack was blocked") keeps blocks beating attacks. A flat 3-frame stun would make a blocked attack recover faster than a whiff. A block of the wrong height does not guard. Throws ignore blocks.
+- **Throw success.** 12 damage and a knockdown **[gap-fill]**.
+- **Wake-up after a throw.** Throw recovery (18) is set so that an immediately repeated throw goes active on the same frame as an attack the target starts on its first actionable frame. If the first throw is active on frame k, the target wakes on k+21 and the re-throw is active on k+24, the same frame a punch started at k+21 goes active. So the triangle holds on wake-up too:
+  - Attacking on wake-up beats the re-throw.
+  - The re-throw beats a wake-up block, or a target that does nothing.
+  - Jumping or moving away makes the re-throw whiff.
+
+  At recovery 15 the re-throw was active on the wake-up frame itself and could not be beaten by any attack, so it was raised in the Phase 1 review.
 - **Trade.** If both attacks hit on the same frame, both apply, and a `trade` event is emitted on top of the two `hit` events.
 - **Pushback at a wall.** Any pushback a wall prevents is transferred to the other fighter, in the opposite direction **[gap-fill]**.
 
@@ -143,7 +162,12 @@ A hit landing while the defender is still in hitstun from an earlier hit increas
 - Damage is `max(1, base × mult / 100)`.
 - The 5th hit of a combo causes a knockdown.
 
-At the default values, combos are effectively dormant. Hitstun (5 frames) is shorter than any attacker's recovery plus the next startup, and pushback adds distance. This is flagged for the Phase 1 balance review.
+At the defaults (hitstun 13, pushback 2), short chains link:
+- `punch kick` is a 2-hit combo.
+- `punch punch kick` is 3 hits (5 + 4 + 5 damage).
+- A third punch in a row whiffs `out_of_range`, because two pushbacks carry the target out of punch range. Pushback is what ends a combo.
+
+The 5th-hit knockdown is a safety cap that the default frame data doesn't reach.
 
 ### Knockdown
 20 frames on the ground, invulnerable to attacks and throws, with no script input. The fighter then stands up idle, can be hit again and can act (and runs `on_hit`).

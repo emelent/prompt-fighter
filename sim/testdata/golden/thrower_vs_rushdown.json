@@ -1,6 +1,6 @@
 {
   "format_version": "1",
-  "config_version": "2026.11-1",
+  "config_version": "2026.11-2",
   "frame_budget": 600,
   "players": [
     {
@@ -955,7 +955,7 @@
     {
       "f": 32,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -984,7 +984,7 @@
     {
       "f": 33,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -1013,7 +1013,7 @@
     {
       "f": 34,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -1042,7 +1042,7 @@
     {
       "f": 35,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -1071,7 +1071,7 @@
     {
       "f": 36,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -1100,7 +1100,7 @@
     {
       "f": 37,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -1132,14 +1132,14 @@
         "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 6,
         "phase": "",
         "hp": 91,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 11
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -1158,17 +1158,17 @@
     {
       "f": 39,
       "p1": {
-        "x": 48,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 7,
         "phase": "",
         "hp": 91,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 11
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -1187,17 +1187,17 @@
     {
       "f": 40,
       "p1": {
-        "x": 48,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 8,
         "phase": "",
         "hp": 91,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -1216,17 +1216,17 @@
     {
       "f": 41,
       "p1": {
-        "x": 48,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 9,
         "phase": "",
         "hp": 91,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -1245,17 +1245,17 @@
     {
       "f": 42,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 10,
         "phase": "",
         "hp": 91,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 8
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -1274,17 +1274,17 @@
     {
       "f": 43,
       "p1": {
-        "x": 50,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 11,
         "phase": "",
         "hp": 91,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 8
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -1303,17 +1303,17 @@
     {
       "f": 44,
       "p1": {
-        "x": 50,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 2,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 12,
         "phase": "",
         "hp": 91,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 8
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -1332,17 +1332,17 @@
     {
       "f": 45,
       "p1": {
-        "x": 50,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 13,
         "phase": "",
         "hp": 91,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -1361,17 +1361,17 @@
     {
       "f": 46,
       "p1": {
-        "x": 50,
+        "x": 48,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 0,
         "phase": "",
         "hp": 91,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 5
+        "script_line": 11
       },
       "p2": {
         "x": 54,
@@ -1390,17 +1390,17 @@
     {
       "f": 47,
       "p1": {
-        "x": 50,
+        "x": 49,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 0,
-        "phase": "startup",
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 1,
+        "phase": "",
         "hp": 91,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 6
+        "script_line": 11
       },
       "p2": {
         "x": 54,
@@ -1419,17 +1419,17 @@
     {
       "f": 48,
       "p1": {
-        "x": 50,
+        "x": 49,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 1,
-        "phase": "startup",
+        "state": "idle",
+        "anim": "check",
+        "anim_frame": 0,
+        "phase": "",
         "hp": 91,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 6
+        "script_line": 5
       },
       "p2": {
         "x": 54,
@@ -1622,17 +1622,17 @@
     {
       "f": 55,
       "p1": {
-        "x": 48,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 6,
         "phase": "",
         "hp": 86,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 11
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -1651,17 +1651,17 @@
     {
       "f": 56,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 7,
         "phase": "",
         "hp": 86,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 11
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -1680,17 +1680,17 @@
     {
       "f": 57,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 8,
         "phase": "",
         "hp": 86,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -1709,17 +1709,17 @@
     {
       "f": 58,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 9,
         "phase": "",
         "hp": 86,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -1738,17 +1738,17 @@
     {
       "f": 59,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 0,
-        "phase": "startup",
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 10,
+        "phase": "",
         "hp": 86,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 6
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -1767,17 +1767,17 @@
     {
       "f": 60,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 1,
-        "phase": "startup",
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 11,
+        "phase": "",
         "hp": 86,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 6
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -1796,17 +1796,17 @@
     {
       "f": 61,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 2,
-        "phase": "startup",
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 12,
+        "phase": "",
         "hp": 86,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 6
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -1825,17 +1825,17 @@
     {
       "f": 62,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 3,
-        "phase": "startup",
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 13,
+        "phase": "",
         "hp": 86,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 6
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -1854,17 +1854,17 @@
     {
       "f": 63,
       "p1": {
-        "x": 49,
+        "x": 48,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 4,
-        "phase": "startup",
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 0,
+        "phase": "",
         "hp": 86,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 6
+        "script_line": 11
       },
       "p2": {
         "x": 54,
@@ -1883,7 +1883,7 @@
     {
       "f": 64,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -1912,7 +1912,7 @@
     {
       "f": 65,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -1941,7 +1941,7 @@
     {
       "f": 66,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -1970,7 +1970,7 @@
     {
       "f": 67,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -1999,7 +1999,7 @@
     {
       "f": 68,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -2028,7 +2028,7 @@
     {
       "f": 69,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -2060,14 +2060,14 @@
         "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 6,
         "phase": "",
         "hp": 77,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 11
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -2086,17 +2086,17 @@
     {
       "f": 71,
       "p1": {
-        "x": 48,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 7,
         "phase": "",
         "hp": 77,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 11
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -2115,17 +2115,17 @@
     {
       "f": 72,
       "p1": {
-        "x": 48,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 8,
         "phase": "",
         "hp": 77,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -2144,17 +2144,17 @@
     {
       "f": 73,
       "p1": {
-        "x": 48,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 9,
         "phase": "",
         "hp": 77,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -2173,17 +2173,17 @@
     {
       "f": 74,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 10,
         "phase": "",
         "hp": 77,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 8
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -2202,17 +2202,17 @@
     {
       "f": 75,
       "p1": {
-        "x": 50,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 11,
         "phase": "",
         "hp": 77,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 8
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -2231,17 +2231,17 @@
     {
       "f": 76,
       "p1": {
-        "x": 50,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 2,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 12,
         "phase": "",
         "hp": 77,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 8
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -2260,17 +2260,17 @@
     {
       "f": 77,
       "p1": {
-        "x": 50,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 13,
         "phase": "",
         "hp": 77,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -2289,17 +2289,17 @@
     {
       "f": 78,
       "p1": {
-        "x": 50,
+        "x": 48,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 0,
         "phase": "",
         "hp": 77,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 5
+        "script_line": 11
       },
       "p2": {
         "x": 54,
@@ -2318,17 +2318,17 @@
     {
       "f": 79,
       "p1": {
-        "x": 50,
+        "x": 49,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 0,
-        "phase": "startup",
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 1,
+        "phase": "",
         "hp": 77,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 6
+        "script_line": 11
       },
       "p2": {
         "x": 54,
@@ -2347,17 +2347,17 @@
     {
       "f": 80,
       "p1": {
-        "x": 50,
+        "x": 49,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 1,
-        "phase": "startup",
+        "state": "idle",
+        "anim": "check",
+        "anim_frame": 0,
+        "phase": "",
         "hp": 77,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 6
+        "script_line": 5
       },
       "p2": {
         "x": 54,
@@ -2550,17 +2550,17 @@
     {
       "f": 87,
       "p1": {
-        "x": 48,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 6,
         "phase": "",
         "hp": 72,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 11
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -2579,17 +2579,17 @@
     {
       "f": 88,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 7,
         "phase": "",
         "hp": 72,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 11
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -2608,17 +2608,17 @@
     {
       "f": 89,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 8,
         "phase": "",
         "hp": 72,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -2637,17 +2637,17 @@
     {
       "f": 90,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 9,
         "phase": "",
         "hp": 72,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -2666,17 +2666,17 @@
     {
       "f": 91,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 0,
-        "phase": "startup",
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 10,
+        "phase": "",
         "hp": 72,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 6
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -2695,17 +2695,17 @@
     {
       "f": 92,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 1,
-        "phase": "startup",
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 11,
+        "phase": "",
         "hp": 72,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 6
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -2724,17 +2724,17 @@
     {
       "f": 93,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 2,
-        "phase": "startup",
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 12,
+        "phase": "",
         "hp": 72,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 6
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -2753,17 +2753,17 @@
     {
       "f": 94,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 3,
-        "phase": "startup",
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 13,
+        "phase": "",
         "hp": 72,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 6
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -2782,17 +2782,17 @@
     {
       "f": 95,
       "p1": {
-        "x": 49,
+        "x": 48,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 4,
-        "phase": "startup",
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 0,
+        "phase": "",
         "hp": 72,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 6
+        "script_line": 11
       },
       "p2": {
         "x": 54,
@@ -2811,7 +2811,7 @@
     {
       "f": 96,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -2840,7 +2840,7 @@
     {
       "f": 97,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -2869,7 +2869,7 @@
     {
       "f": 98,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -2898,7 +2898,7 @@
     {
       "f": 99,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -2927,7 +2927,7 @@
     {
       "f": 100,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -2956,7 +2956,7 @@
     {
       "f": 101,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -2988,14 +2988,14 @@
         "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 6,
         "phase": "",
         "hp": 63,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 11
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -3014,17 +3014,17 @@
     {
       "f": 103,
       "p1": {
-        "x": 48,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 7,
         "phase": "",
         "hp": 63,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 11
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -3043,17 +3043,17 @@
     {
       "f": 104,
       "p1": {
-        "x": 48,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 8,
         "phase": "",
         "hp": 63,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -3072,17 +3072,17 @@
     {
       "f": 105,
       "p1": {
-        "x": 48,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 9,
         "phase": "",
         "hp": 63,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -3101,17 +3101,17 @@
     {
       "f": 106,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 10,
         "phase": "",
         "hp": 63,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 8
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -3130,17 +3130,17 @@
     {
       "f": 107,
       "p1": {
-        "x": 50,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 11,
         "phase": "",
         "hp": 63,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 8
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -3159,17 +3159,17 @@
     {
       "f": 108,
       "p1": {
-        "x": 50,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 2,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 12,
         "phase": "",
         "hp": 63,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 8
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -3188,17 +3188,17 @@
     {
       "f": 109,
       "p1": {
-        "x": 50,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 13,
         "phase": "",
         "hp": 63,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -3217,17 +3217,17 @@
     {
       "f": 110,
       "p1": {
-        "x": 50,
+        "x": 48,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 0,
         "phase": "",
         "hp": 63,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 5
+        "script_line": 11
       },
       "p2": {
         "x": 54,
@@ -3246,17 +3246,17 @@
     {
       "f": 111,
       "p1": {
-        "x": 50,
+        "x": 49,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 0,
-        "phase": "startup",
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 1,
+        "phase": "",
         "hp": 63,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 6
+        "script_line": 11
       },
       "p2": {
         "x": 54,
@@ -3275,17 +3275,17 @@
     {
       "f": 112,
       "p1": {
-        "x": 50,
+        "x": 49,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 1,
-        "phase": "startup",
+        "state": "idle",
+        "anim": "check",
+        "anim_frame": 0,
+        "phase": "",
         "hp": 63,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 6
+        "script_line": 5
       },
       "p2": {
         "x": 54,
@@ -3478,17 +3478,17 @@
     {
       "f": 119,
       "p1": {
-        "x": 48,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 6,
         "phase": "",
         "hp": 58,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 11
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -3507,17 +3507,17 @@
     {
       "f": 120,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 7,
         "phase": "",
         "hp": 58,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 11
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -3536,17 +3536,17 @@
     {
       "f": 121,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 8,
         "phase": "",
         "hp": 58,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -3565,17 +3565,17 @@
     {
       "f": 122,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 9,
         "phase": "",
         "hp": 58,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -3594,17 +3594,17 @@
     {
       "f": 123,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 0,
-        "phase": "startup",
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 10,
+        "phase": "",
         "hp": 58,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 6
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -3623,17 +3623,17 @@
     {
       "f": 124,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 1,
-        "phase": "startup",
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 11,
+        "phase": "",
         "hp": 58,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 6
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -3652,17 +3652,17 @@
     {
       "f": 125,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 2,
-        "phase": "startup",
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 12,
+        "phase": "",
         "hp": 58,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 6
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -3681,17 +3681,17 @@
     {
       "f": 126,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 3,
-        "phase": "startup",
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 13,
+        "phase": "",
         "hp": 58,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 6
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -3710,17 +3710,17 @@
     {
       "f": 127,
       "p1": {
-        "x": 49,
+        "x": 48,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 4,
-        "phase": "startup",
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 0,
+        "phase": "",
         "hp": 58,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 6
+        "script_line": 11
       },
       "p2": {
         "x": 54,
@@ -3739,7 +3739,7 @@
     {
       "f": 128,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -3768,7 +3768,7 @@
     {
       "f": 129,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -3797,7 +3797,7 @@
     {
       "f": 130,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -3826,7 +3826,7 @@
     {
       "f": 131,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -3855,7 +3855,7 @@
     {
       "f": 132,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -3884,7 +3884,7 @@
     {
       "f": 133,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -3916,14 +3916,14 @@
         "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 6,
         "phase": "",
         "hp": 49,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 11
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -3942,17 +3942,17 @@
     {
       "f": 135,
       "p1": {
-        "x": 48,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 7,
         "phase": "",
         "hp": 49,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 11
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -3971,17 +3971,17 @@
     {
       "f": 136,
       "p1": {
-        "x": 48,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 8,
         "phase": "",
         "hp": 49,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -4000,17 +4000,17 @@
     {
       "f": 137,
       "p1": {
-        "x": 48,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 9,
         "phase": "",
         "hp": 49,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -4029,17 +4029,17 @@
     {
       "f": 138,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 10,
         "phase": "",
         "hp": 49,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 8
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -4058,17 +4058,17 @@
     {
       "f": 139,
       "p1": {
-        "x": 50,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 11,
         "phase": "",
         "hp": 49,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 8
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -4087,17 +4087,17 @@
     {
       "f": 140,
       "p1": {
-        "x": 50,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 2,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 12,
         "phase": "",
         "hp": 49,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 8
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -4116,17 +4116,17 @@
     {
       "f": 141,
       "p1": {
-        "x": 50,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 13,
         "phase": "",
         "hp": 49,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -4145,17 +4145,17 @@
     {
       "f": 142,
       "p1": {
-        "x": 50,
+        "x": 48,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 0,
         "phase": "",
         "hp": 49,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 5
+        "script_line": 11
       },
       "p2": {
         "x": 54,
@@ -4174,17 +4174,17 @@
     {
       "f": 143,
       "p1": {
-        "x": 50,
+        "x": 49,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 0,
-        "phase": "startup",
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 1,
+        "phase": "",
         "hp": 49,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 6
+        "script_line": 11
       },
       "p2": {
         "x": 54,
@@ -4203,17 +4203,17 @@
     {
       "f": 144,
       "p1": {
-        "x": 50,
+        "x": 49,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 1,
-        "phase": "startup",
+        "state": "idle",
+        "anim": "check",
+        "anim_frame": 0,
+        "phase": "",
         "hp": 49,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 6
+        "script_line": 5
       },
       "p2": {
         "x": 54,
@@ -4406,17 +4406,17 @@
     {
       "f": 151,
       "p1": {
-        "x": 48,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 6,
         "phase": "",
         "hp": 44,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 11
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -4435,17 +4435,17 @@
     {
       "f": 152,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 7,
         "phase": "",
         "hp": 44,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 11
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -4464,17 +4464,17 @@
     {
       "f": 153,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 8,
         "phase": "",
         "hp": 44,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -4493,17 +4493,17 @@
     {
       "f": 154,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 9,
         "phase": "",
         "hp": 44,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -4522,17 +4522,17 @@
     {
       "f": 155,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 0,
-        "phase": "startup",
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 10,
+        "phase": "",
         "hp": 44,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 6
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -4551,17 +4551,17 @@
     {
       "f": 156,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 1,
-        "phase": "startup",
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 11,
+        "phase": "",
         "hp": 44,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 6
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -4580,17 +4580,17 @@
     {
       "f": 157,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 2,
-        "phase": "startup",
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 12,
+        "phase": "",
         "hp": 44,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 6
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -4609,17 +4609,17 @@
     {
       "f": 158,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 3,
-        "phase": "startup",
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 13,
+        "phase": "",
         "hp": 44,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 6
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -4638,17 +4638,17 @@
     {
       "f": 159,
       "p1": {
-        "x": 49,
+        "x": 48,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 4,
-        "phase": "startup",
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 0,
+        "phase": "",
         "hp": 44,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 6
+        "script_line": 11
       },
       "p2": {
         "x": 54,
@@ -4667,7 +4667,7 @@
     {
       "f": 160,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -4696,7 +4696,7 @@
     {
       "f": 161,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -4725,7 +4725,7 @@
     {
       "f": 162,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -4754,7 +4754,7 @@
     {
       "f": 163,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -4783,7 +4783,7 @@
     {
       "f": 164,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -4812,7 +4812,7 @@
     {
       "f": 165,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -4844,14 +4844,14 @@
         "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 6,
         "phase": "",
         "hp": 35,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 11
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -4870,17 +4870,17 @@
     {
       "f": 167,
       "p1": {
-        "x": 48,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 7,
         "phase": "",
         "hp": 35,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 11
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -4899,17 +4899,17 @@
     {
       "f": 168,
       "p1": {
-        "x": 48,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 8,
         "phase": "",
         "hp": 35,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -4928,17 +4928,17 @@
     {
       "f": 169,
       "p1": {
-        "x": 48,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 9,
         "phase": "",
         "hp": 35,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -4957,17 +4957,17 @@
     {
       "f": 170,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 10,
         "phase": "",
         "hp": 35,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 8
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -4986,17 +4986,17 @@
     {
       "f": 171,
       "p1": {
-        "x": 50,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 11,
         "phase": "",
         "hp": 35,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 8
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -5015,17 +5015,17 @@
     {
       "f": 172,
       "p1": {
-        "x": 50,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 2,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 12,
         "phase": "",
         "hp": 35,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 8
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -5044,17 +5044,17 @@
     {
       "f": 173,
       "p1": {
-        "x": 50,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 13,
         "phase": "",
         "hp": 35,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -5073,17 +5073,17 @@
     {
       "f": 174,
       "p1": {
-        "x": 50,
+        "x": 48,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 0,
         "phase": "",
         "hp": 35,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 5
+        "script_line": 11
       },
       "p2": {
         "x": 54,
@@ -5102,17 +5102,17 @@
     {
       "f": 175,
       "p1": {
-        "x": 50,
+        "x": 49,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 0,
-        "phase": "startup",
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 1,
+        "phase": "",
         "hp": 35,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 6
+        "script_line": 11
       },
       "p2": {
         "x": 54,
@@ -5131,17 +5131,17 @@
     {
       "f": 176,
       "p1": {
-        "x": 50,
+        "x": 49,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 1,
-        "phase": "startup",
+        "state": "idle",
+        "anim": "check",
+        "anim_frame": 0,
+        "phase": "",
         "hp": 35,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 6
+        "script_line": 5
       },
       "p2": {
         "x": 54,
@@ -5334,17 +5334,17 @@
     {
       "f": 183,
       "p1": {
-        "x": 48,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 6,
         "phase": "",
         "hp": 30,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 11
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -5363,17 +5363,17 @@
     {
       "f": 184,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 7,
         "phase": "",
         "hp": 30,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 11
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -5392,17 +5392,17 @@
     {
       "f": 185,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 8,
         "phase": "",
         "hp": 30,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -5421,17 +5421,17 @@
     {
       "f": 186,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 9,
         "phase": "",
         "hp": 30,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -5450,17 +5450,17 @@
     {
       "f": 187,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 0,
-        "phase": "startup",
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 10,
+        "phase": "",
         "hp": 30,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 6
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -5479,17 +5479,17 @@
     {
       "f": 188,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 1,
-        "phase": "startup",
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 11,
+        "phase": "",
         "hp": 30,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 6
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -5508,17 +5508,17 @@
     {
       "f": 189,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 2,
-        "phase": "startup",
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 12,
+        "phase": "",
         "hp": 30,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 6
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -5537,17 +5537,17 @@
     {
       "f": 190,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 3,
-        "phase": "startup",
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 13,
+        "phase": "",
         "hp": 30,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 6
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -5566,17 +5566,17 @@
     {
       "f": 191,
       "p1": {
-        "x": 49,
+        "x": 48,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 4,
-        "phase": "startup",
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 0,
+        "phase": "",
         "hp": 30,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 6
+        "script_line": 11
       },
       "p2": {
         "x": 54,
@@ -5595,7 +5595,7 @@
     {
       "f": 192,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -5624,7 +5624,7 @@
     {
       "f": 193,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -5653,7 +5653,7 @@
     {
       "f": 194,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -5682,7 +5682,7 @@
     {
       "f": 195,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -5711,7 +5711,7 @@
     {
       "f": 196,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -5740,7 +5740,7 @@
     {
       "f": 197,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -5772,14 +5772,14 @@
         "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 6,
         "phase": "",
         "hp": 21,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 11
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -5798,17 +5798,17 @@
     {
       "f": 199,
       "p1": {
-        "x": 48,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 7,
         "phase": "",
         "hp": 21,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 11
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -5827,17 +5827,17 @@
     {
       "f": 200,
       "p1": {
-        "x": 48,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 8,
         "phase": "",
         "hp": 21,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -5856,17 +5856,17 @@
     {
       "f": 201,
       "p1": {
-        "x": 48,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 9,
         "phase": "",
         "hp": 21,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -5885,17 +5885,17 @@
     {
       "f": 202,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 10,
         "phase": "",
         "hp": 21,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 8
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -5914,17 +5914,17 @@
     {
       "f": 203,
       "p1": {
-        "x": 50,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 11,
         "phase": "",
         "hp": 21,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 8
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -5943,17 +5943,17 @@
     {
       "f": 204,
       "p1": {
-        "x": 50,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 2,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 12,
         "phase": "",
         "hp": 21,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 8
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -5972,17 +5972,17 @@
     {
       "f": 205,
       "p1": {
-        "x": 50,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 13,
         "phase": "",
         "hp": 21,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -6001,17 +6001,17 @@
     {
       "f": 206,
       "p1": {
-        "x": 50,
+        "x": 48,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 0,
         "phase": "",
         "hp": 21,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 5
+        "script_line": 11
       },
       "p2": {
         "x": 54,
@@ -6030,17 +6030,17 @@
     {
       "f": 207,
       "p1": {
-        "x": 50,
+        "x": 49,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 0,
-        "phase": "startup",
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 1,
+        "phase": "",
         "hp": 21,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 6
+        "script_line": 11
       },
       "p2": {
         "x": 54,
@@ -6059,17 +6059,17 @@
     {
       "f": 208,
       "p1": {
-        "x": 50,
+        "x": 49,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 1,
-        "phase": "startup",
+        "state": "idle",
+        "anim": "check",
+        "anim_frame": 0,
+        "phase": "",
         "hp": 21,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 6
+        "script_line": 5
       },
       "p2": {
         "x": 54,
@@ -6262,17 +6262,17 @@
     {
       "f": 215,
       "p1": {
-        "x": 48,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 6,
         "phase": "",
         "hp": 16,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 11
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -6291,17 +6291,17 @@
     {
       "f": 216,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 7,
         "phase": "",
         "hp": 16,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 11
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -6320,17 +6320,17 @@
     {
       "f": 217,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 8,
         "phase": "",
         "hp": 16,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -6349,17 +6349,17 @@
     {
       "f": 218,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 9,
         "phase": "",
         "hp": 16,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -6378,17 +6378,17 @@
     {
       "f": 219,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 0,
-        "phase": "startup",
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 10,
+        "phase": "",
         "hp": 16,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 6
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -6407,17 +6407,17 @@
     {
       "f": 220,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 1,
-        "phase": "startup",
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 11,
+        "phase": "",
         "hp": 16,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 6
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -6436,17 +6436,17 @@
     {
       "f": 221,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 2,
-        "phase": "startup",
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 12,
+        "phase": "",
         "hp": 16,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 6
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -6465,17 +6465,17 @@
     {
       "f": 222,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 3,
-        "phase": "startup",
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 13,
+        "phase": "",
         "hp": 16,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 6
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -6494,17 +6494,17 @@
     {
       "f": 223,
       "p1": {
-        "x": 49,
+        "x": 48,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 4,
-        "phase": "startup",
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 0,
+        "phase": "",
         "hp": 16,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 6
+        "script_line": 11
       },
       "p2": {
         "x": 54,
@@ -6523,7 +6523,7 @@
     {
       "f": 224,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -6552,7 +6552,7 @@
     {
       "f": 225,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -6581,7 +6581,7 @@
     {
       "f": 226,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -6610,7 +6610,7 @@
     {
       "f": 227,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -6639,7 +6639,7 @@
     {
       "f": 228,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -6668,7 +6668,7 @@
     {
       "f": 229,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "hitstun",
@@ -6700,14 +6700,14 @@
         "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 6,
         "phase": "",
         "hp": 7,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 11
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -6726,17 +6726,17 @@
     {
       "f": 231,
       "p1": {
-        "x": 48,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 7,
         "phase": "",
         "hp": 7,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 11
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -6755,17 +6755,17 @@
     {
       "f": 232,
       "p1": {
-        "x": 48,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 8,
         "phase": "",
         "hp": 7,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -6784,17 +6784,17 @@
     {
       "f": 233,
       "p1": {
-        "x": 48,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 9,
         "phase": "",
         "hp": 7,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -6813,17 +6813,17 @@
     {
       "f": 234,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 10,
         "phase": "",
         "hp": 7,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 8
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -6842,17 +6842,17 @@
     {
       "f": 235,
       "p1": {
-        "x": 50,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 11,
         "phase": "",
         "hp": 7,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 8
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -6871,17 +6871,17 @@
     {
       "f": 236,
       "p1": {
-        "x": 50,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 2,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 12,
         "phase": "",
         "hp": 7,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 8
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -6900,17 +6900,17 @@
     {
       "f": 237,
       "p1": {
-        "x": 50,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 13,
         "phase": "",
         "hp": 7,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -6929,17 +6929,17 @@
     {
       "f": 238,
       "p1": {
-        "x": 50,
+        "x": 48,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 0,
         "phase": "",
         "hp": 7,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 5
+        "script_line": 11
       },
       "p2": {
         "x": 54,
@@ -6958,17 +6958,17 @@
     {
       "f": 239,
       "p1": {
-        "x": 50,
+        "x": 49,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 0,
-        "phase": "startup",
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 1,
+        "phase": "",
         "hp": 7,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 6
+        "script_line": 11
       },
       "p2": {
         "x": 54,
@@ -6987,17 +6987,17 @@
     {
       "f": 240,
       "p1": {
-        "x": 50,
+        "x": 49,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 1,
-        "phase": "startup",
+        "state": "idle",
+        "anim": "check",
+        "anim_frame": 0,
+        "phase": "",
         "hp": 7,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 6
+        "script_line": 5
       },
       "p2": {
         "x": 54,
@@ -7190,17 +7190,17 @@
     {
       "f": 247,
       "p1": {
-        "x": 48,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 6,
         "phase": "",
         "hp": 2,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 11
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -7219,17 +7219,17 @@
     {
       "f": 248,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "walk",
-        "anim": "walk_forward",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 7,
         "phase": "",
         "hp": 2,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 11
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -7248,17 +7248,17 @@
     {
       "f": 249,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 0,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 8,
         "phase": "",
         "hp": 2,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -7277,17 +7277,17 @@
     {
       "f": 250,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "idle",
-        "anim": "check",
-        "anim_frame": 1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 9,
         "phase": "",
         "hp": 2,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 5
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -7306,17 +7306,17 @@
     {
       "f": 251,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 0,
-        "phase": "startup",
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 10,
+        "phase": "",
         "hp": 2,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 6
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -7335,17 +7335,17 @@
     {
       "f": 252,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 1,
-        "phase": "startup",
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 11,
+        "phase": "",
         "hp": 2,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 6
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -7364,17 +7364,17 @@
     {
       "f": 253,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 2,
-        "phase": "startup",
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 12,
+        "phase": "",
         "hp": 2,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 6
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -7393,17 +7393,17 @@
     {
       "f": 254,
       "p1": {
-        "x": 49,
+        "x": 47,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 3,
-        "phase": "startup",
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 13,
+        "phase": "",
         "hp": 2,
         "invulnerable": false,
-        "combo": 0,
-        "script_line": 6
+        "combo": 1,
+        "script_line": 0
       },
       "p2": {
         "x": 54,
@@ -7422,17 +7422,17 @@
     {
       "f": 255,
       "p1": {
-        "x": 49,
+        "x": 48,
         "y": 0,
         "facing": 1,
-        "state": "attack",
-        "anim": "throw",
-        "anim_frame": 4,
-        "phase": "startup",
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 0,
+        "phase": "",
         "hp": 2,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 6
+        "script_line": 11
       },
       "p2": {
         "x": 54,
@@ -7451,7 +7451,7 @@
     {
       "f": 256,
       "p1": {
-        "x": 46,
+        "x": 47,
         "y": 0,
         "facing": 1,
         "state": "ko",
@@ -7624,25 +7624,6 @@
       }
     },
     {
-      "frame": 38,
-      "type": "handler_enter",
-      "actor": "p1",
-      "detail": {
-        "handler": "on_hit"
-      }
-    },
-    {
-      "frame": 40,
-      "type": "check",
-      "actor": "p1",
-      "detail": {
-        "sensor": "in_range(throw)",
-        "value": false,
-        "line": 5,
-        "cost": 2
-      }
-    },
-    {
       "frame": 44,
       "type": "check",
       "actor": "p2",
@@ -7654,7 +7635,15 @@
       }
     },
     {
-      "frame": 45,
+      "frame": 46,
+      "type": "handler_enter",
+      "actor": "p1",
+      "detail": {
+        "handler": "on_hit"
+      }
+    },
+    {
+      "frame": 48,
       "type": "check",
       "actor": "p1",
       "detail": {
@@ -7677,14 +7666,6 @@
       }
     },
     {
-      "frame": 55,
-      "type": "handler_enter",
-      "actor": "p1",
-      "detail": {
-        "handler": "on_hit"
-      }
-    },
-    {
       "frame": 56,
       "type": "check",
       "actor": "p2",
@@ -7696,14 +7677,11 @@
       }
     },
     {
-      "frame": 57,
-      "type": "check",
+      "frame": 63,
+      "type": "handler_enter",
       "actor": "p1",
       "detail": {
-        "sensor": "in_range(throw)",
-        "value": true,
-        "line": 5,
-        "cost": 2
+        "handler": "on_hit"
       }
     },
     {
@@ -7719,25 +7697,6 @@
       }
     },
     {
-      "frame": 70,
-      "type": "handler_enter",
-      "actor": "p1",
-      "detail": {
-        "handler": "on_hit"
-      }
-    },
-    {
-      "frame": 72,
-      "type": "check",
-      "actor": "p1",
-      "detail": {
-        "sensor": "in_range(throw)",
-        "value": false,
-        "line": 5,
-        "cost": 2
-      }
-    },
-    {
       "frame": 76,
       "type": "check",
       "actor": "p2",
@@ -7749,7 +7708,15 @@
       }
     },
     {
-      "frame": 77,
+      "frame": 78,
+      "type": "handler_enter",
+      "actor": "p1",
+      "detail": {
+        "handler": "on_hit"
+      }
+    },
+    {
+      "frame": 80,
       "type": "check",
       "actor": "p1",
       "detail": {
@@ -7772,14 +7739,6 @@
       }
     },
     {
-      "frame": 87,
-      "type": "handler_enter",
-      "actor": "p1",
-      "detail": {
-        "handler": "on_hit"
-      }
-    },
-    {
       "frame": 88,
       "type": "check",
       "actor": "p2",
@@ -7791,14 +7750,11 @@
       }
     },
     {
-      "frame": 89,
-      "type": "check",
+      "frame": 95,
+      "type": "handler_enter",
       "actor": "p1",
       "detail": {
-        "sensor": "in_range(throw)",
-        "value": true,
-        "line": 5,
-        "cost": 2
+        "handler": "on_hit"
       }
     },
     {
@@ -7814,25 +7770,6 @@
       }
     },
     {
-      "frame": 102,
-      "type": "handler_enter",
-      "actor": "p1",
-      "detail": {
-        "handler": "on_hit"
-      }
-    },
-    {
-      "frame": 104,
-      "type": "check",
-      "actor": "p1",
-      "detail": {
-        "sensor": "in_range(throw)",
-        "value": false,
-        "line": 5,
-        "cost": 2
-      }
-    },
-    {
       "frame": 108,
       "type": "check",
       "actor": "p2",
@@ -7844,7 +7781,15 @@
       }
     },
     {
-      "frame": 109,
+      "frame": 110,
+      "type": "handler_enter",
+      "actor": "p1",
+      "detail": {
+        "handler": "on_hit"
+      }
+    },
+    {
+      "frame": 112,
       "type": "check",
       "actor": "p1",
       "detail": {
@@ -7867,14 +7812,6 @@
       }
     },
     {
-      "frame": 119,
-      "type": "handler_enter",
-      "actor": "p1",
-      "detail": {
-        "handler": "on_hit"
-      }
-    },
-    {
       "frame": 120,
       "type": "check",
       "actor": "p2",
@@ -7886,14 +7823,11 @@
       }
     },
     {
-      "frame": 121,
-      "type": "check",
+      "frame": 127,
+      "type": "handler_enter",
       "actor": "p1",
       "detail": {
-        "sensor": "in_range(throw)",
-        "value": true,
-        "line": 5,
-        "cost": 2
+        "handler": "on_hit"
       }
     },
     {
@@ -7909,25 +7843,6 @@
       }
     },
     {
-      "frame": 134,
-      "type": "handler_enter",
-      "actor": "p1",
-      "detail": {
-        "handler": "on_hit"
-      }
-    },
-    {
-      "frame": 136,
-      "type": "check",
-      "actor": "p1",
-      "detail": {
-        "sensor": "in_range(throw)",
-        "value": false,
-        "line": 5,
-        "cost": 2
-      }
-    },
-    {
       "frame": 140,
       "type": "check",
       "actor": "p2",
@@ -7939,7 +7854,15 @@
       }
     },
     {
-      "frame": 141,
+      "frame": 142,
+      "type": "handler_enter",
+      "actor": "p1",
+      "detail": {
+        "handler": "on_hit"
+      }
+    },
+    {
+      "frame": 144,
       "type": "check",
       "actor": "p1",
       "detail": {
@@ -7962,14 +7885,6 @@
       }
     },
     {
-      "frame": 151,
-      "type": "handler_enter",
-      "actor": "p1",
-      "detail": {
-        "handler": "on_hit"
-      }
-    },
-    {
       "frame": 152,
       "type": "check",
       "actor": "p2",
@@ -7981,14 +7896,11 @@
       }
     },
     {
-      "frame": 153,
-      "type": "check",
+      "frame": 159,
+      "type": "handler_enter",
       "actor": "p1",
       "detail": {
-        "sensor": "in_range(throw)",
-        "value": true,
-        "line": 5,
-        "cost": 2
+        "handler": "on_hit"
       }
     },
     {
@@ -8004,25 +7916,6 @@
       }
     },
     {
-      "frame": 166,
-      "type": "handler_enter",
-      "actor": "p1",
-      "detail": {
-        "handler": "on_hit"
-      }
-    },
-    {
-      "frame": 168,
-      "type": "check",
-      "actor": "p1",
-      "detail": {
-        "sensor": "in_range(throw)",
-        "value": false,
-        "line": 5,
-        "cost": 2
-      }
-    },
-    {
       "frame": 172,
       "type": "check",
       "actor": "p2",
@@ -8034,7 +7927,15 @@
       }
     },
     {
-      "frame": 173,
+      "frame": 174,
+      "type": "handler_enter",
+      "actor": "p1",
+      "detail": {
+        "handler": "on_hit"
+      }
+    },
+    {
+      "frame": 176,
       "type": "check",
       "actor": "p1",
       "detail": {
@@ -8057,14 +7958,6 @@
       }
     },
     {
-      "frame": 183,
-      "type": "handler_enter",
-      "actor": "p1",
-      "detail": {
-        "handler": "on_hit"
-      }
-    },
-    {
       "frame": 184,
       "type": "check",
       "actor": "p2",
@@ -8076,14 +7969,11 @@
       }
     },
     {
-      "frame": 185,
-      "type": "check",
+      "frame": 191,
+      "type": "handler_enter",
       "actor": "p1",
       "detail": {
-        "sensor": "in_range(throw)",
-        "value": true,
-        "line": 5,
-        "cost": 2
+        "handler": "on_hit"
       }
     },
     {
@@ -8099,25 +7989,6 @@
       }
     },
     {
-      "frame": 198,
-      "type": "handler_enter",
-      "actor": "p1",
-      "detail": {
-        "handler": "on_hit"
-      }
-    },
-    {
-      "frame": 200,
-      "type": "check",
-      "actor": "p1",
-      "detail": {
-        "sensor": "in_range(throw)",
-        "value": false,
-        "line": 5,
-        "cost": 2
-      }
-    },
-    {
       "frame": 204,
       "type": "check",
       "actor": "p2",
@@ -8129,7 +8000,15 @@
       }
     },
     {
-      "frame": 205,
+      "frame": 206,
+      "type": "handler_enter",
+      "actor": "p1",
+      "detail": {
+        "handler": "on_hit"
+      }
+    },
+    {
+      "frame": 208,
       "type": "check",
       "actor": "p1",
       "detail": {
@@ -8152,14 +8031,6 @@
       }
     },
     {
-      "frame": 215,
-      "type": "handler_enter",
-      "actor": "p1",
-      "detail": {
-        "handler": "on_hit"
-      }
-    },
-    {
       "frame": 216,
       "type": "check",
       "actor": "p2",
@@ -8171,14 +8042,11 @@
       }
     },
     {
-      "frame": 217,
-      "type": "check",
+      "frame": 223,
+      "type": "handler_enter",
       "actor": "p1",
       "detail": {
-        "sensor": "in_range(throw)",
-        "value": true,
-        "line": 5,
-        "cost": 2
+        "handler": "on_hit"
       }
     },
     {
@@ -8194,25 +8062,6 @@
       }
     },
     {
-      "frame": 230,
-      "type": "handler_enter",
-      "actor": "p1",
-      "detail": {
-        "handler": "on_hit"
-      }
-    },
-    {
-      "frame": 232,
-      "type": "check",
-      "actor": "p1",
-      "detail": {
-        "sensor": "in_range(throw)",
-        "value": false,
-        "line": 5,
-        "cost": 2
-      }
-    },
-    {
       "frame": 236,
       "type": "check",
       "actor": "p2",
@@ -8224,7 +8073,15 @@
       }
     },
     {
-      "frame": 237,
+      "frame": 238,
+      "type": "handler_enter",
+      "actor": "p1",
+      "detail": {
+        "handler": "on_hit"
+      }
+    },
+    {
+      "frame": 240,
       "type": "check",
       "actor": "p1",
       "detail": {
@@ -8247,14 +8104,6 @@
       }
     },
     {
-      "frame": 247,
-      "type": "handler_enter",
-      "actor": "p1",
-      "detail": {
-        "handler": "on_hit"
-      }
-    },
-    {
       "frame": 248,
       "type": "check",
       "actor": "p2",
@@ -8266,14 +8115,11 @@
       }
     },
     {
-      "frame": 249,
-      "type": "check",
+      "frame": 255,
+      "type": "handler_enter",
       "actor": "p1",
       "detail": {
-        "sensor": "in_range(throw)",
-        "value": true,
-        "line": 5,
-        "cost": 2
+        "handler": "on_hit"
       }
     },
     {

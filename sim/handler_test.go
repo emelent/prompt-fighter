@@ -2,6 +2,10 @@ package sim
 
 import "testing"
 
+// classicStun pins hitstun and pushback so these interrupt/resume scenarios
+// keep fixed frame numbers when the balance values are retuned.
+func classicStun(c *Config) { c.Hitstun, c.HitPushback = 5, 3 }
+
 func handlerEnters(l *Log, actor string) []int {
 	var fs []int
 	for _, e := range events(l, "handler_enter", actor) {
@@ -12,7 +16,7 @@ func handlerEnters(l *Log, actor string) []int {
 
 func TestHandlerResumeAfterHitstunWithoutHandler(t *testing.T) {
 	// p2's punch (active frame 3, range 8) hits p1 during kick startup.
-	l := run(t, "kick move_back x2 punch", "punch", startX(30, 37), frames(40))
+	l := run(t, "kick move_back x2 punch", "punch", startX(30, 37), frames(40), classicStun)
 	if h := events(l, "hit", "p2"); len(h) != 1 || h[0].Frame != 3 {
 		t.Fatalf("hits = %v", h)
 	}
@@ -30,7 +34,7 @@ func TestHandlerResumeAfterHitstunWithoutHandler(t *testing.T) {
 }
 
 func TestHandlerOnHitThenResume(t *testing.T) {
-	l := run(t, "wait 2 loop { move_forward x3 kick } on_hit { move_back x2 }", "punch", startX(30, 38), frames(40))
+	l := run(t, "wait 2 loop { move_forward x3 kick } on_hit { move_back x2 }", "punch", startX(30, 38), frames(40), classicStun)
 	if h := events(l, "hit", "p2"); len(h) != 1 || h[0].Frame != 3 {
 		t.Fatalf("hits = %v (want p1 hit during move_forward on frame 3)", h)
 	}
@@ -46,7 +50,7 @@ func TestHandlerOnHitThenResume(t *testing.T) {
 }
 
 func TestHandlerOnBlock(t *testing.T) {
-	l := run(t, "kick wait 1 on_block { throw }", "high_block hold 30", startX(30, 40), frames(45))
+	l := run(t, "kick wait 1 on_block { throw }", "high_block hold 30", startX(30, 40), frames(45), classicStun)
 	b := events(l, "block", "p1")
 	if len(b) != 1 || b[0].Frame != 6 {
 		t.Fatalf("blocks = %v", b)
@@ -63,15 +67,15 @@ func TestHandlerOnBlock(t *testing.T) {
 	if got := p(l, 16, 0).Anim; got != "throw" {
 		t.Errorf("frame 16 anim %q, want throw", got)
 	}
-	// throw lasts 21 frames (16..36), then the statement after the kick.
-	if got := p(l, 37, 0).Anim; got != "wait" {
-		t.Errorf("frame 37 anim %q, want wait", got)
+	// throw lasts 24 frames (16..39), then the statement after the kick.
+	if got := p(l, 40, 0).Anim; got != "wait" {
+		t.Errorf("frame 40 anim %q, want wait", got)
 	}
 }
 
 func TestHandlerInterruptDuringCondition(t *testing.T) {
 	// The read covers frames 2-3; p2's punch hits on frame 3.
-	l := run(t, "wait 2 if enemy.ducking { sweep } else { kick } wait 5", "punch", startX(30, 37), frames(30))
+	l := run(t, "wait 2 if enemy.ducking { sweep } else { kick } wait 5", "punch", startX(30, 37), frames(30), classicStun)
 	if h := events(l, "hit", "p2"); len(h) != 1 || h[0].Frame != 3 {
 		t.Fatalf("hits = %v", h)
 	}
@@ -82,7 +86,7 @@ func TestHandlerInterruptDuringCondition(t *testing.T) {
 
 func TestHandlerInterruptInsideHandler(t *testing.T) {
 	// First hit at frame 3; on_hit starts at 9. p2 walks in and hits again at 16.
-	l := run(t, "kick wait 1 on_hit { wait 10 }", "punch move_forward x3 punch", startX(30, 37), frames(40))
+	l := run(t, "kick wait 1 on_hit { wait 10 }", "punch move_forward x3 punch", startX(30, 37), frames(40), classicStun)
 	hits := events(l, "hit", "p2")
 	if len(hits) != 2 || hits[0].Frame != 3 || hits[1].Frame != 16 {
 		t.Fatalf("hits = %v", hits)
@@ -100,7 +104,7 @@ func TestHandlerInterruptInsideHandler(t *testing.T) {
 }
 
 func TestHandlerScriptEndIdles(t *testing.T) {
-	l := run(t, "kick", "")
+	l := run(t, "kick", "", classicStun)
 	e := events(l, "script_end", "p1")
 	if len(e) != 1 || e[0].Frame != 18 {
 		t.Fatalf("script_end = %v, want one at frame 18", e)
@@ -113,7 +117,7 @@ func TestHandlerScriptEndIdles(t *testing.T) {
 }
 
 func TestHandlerRunsAfterScriptEnd(t *testing.T) {
-	l := run(t, "wait 1 on_hit { move_back x2 }", "wait 5 punch", startX(30, 37), frames(30))
+	l := run(t, "wait 1 on_hit { move_back x2 }", "wait 5 punch", startX(30, 37), frames(30), classicStun)
 	if h := events(l, "hit", "p2"); len(h) != 1 || h[0].Frame != 8 {
 		t.Fatalf("hits = %v", h)
 	}

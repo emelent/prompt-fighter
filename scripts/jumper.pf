@@ -1,11 +1,15 @@
 # jumper.pf — air assault.
-# Strategy: approach and attack from the air. Jump kicks are high, so they
-# beat sweeps and throws on the ground but lose to ducking and anti-air kicks.
+# Strategy: walk in, then jump forward and kick late in the jump. A kick
+# started on airborne frames 17-20 is a landing low: it carries through
+# touchdown, hits ducking fighters and goes under a high_block, so it must be
+# blocked low. It loses to fighters who poke it out of the air with quick
+# grounded attacks: any hit on an airborne fighter knocks it down.
 loop {
-  if distance > 20 {
+  if distance > 24 {
     move_forward x5
   } else {
     jump_forward
+    wait 15
     kick
   }
 }

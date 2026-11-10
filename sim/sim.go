@@ -175,8 +175,9 @@ func (f *fighter) preThink(t int) {
 			f.stance = stNone
 		}
 	}
-	// Air attacks end on landing.
-	if a := f.act; a != nil && a.kind == akAttack && isAirAttack(a.attack) && !f.airborne(t) {
+	// Air attacks end on landing, except landing-low attacks, which carry
+	// through touchdown and finish on the ground.
+	if a := f.act; a != nil && a.kind == akAttack && isAirAttack(a.attack) && a.zone != ZoneLandingLow && !f.airborne(t) {
 		if a.reachedActive && !a.connected && a.k(t-1) < a.spec.Startup+a.spec.Active {
 			f.whiff(a)
 		}
@@ -255,14 +256,17 @@ func (f *fighter) connect(t int) *conn {
 	e := f.enemy()
 	reason := ""
 	isThrow := a.attack == dsl.AtkThrow
+	air := isAirAttack(a.attack)
 	switch {
 	case abs(f.x-e.x) > a.spec.Range:
 		reason = "out_of_range"
 	case e.knockedDown(t):
 		reason = "invulnerable"
-	case a.spec.Height == HeightHigh && e.ducking(t):
+	case !air && a.height == HeightHigh && e.ducking(t):
 		reason = "ducked"
-	case (a.spec.Height == HeightLow || isThrow) && e.airborne(t):
+	case a.zone == ZoneAirToAir && !e.airborne(t):
+		reason = "grounded"
+	case (a.zone == ZoneRisingOverhead || a.zone == ZoneFallingOverhead || a.height == HeightLow || isThrow) && e.airborne(t):
 		reason = "airborne"
 	case isThrow && e.inHitstun(t):
 		reason = "stunned"
@@ -274,7 +278,7 @@ func (f *fighter) connect(t int) *conn {
 	switch {
 	case isThrow:
 		return &conn{kind: cThrow, a: a}
-	case a.spec.Height != HeightNone && e.guarding(t, a.spec.Height):
+	case a.height != HeightNone && e.guarding(t, a.height):
 		return &conn{kind: cBlock, a: a}
 	}
 	return &conn{kind: cHit, a: a}

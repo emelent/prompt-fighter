@@ -1,0 +1,15 @@
+# ducker.pf — low profile.
+# Strategy: stay ducked so grounded high attacks (punch, kick) whiff, jab
+# from the duck when the enemy is close, and sweep enemies that walk into
+# range. Weak to jump attacks (overheads hit a ducking fighter) and throws.
+loop {
+  if in_range(low_jab) {
+    duck hold 12
+    punch
+    punch
+  } elif in_range(sweep) {
+    sweep
+  } else {
+    duck hold 8
+  }
+}

@@ -14,10 +14,11 @@ var update = flag.Bool("update", false, "rewrite golden event logs")
 
 var goldenPairs = [][2]string{
 	{"rushdown", "turtle"},  // timeout
-	{"turtle", "jumper"},    // timeout
+	{"turtle", "jumper"},    // ko (anti-air pokes)
 	{"jumper", "lazy"},      // ko
 	{"thrower", "rushdown"}, // ko
 	{"lazy", "thrower"},     // ko
+	{"ducker", "jumper"},    // ko (landing lows vs a ducker)
 }
 
 func TestGoldenLogs(t *testing.T) {

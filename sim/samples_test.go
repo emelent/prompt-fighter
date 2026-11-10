@@ -58,3 +58,19 @@ func TestBalanceLazyHasNoChecks(t *testing.T) {
 		}
 	}
 }
+
+func TestDuckerDucks(t *testing.T) {
+	ducker := sample(t, "ducker.pf")
+	for _, opp := range samples(t) {
+		if opp.Name == ducker.Name {
+			continue
+		}
+		l, err := Simulate(DefaultConfig(), ducker, opp)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if firstFrame(l, 0, 0, func(ff FighterFrame) bool { return ff.State == "duck" }) < 0 {
+			t.Errorf("ducker never ducks against %s", opp.Name)
+		}
+	}
+}
