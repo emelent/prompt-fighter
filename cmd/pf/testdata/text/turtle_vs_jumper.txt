@@ -1,0 +1,64 @@
+[f 049] p1 punch hits p2 for 5 (combo 1, hp 95)
+[f 049] p1 trades punch for jump_kick (5/10)
+[f 049] p2 knocked down (airborne)
+[f 049] p2 jump_kick hits p1 for 10 (combo 1, hp 90)
+[f 063] p1 enters on_hit
+[f 070] p2 enters on_hit
+[f 087] p1 punch hits p2 for 5 (combo 1, hp 90)
+[f 087] p2 knocked down (airborne)
+[f 102] p1 punch whiffs (invulnerable)
+[f 108] p2 enters on_hit
+[f 115] p1 punch hits p2 for 5 (combo 1, hp 85)
+[f 129] p2 enters on_hit
+[f 143] p1 punch hits p2 for 5 (combo 1, hp 80)
+[f 143] p2 knocked down (airborne)
+[f 158] p1 punch whiffs (invulnerable)
+[f 164] p2 enters on_hit
+[f 171] p1 punch hits p2 for 5 (combo 1, hp 75)
+[f 185] p2 enters on_hit
+[f 199] p1 punch hits p2 for 5 (combo 1, hp 70)
+[f 199] p2 knocked down (airborne)
+[f 214] p1 punch whiffs (invulnerable)
+[f 220] p2 enters on_hit
+[f 227] p1 punch hits p2 for 5 (combo 1, hp 65)
+[f 241] p2 enters on_hit
+[f 255] p1 punch hits p2 for 5 (combo 1, hp 60)
+[f 255] p2 knocked down (airborne)
+[f 270] p1 punch whiffs (invulnerable)
+[f 276] p2 enters on_hit
+[f 283] p1 punch hits p2 for 5 (combo 1, hp 55)
+[f 297] p2 enters on_hit
+[f 311] p1 punch hits p2 for 5 (combo 1, hp 50)
+[f 311] p2 knocked down (airborne)
+[f 326] p1 punch whiffs (invulnerable)
+[f 332] p2 enters on_hit
+[f 339] p1 punch hits p2 for 5 (combo 1, hp 45)
+[f 353] p2 enters on_hit
+[f 367] p1 punch hits p2 for 5 (combo 1, hp 40)
+[f 367] p2 knocked down (airborne)
+[f 382] p1 punch whiffs (invulnerable)
+[f 388] p2 enters on_hit
+[f 395] p1 punch hits p2 for 5 (combo 1, hp 35)
+[f 409] p2 enters on_hit
+[f 423] p1 punch hits p2 for 5 (combo 1, hp 30)
+[f 423] p2 knocked down (airborne)
+[f 438] p1 punch whiffs (invulnerable)
+[f 444] p2 enters on_hit
+[f 451] p1 punch hits p2 for 5 (combo 1, hp 25)
+[f 465] p2 enters on_hit
+[f 479] p1 punch hits p2 for 5 (combo 1, hp 20)
+[f 479] p2 knocked down (airborne)
+[f 494] p1 punch whiffs (invulnerable)
+[f 500] p2 enters on_hit
+[f 507] p1 punch hits p2 for 5 (combo 1, hp 15)
+[f 521] p2 enters on_hit
+[f 535] p1 punch hits p2 for 5 (combo 1, hp 10)
+[f 535] p2 knocked down (airborne)
+[f 550] p1 punch whiffs (invulnerable)
+[f 556] p2 enters on_hit
+[f 563] p1 punch hits p2 for 5 (combo 1, hp 5)
+[f 577] p2 enters on_hit
+[f 591] p1 punch hits p2 for 5 (combo 1, hp 0)
+[f 591] p2 knocked down (airborne)
+[f 591] p2 KO
+result: p1 wins by ko at f591 (hp 90-0)

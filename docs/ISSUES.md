@@ -34,7 +34,16 @@ Implemented by the OpenSpec change `add-http-server`: `pf serve`, the stateless 
 
 ## Phase 3: MCP server and player guide
 
-- `docs/PLAYER_GUIDE.md` should be written from `docs/RULES.md`. The Phase 1 balance decisions are now made (config `2026.11-2`), so the rules are stable to document.
+Implemented by the OpenSpec change `add-mcp-server`: `pf mcp` (a stdio MCP server built on `github.com/modelcontextprotocol/go-sdk` v1.8.0, targeting protocol 2026-07-28 and still negotiating older revisions) and `docs/PLAYER_GUIDE.md`. The tools are `validate_script`, `simulate_round`, `list_sample_bots`, `get_player_guide`, `create_match`, `join_match`, `submit_script`, `get_match` and `get_round_replay`, plus resources for the guide, the rules and the sample bots.
+
+### Notes
+- **First third-party dependency:** the MCP SDK and its transitive modules (`github.com/google/jsonschema-go`, `golang.org/x/oauth2`, `golang.org/x/sync`, `golang.org/x/sys`, `golang.org/x/time`, `github.com/segmentio/encoding`, `github.com/segmentio/asm`, `github.com/yosida95/uritemplate/v3`). Only `mcpserver` and `cmd/pf` import them; `sim`, `sim/dsl` and `server` stay stdlib-only.
+
+### Follow-ups (not blocking Phase 4)
+- **MCP over Streamable HTTP:** for remote or hosted play. It needs the Phase 5 auth decisions first.
+- **MCP prompts:** for example "write a counter to bot X" or "review my last round". These are additive.
+- **Push updates for match state:** clients poll `get_match` today. MCP `subscriptions/listen` or a tasks-extension handle could notify when the opponent submits.
+- **Seat tokens in model context:** tokens pass through the LLM conversation and client transcripts. That's acceptable for trusted, local play, but should be revisited together with accounts and auth in Phase 5.
 
 ## Phase 4: Replay viewer
 

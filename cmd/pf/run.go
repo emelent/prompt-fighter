@@ -19,7 +19,8 @@ const usage = `usage:
   pf validate <file>...
   pf sim <a.pf> <b.pf> [--json] [--frames N] [-v]
   pf selfplay <dir>
-  pf serve [--addr HOST:PORT] [--data DIR]`
+  pf serve [--addr HOST:PORT] [--data DIR]
+  pf mcp [--server URL]`
 
 func run(args []string, stdout, stderr io.Writer) int {
 	if len(args) == 0 {
@@ -35,6 +36,8 @@ func run(args []string, stdout, stderr io.Writer) int {
 		return cmdSelfplay(args[1:], stdout, stderr)
 	case "serve":
 		return cmdServeSignals(args[1:], stdout, stderr)
+	case "mcp":
+		return cmdMcp(args[1:], stdout, stderr)
 	case "-h", "--help", "help":
 		fmt.Fprintln(stdout, usage)
 		return 0
@@ -138,50 +141,11 @@ func cmdSim(args []string, stdout, stderr io.Writer) int {
 	return 0
 }
 
-func describe(e sim.Event) string {
-	d := e.Detail
-	switch e.Type {
-	case "hit":
-		return fmt.Sprintf("%s hits %s for %d (combo %d, hp %d)", d.Attack, e.Target, *d.Damage, d.Combo, *d.HP)
-	case "block":
-		return fmt.Sprintf("%s blocked by %s", d.Attack, e.Target)
-	case "whiff":
-		return fmt.Sprintf("%s whiffs (%s)", d.Attack, d.Reason)
-	case "throw":
-		if d.Outcome == "tech" {
-			return "throw teched"
-		}
-		return fmt.Sprintf("throws %s for %d (hp %d)", e.Target, *d.Damage, *d.HP)
-	case "trade":
-		return fmt.Sprintf("trades %s for %s (%d/%d)", d.Attacks[0], d.Attacks[1], d.Damages[0], d.Damages[1])
-	case "knockdown":
-		return fmt.Sprintf("knocked down (%s)", d.Reason)
-	case "ko":
-		return "KO"
-	case "check":
-		return fmt.Sprintf("checks %s = %s (line %d)", d.Sensor, string(d.Value), d.Line)
-	case "script_end":
-		return "script ended"
-	case "handler_enter":
-		return "enters " + d.Handler
-	}
-	return e.Type
-}
-
 func writeText(w io.Writer, l *sim.Log, verbose bool) {
-	for _, e := range l.Events {
-		if e.Type == "check" && !verbose {
-			continue
-		}
-		fmt.Fprintf(w, "[f %03d] %s %s\n", e.Frame, e.Actor, describe(e))
+	for _, ln := range l.EventLines(verbose) {
+		fmt.Fprintln(w, ln)
 	}
-	r := l.Result
-	hp := fmt.Sprintf("hp %d-%d", r.HP[0], r.HP[1])
-	if r.Winner == nil {
-		fmt.Fprintf(w, "result: draw by %s at f%d (%s)\n", r.Reason, r.EndFrame, hp)
-	} else {
-		fmt.Fprintf(w, "result: %s wins by %s at f%d (%s)\n", *r.Winner, r.Reason, r.EndFrame, hp)
-	}
+	fmt.Fprintln(w, l.ResultLine())
 }
 
 // --- selfplay ---

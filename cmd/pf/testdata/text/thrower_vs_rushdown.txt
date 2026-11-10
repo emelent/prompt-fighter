@@ -1,0 +1,31 @@
+[f 032] p2 kick hits p1 for 9 (combo 1, hp 91)
+[f 046] p1 enters on_hit
+[f 049] p2 punch hits p1 for 5 (combo 1, hp 86)
+[f 063] p1 enters on_hit
+[f 064] p2 kick hits p1 for 9 (combo 1, hp 77)
+[f 078] p1 enters on_hit
+[f 081] p2 punch hits p1 for 5 (combo 1, hp 72)
+[f 095] p1 enters on_hit
+[f 096] p2 kick hits p1 for 9 (combo 1, hp 63)
+[f 110] p1 enters on_hit
+[f 113] p2 punch hits p1 for 5 (combo 1, hp 58)
+[f 127] p1 enters on_hit
+[f 128] p2 kick hits p1 for 9 (combo 1, hp 49)
+[f 142] p1 enters on_hit
+[f 145] p2 punch hits p1 for 5 (combo 1, hp 44)
+[f 159] p1 enters on_hit
+[f 160] p2 kick hits p1 for 9 (combo 1, hp 35)
+[f 174] p1 enters on_hit
+[f 177] p2 punch hits p1 for 5 (combo 1, hp 30)
+[f 191] p1 enters on_hit
+[f 192] p2 kick hits p1 for 9 (combo 1, hp 21)
+[f 206] p1 enters on_hit
+[f 209] p2 punch hits p1 for 5 (combo 1, hp 16)
+[f 223] p1 enters on_hit
+[f 224] p2 kick hits p1 for 9 (combo 1, hp 7)
+[f 238] p1 enters on_hit
+[f 241] p2 punch hits p1 for 5 (combo 1, hp 2)
+[f 255] p1 enters on_hit
+[f 256] p1 KO
+[f 256] p2 kick hits p1 for 9 (combo 1, hp 0)
+result: p2 wins by ko at f256 (hp 0-100)

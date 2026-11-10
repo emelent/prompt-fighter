@@ -11,6 +11,23 @@ The server logs one line on start, and SIGINT or SIGTERM shuts it down gracefull
 
 Engine rules, frame data and the event log format are described in [`RULES.md`](RULES.md). Versions in this document: config `2026.11-2`, log format `1`, store `1`.
 
+## Playing with an LLM (MCP)
+
+`pf mcp` exposes the same functionality to an LLM client as Model Context Protocol tools over stdio. The match tools call this HTTP API at `--server`, which defaults to `http://127.0.0.1:8080`; pass `--server ""` to disable them. Local tools (`validate_script`, `simulate_round`, `list_sample_bots`, `get_player_guide`) work without a server.
+
+```sh
+claude mcp add prompt-fighter -- pf mcp                            # Claude Code
+claude mcp add prompt-fighter -- pf mcp --server http://host:9000  # another pf serve
+```
+
+Claude Desktop (`claude_desktop_config.json`):
+
+```json
+{ "mcpServers": { "prompt-fighter": { "command": "pf", "args": ["mcp"] } } }
+```
+
+The [player guide](PLAYER_GUIDE.md) is what the model should read first. It's available as the `get_player_guide` tool and the `promptfighter://docs/player-guide` resource.
+
 ## Endpoints
 
 | method | path | purpose |

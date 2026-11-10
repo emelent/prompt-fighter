@@ -1,0 +1,64 @@
+[f 000] p1 checks in_range(throw) = false (line 5)
+[f 000] p2 checks in_range(kick) = false (line 5)
+[f 005] p1 checks in_range(throw) = false (line 5)
+[f 006] p2 checks in_range(kick) = false (line 5)
+[f 010] p1 checks in_range(throw) = false (line 5)
+[f 012] p2 checks in_range(kick) = false (line 5)
+[f 015] p1 checks in_range(throw) = false (line 5)
+[f 018] p2 checks in_range(kick) = false (line 5)
+[f 020] p1 checks in_range(throw) = false (line 5)
+[f 024] p2 checks in_range(kick) = true (line 5)
+[f 025] p1 checks in_range(throw) = false (line 5)
+[f 030] p1 checks in_range(throw) = false (line 5)
+[f 032] p2 kick hits p1 for 9 (combo 1, hp 91)
+[f 044] p2 checks enemy.blocking = false (line 7)
+[f 046] p1 enters on_hit
+[f 048] p1 checks in_range(throw) = true (line 5)
+[f 049] p2 punch hits p1 for 5 (combo 1, hp 86)
+[f 056] p2 checks in_range(kick) = true (line 5)
+[f 063] p1 enters on_hit
+[f 064] p2 kick hits p1 for 9 (combo 1, hp 77)
+[f 076] p2 checks enemy.blocking = false (line 7)
+[f 078] p1 enters on_hit
+[f 080] p1 checks in_range(throw) = true (line 5)
+[f 081] p2 punch hits p1 for 5 (combo 1, hp 72)
+[f 088] p2 checks in_range(kick) = true (line 5)
+[f 095] p1 enters on_hit
+[f 096] p2 kick hits p1 for 9 (combo 1, hp 63)
+[f 108] p2 checks enemy.blocking = false (line 7)
+[f 110] p1 enters on_hit
+[f 112] p1 checks in_range(throw) = true (line 5)
+[f 113] p2 punch hits p1 for 5 (combo 1, hp 58)
+[f 120] p2 checks in_range(kick) = true (line 5)
+[f 127] p1 enters on_hit
+[f 128] p2 kick hits p1 for 9 (combo 1, hp 49)
+[f 140] p2 checks enemy.blocking = false (line 7)
+[f 142] p1 enters on_hit
+[f 144] p1 checks in_range(throw) = true (line 5)
+[f 145] p2 punch hits p1 for 5 (combo 1, hp 44)
+[f 152] p2 checks in_range(kick) = true (line 5)
+[f 159] p1 enters on_hit
+[f 160] p2 kick hits p1 for 9 (combo 1, hp 35)
+[f 172] p2 checks enemy.blocking = false (line 7)
+[f 174] p1 enters on_hit
+[f 176] p1 checks in_range(throw) = true (line 5)
+[f 177] p2 punch hits p1 for 5 (combo 1, hp 30)
+[f 184] p2 checks in_range(kick) = true (line 5)
+[f 191] p1 enters on_hit
+[f 192] p2 kick hits p1 for 9 (combo 1, hp 21)
+[f 204] p2 checks enemy.blocking = false (line 7)
+[f 206] p1 enters on_hit
+[f 208] p1 checks in_range(throw) = true (line 5)
+[f 209] p2 punch hits p1 for 5 (combo 1, hp 16)
+[f 216] p2 checks in_range(kick) = true (line 5)
+[f 223] p1 enters on_hit
+[f 224] p2 kick hits p1 for 9 (combo 1, hp 7)
+[f 236] p2 checks enemy.blocking = false (line 7)
+[f 238] p1 enters on_hit
+[f 240] p1 checks in_range(throw) = true (line 5)
+[f 241] p2 punch hits p1 for 5 (combo 1, hp 2)
+[f 248] p2 checks in_range(kick) = true (line 5)
+[f 255] p1 enters on_hit
+[f 256] p1 KO
+[f 256] p2 kick hits p1 for 9 (combo 1, hp 0)
+result: p2 wins by ko at f256 (hp 0-100)
