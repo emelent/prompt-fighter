@@ -78,7 +78,7 @@ Implemented by the OpenSpec change `pixel-art-fighters`: the replay stage is now
 
 ### Follow-ups
 - **Character select:** both players use the same character, told apart by palette. More characters would need a way to choose (for example a field in the match or the script header).
-- **Sound:** hit, block and KO effects. The game is created with `noAudio` today.
+- ~~**Sound:**~~ done: hit, miss, block and jump effects plus background music, from the files in `audio/` (see API.md, Replay viewer). There is no KO or throw-specific sound yet; a throw uses the kick hit.
 - **Non-Latin names:** characters outside the 5×7 font draw as boxes on the stage. Full names still show in the script panels.
 - **Custom configs:** the knockdown get-up pose assumes the default 20 knockdown frames, and the round word assumes best of 3. Logs don't carry these values.
 

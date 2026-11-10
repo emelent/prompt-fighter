@@ -19,7 +19,7 @@ func checkViewerHeaders(t *testing.T, path string, h map[string][]string) {
 		return ""
 	}
 	csp := get("Content-Security-Policy")
-	for _, d := range []string{"default-src 'none'", "script-src 'self'", "style-src 'self'", "connect-src 'self'", "base-uri 'none'", "frame-ancestors 'none'"} {
+	for _, d := range []string{"default-src 'none'", "script-src 'self'", "style-src 'self'", "media-src 'self'", "connect-src 'self'", "base-uri 'none'", "frame-ancestors 'none'"} {
 		if !strings.Contains(csp, d) {
 			t.Errorf("%s: CSP %q lacks %q", path, csp, d)
 		}
@@ -123,4 +123,24 @@ func TestRootRedirectsToLobby(t *testing.T) {
 	expectError(t, do(t, s, "POST", "/", ""), 405, "method_not_allowed")
 	expectError(t, do(t, s, "GET", "/nope", ""), 404, "not_found")
 	expectError(t, do(t, s, "GET", "/play/nope", ""), 404, "not_found")
+}
+
+func TestViewAudioAssets(t *testing.T) {
+	s := newTestServer(t)
+	entries, _ := fs.ReadDir(web.FS, ".")
+	n := 0
+	for _, e := range entries {
+		if !strings.HasSuffix(e.Name(), ".mp3") {
+			continue
+		}
+		n++
+		rec := do(t, s, "GET", "/view/static/"+e.Name(), "")
+		if rec.Code != 200 || rec.Header().Get("Content-Type") != "audio/mpeg" {
+			t.Errorf("%s: %d %q, want 200 audio/mpeg", e.Name(), rec.Code, rec.Header().Get("Content-Type"))
+		}
+		checkViewerHeaders(t, e.Name(), rec.Header())
+	}
+	if n < 7 {
+		t.Errorf("embedded %d mp3 files, want at least 7 (six effects and the fight music)", n)
+	}
 }

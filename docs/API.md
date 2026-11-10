@@ -219,6 +219,8 @@ The pages use only the API above; no extra endpoints exist for them. They're ser
 
 **Frame countdown:** the number at the top centre is the frames left in the round, `frame_budget − 1 − f` from the log (599 at frame 0 of a default round, 000 when a round times out).
 
+**Sound:** hits, misses, blocks (guard breaks included) and jumps play sound effects as playback advances (playing or stepping forward; scrubbing and jumping are silent), with background music: each page picks one `fight_music_*` track at random, starts it when the round first plays, and keeps it looping through pauses and after the round ends. Punch-type attacks (`punch`, `dive_punch`, `low_jab`) and kick-type attacks (`kick`, `sweep`, `jump_kick`) have their own hit and miss sounds, and a successful throw uses the kick hit. Browsers start audio only after the first click or key press on the page. The "sound" toggle turns it off and is remembered in the browser. The sources are the files in `audio/`. The viewer uses MP3 copies in `web/src/audio/`, made by `npm run audio` in `web/` (needs ffmpeg); a new `fight_music_N` file joins the rotation after `npm run audio && npm run build`.
+
 The "checks" toggle adds sensor reads to the event feed, and "ranges" draws each active attack's full reach. The drawn limbs are illustrative and shorter than the real reach (a punch reaches 8 units, about 70 px), so use "ranges" to see what can connect.
 
 **Security:**

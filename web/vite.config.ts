@@ -14,6 +14,9 @@ export default defineConfig({
     chunkSizeWarningLimit: 2000,
     // Keep everything in external files: the CSP forbids inline scripts.
     modulePreload: { polyfill: false },
+    // Never inline sounds as data: URLs: the stage fetches them, and the CSP
+    // only allows same-origin connections.
+    assetsInlineLimit: (file: string) => (file.endsWith('.mp3') ? false : undefined),
   },
   server: {
     // The lobby embeds ../scripts/*.pf (sample bots) at build time.

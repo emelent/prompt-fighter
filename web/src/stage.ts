@@ -9,6 +9,13 @@ import { choosePose, colourise, PALETTES, PLAYER_TEXT, poseGrid, SPRITE_H, SPRIT
 import { INTRO_FIGHT_MS, type Playback } from './playback';
 import { ADVANCE, fitText, textMask, textWidth } from './pixelfont';
 import { buildScene, MAX_HP, type FighterDraw, type Flash, type Scene } from './scene';
+import { pickTrack, SOUND_KEYS, soundsBetween, type SoundKey } from './sounds';
+import blockUrl from './audio/block.mp3';
+import jumpUrl from './audio/jump.mp3';
+import kickHitUrl from './audio/kick_hit.mp3';
+import kickMissUrl from './audio/kick_miss.mp3';
+import punchHitUrl from './audio/punch_hit.mp3';
+import punchMissUrl from './audio/punch_miss.mp3';
 import type { Log } from './types';
 
 export const GAME_WIDTH = 960;
@@ -42,6 +49,19 @@ const SPARKS: Record<Flash['kind'], readonly string[]> = {
   block: ['#e8fbff', '#62d6ff', '#62d6ff'],
 };
 
+const SOUND_URLS: Record<SoundKey, string> = {
+  punch_hit: punchHitUrl,
+  punch_miss: punchMissUrl,
+  kick_hit: kickHitUrl,
+  kick_miss: kickMissUrl,
+  block: blockUrl,
+  jump: jumpUrl,
+};
+/** Every fight_music_* track in src/audio (see convert-audio.sh); one is picked per page. */
+const FIGHT_MUSIC = Object.values(import.meta.glob<string>('./audio/fight_music_*.mp3', { eager: true, query: '?url', import: 'default' }));
+const EFFECT_VOLUME = 0.8;
+const MUSIC_VOLUME = 0.3;
+
 function sx(x: number): number {
   return STAGE_LEFT + x * UNIT;
 }
@@ -56,6 +76,8 @@ export interface StageSource {
   showRanges: () => boolean;
   /** The intro's round word ("ROUND 2", "FINAL ROUND"), or null for none. */
   roundLabel?: string | null;
+  /** Whether sound effects and music are on (default on). */
+  soundOn?: () => boolean;
 }
 
 type Align = 'left' | 'center' | 'right';
@@ -69,6 +91,9 @@ export class StageScene extends Phaser.Scene {
   private glyphsUsed = 0;
   private drawn = -1;
   private dirty = true;
+  private soundFrame = 0; // the frame sound effects were last played up to
+  private music: Phaser.Sound.BaseSound | null = null;
+  private musicStarted = false;
 
   constructor(private readonly src: StageSource) {
     super({ key: 'stage' });
@@ -79,7 +104,22 @@ export class StageScene extends Phaser.Scene {
     this.dirty = true;
   }
 
+  preload(): void {
+    for (const key of SOUND_KEYS) this.load.audio(key, SOUND_URLS[key]);
+  }
+
   create(): void {
+    // One fight track, picked at random; it is large, so it loads after the
+    // stage is up, and only the chosen track is downloaded.
+    const track = pickTrack(FIGHT_MUSIC);
+    if (track) {
+      this.load.audio('music', track);
+      this.load.once(Phaser.Loader.Events.COMPLETE, () => {
+        this.music = this.sound.add('music', { loop: true, volume: MUSIC_VOLUME });
+      });
+      this.load.start();
+    }
+    this.soundFrame = this.src.playback.frame;
     const bd = backdropRGBA();
     this.canvasTexture('backdrop', bd.width, bd.height, bd.data);
     this.add.image(0, 0, 'backdrop').setOrigin(0, 0).setScale(GAME_WIDTH / BACKDROP_W, GAME_HEIGHT / BACKDROP_H).setDepth(0);
@@ -98,10 +138,30 @@ export class StageScene extends Phaser.Scene {
     // resuming does not jump far ahead.
     this.src.playback.tick(Math.min(this.game.loop.rawDelta, 250));
     const f = this.src.playback.frame;
+    this.updateSound(f);
     if (f !== this.drawn || this.dirty) {
       this.draw(buildScene(this.src.log, f, { showRanges: this.src.showRanges() }));
       this.drawn = f;
       this.dirty = false;
+    }
+  }
+
+  // --- sound -------------------------------------------------------------------
+
+  private updateSound(f: number): void {
+    const on = this.src.soundOn?.() ?? true;
+    this.sound.mute = !on;
+    if (f !== this.soundFrame) {
+      if (on) for (const cue of soundsBetween(this.src.log, this.soundFrame, f)) this.sound.play(cue.key, { volume: EFFECT_VOLUME });
+      this.soundFrame = f;
+    }
+    // The music starts the first time the round plays and then loops in the
+    // background, through pauses and after the round ends; the sound toggle
+    // mutes it.
+    const m = this.music;
+    if (m && !m.isPlaying && (this.src.playback.playing || this.musicStarted)) {
+      m.play();
+      this.musicStarted = true;
     }
   }
 
@@ -296,7 +356,6 @@ export function mountStage(parent: HTMLElement, src: StageSource): { game: Phase
     backgroundColor: INK,
     pixelArt: true,
     banner: false,
-    audio: { noAudio: true },
     input: { keyboard: false, mouse: false, touch: false, gamepad: false },
     scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_HORIZONTALLY },
     scene,

@@ -23,6 +23,25 @@ interface PlayerContext {
   round?: number;
 }
 
+const SOUND_PREF = 'pf.sound';
+
+/** Whether sound is on: on unless the viewer turned it off before. */
+function loadSoundPref(): boolean {
+  try {
+    return localStorage.getItem(SOUND_PREF) !== 'off';
+  } catch {
+    return true;
+  }
+}
+
+function saveSoundPref(on: boolean): void {
+  try {
+    localStorage.setItem(SOUND_PREF, on ? 'on' : 'off');
+  } catch {
+    // Storage blocked (private window): the choice lasts for this page only.
+  }
+}
+
 function isTextInput(t: EventTarget | null): boolean {
   if (!(t instanceof HTMLElement)) return false;
   if (t instanceof HTMLTextAreaElement || t instanceof HTMLSelectElement) return true;
@@ -58,6 +77,9 @@ function renderPlayer(log: Log, ctx: PlayerContext): void {
   const frameOut = el('output', { class: 'frame-out', 'aria-label': 'Current frame' });
   const checksBox = el('input', { type: 'checkbox', 'aria-label': 'Show sensor checks in the event feed' });
   const rangesBox = el('input', { type: 'checkbox', 'aria-label': 'Show attack ranges' });
+  const soundBox = el('input', { type: 'checkbox', 'aria-label': 'Play sound effects and music' });
+  soundBox.checked = loadSoundPref();
+  soundBox.addEventListener('change', () => saveSoundPref(soundBox.checked));
   const controls = el(
     'div',
     { class: 'controls', role: 'toolbar', 'aria-label': 'Playback controls' },
@@ -73,6 +95,7 @@ function renderPlayer(log: Log, ctx: PlayerContext): void {
     el('label', {}, 'speed ', speed),
     el('label', {}, checksBox, ' checks'),
     el('label', {}, rangesBox, ' ranges'),
+    el('label', {}, soundBox, ' sound'),
   );
 
   // Script panels
@@ -167,7 +190,7 @@ function renderPlayer(log: Log, ctx: PlayerContext): void {
   show(layout);
   buildFeed();
 
-  const { scene } = mountStage(stageBox, { log, playback: pb, showRanges: () => showRanges, roundLabel: roundLabel(ctx.round ?? null) });
+  const { scene } = mountStage(stageBox, { log, playback: pb, showRanges: () => showRanges, roundLabel: roundLabel(ctx.round ?? null), soundOn: () => soundBox.checked });
   stageScene = scene;
 
   pb.seek(start ?? 0);

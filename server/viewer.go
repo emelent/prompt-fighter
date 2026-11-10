@@ -9,10 +9,11 @@ import (
 	"promptfighter/web"
 )
 
-// viewerCSP allows only same-origin scripts, styles and connections; no inline
-// scripts, objects, framing or base-URI changes (replay-viewer spec).
+// viewerCSP allows only same-origin scripts, styles, connections and media
+// (the stage's sound effects); no inline scripts, objects, framing or base-URI
+// changes (replay-viewer spec).
 const viewerCSP = "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; " +
-	"connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+	"media-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
 
 func viewerHeaders(w http.ResponseWriter) {
 	h := w.Header()
@@ -35,6 +36,9 @@ func (s *Server) handleViewerPage(w http.ResponseWriter, r *http.Request) *apiEr
 	return nil
 }
 
+// assetTypes fixes content types the platform's MIME table may lack.
+var assetTypes = map[string]string{".mp3": "audio/mpeg"}
+
 // handleViewerAsset serves a built asset from the embedded dist directory.
 func (s *Server) handleViewerAsset(w http.ResponseWriter, r *http.Request) *apiError {
 	viewerHeaders(w)
@@ -46,7 +50,10 @@ func (s *Server) handleViewerAsset(w http.ResponseWriter, r *http.Request) *apiE
 	if err != nil {
 		return errNotFound("no such viewer asset: " + name)
 	}
-	ct := mime.TypeByExtension(path.Ext(name))
+	ct := assetTypes[path.Ext(name)]
+	if ct == "" {
+		ct = mime.TypeByExtension(path.Ext(name))
+	}
 	if ct == "" {
 		ct = "application/octet-stream"
 	}
