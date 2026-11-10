@@ -1,14 +1,16 @@
 # ducker.pf — low profile.
 # Strategy: stay ducked so grounded high attacks (punch, kick) whiff, jab
 # from the duck when the enemy is close, and sweep enemies that walk into
-# range. Weak to jump attacks (overheads hit a ducking fighter) and throws.
+# range. Before a 6th sweep in a row would go stale (shorter reach), it jabs
+# from the duck instead, which resets the count. Weak to jump attacks
+# (overheads hit a ducking fighter) and throws.
 loop {
   if in_range(low_jab) {
     duck hold 12
     punch
     punch
   } elif in_range(sweep) {
-    sweep
+    if repeats >= 5 { duck hold 6 punch } else { sweep }
   } else {
     duck hold 8
   }

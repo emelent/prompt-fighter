@@ -26,7 +26,16 @@ const BAR_W = 380;
 const BAR_Y = 24;
 const BAR_H = 27;
 
-const CALLOUT_COLOURS: Record<Callout['kind'], string> = { block: '#8fe9ff', throw: '#ffcc33', tech: '#ffffff', trade: '#ff9a3d', ko: '#ff4d3d' };
+const CALLOUT_COLOURS: Record<Callout['kind'], string> = {
+  block: '#8fe9ff',
+  throw: '#ffcc33',
+  tech: '#ffffff',
+  trade: '#ff9a3d',
+  ko: '#ff4d3d',
+  guard_break: '#ff5ca8',
+  boost: '#ff6a3d',
+  stale: '#b9ad95',
+};
 const SPARKS: Record<Flash['kind'], readonly string[]> = {
   hit: ['#ffffff', '#ffcc33', '#ff6a3d'],
   throw: ['#ffffff', '#ffcc33', '#ff6a3d'],
@@ -132,7 +141,7 @@ export class StageScene extends Phaser.Scene {
   }
 
   /** Draws text in the pixel font; y is the top of the text. Returns its width. */
-  private text(str: string, x: number, y: number, scale: number, colour: string, align: Align = 'left'): number {
+  private text(str: string, x: number, y: number, scale: number, colour: string, align: Align = 'left', alpha = 1): number {
     const chars = [...str];
     const w = (textWidth(str) + 2) * scale;
     const left = align === 'left' ? x : align === 'right' ? x - w : x - w / 2;
@@ -144,7 +153,7 @@ export class StageScene extends Phaser.Scene {
         this.glyphs.push(img);
       }
       this.glyphsUsed++;
-      img.setTexture(this.glyphTexture(ch, colour)).setPosition(Math.round(left + i * ADVANCE * scale), Math.round(y)).setScale(scale).setVisible(true);
+      img.setTexture(this.glyphTexture(ch, colour)).setPosition(Math.round(left + i * ADVANCE * scale), Math.round(y)).setScale(scale).setAlpha(alpha).setVisible(true);
     });
     return w;
   }
@@ -250,17 +259,21 @@ export class StageScene extends Phaser.Scene {
   }
 
   private drawCallouts(sc: Scene): void {
-    for (const c of calloutsAt(this.src.log, sc.frame)) {
+    const stacked = new Map<string, number>(); // callouts already drawn per anchor
+    // Newest first, so the newest callout sits closest to the fighter.
+    for (const c of calloutsAt(this.src.log, sc.frame).reverse()) {
       const colour = CALLOUT_COLOURS[c.kind];
       if (c.anchor === 'center') {
-        this.text(c.text, GAME_WIDTH / 2, 130, 6, colour, 'center');
+        this.text(c.text, GAME_WIDTH / 2, 130, 6, colour, 'center', c.alpha);
         continue;
       }
       const [a, b] = sc.fighters;
       const x = c.anchor === 'mid' ? (sx(a.x) + sx(b.x)) / 2 : sx((c.anchor === 'p1' ? a : b).x);
       const foot = c.anchor === 'mid' ? Math.min(this.feet(a), this.feet(b)) : this.feet(c.anchor === 'p1' ? a : b);
-      const y = Math.max(96, foot - 240 - Math.floor(c.age / 3) * PX);
-      this.text(c.text, x, y, 3, colour, 'center');
+      const n = stacked.get(c.anchor) ?? 0;
+      stacked.set(c.anchor, n + 1);
+      const y = Math.max(96, foot - 240 - n * 33 - Math.floor(c.age / 3) * PX);
+      this.text(c.text, x, y, 3, colour, 'center', c.alpha);
     }
   }
 

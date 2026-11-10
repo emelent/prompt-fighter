@@ -5,7 +5,7 @@ import { HighlightStyle, StreamLanguage, type StreamParser } from '@codemirror/l
 import { tags as t } from '@lezer/highlight';
 
 export const ACTIONS = ['punch', 'kick', 'sweep', 'throw', 'jump', 'jump_forward', 'jump_back', 'duck', 'high_block', 'low_block', 'move_forward', 'move_back', 'wait'] as const;
-export const SENSORS = ['distance', 'health', 'enemy.health', 'enemy.airborne', 'enemy.ducking', 'enemy.blocking', 'enemy.attacking', 'enemy.knocked_down', 'in_range'] as const;
+export const SENSORS = ['distance', 'health', 'enemy.health', 'guard', 'passive', 'enemy.passive', 'repeats', 'enemy.airborne', 'enemy.ducking', 'enemy.blocking', 'enemy.attacking', 'enemy.knocked_down', 'in_range'] as const;
 export const OVERLAY_ATTACKS = ['jump_kick', 'dive_punch', 'low_jab'] as const;
 export const KEYWORDS = ['if', 'elif', 'else', 'loop', 'repeat', 'hold', 'and', 'or', 'not'] as const;
 export const HANDLERS = ['on_hit', 'on_block'] as const;

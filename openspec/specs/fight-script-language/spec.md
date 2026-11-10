@@ -72,7 +72,7 @@ The language SHALL support `if <cond> { ... }` followed by zero or more `elif <c
 ### Requirement: Conditions
 A condition SHALL be an expression built from:
 - Boolean sensors: `enemy.airborne`, `enemy.ducking`, `enemy.blocking`, `enemy.attacking`, `enemy.knocked_down`, and `in_range(<attack>)`, where `<attack>` is one of `punch`, `kick`, `sweep`, `throw`, `jump_kick`, `dive_punch`, `low_jab`.
-- Integer sensors: `distance`, `health`, `enemy.health`.
+- Integer sensors: `distance`, `health`, `enemy.health`, `guard`, `passive`, `enemy.passive`, `repeats`.
 - Integer literals from 0 to 999.
 - Comparisons `<`, `<=`, `>`, `>=`, `==`, `!=` between two integer operands.
 - `not`, `and`, `or`, and parentheses.
@@ -98,6 +98,10 @@ Precedence from highest to lowest SHALL be: parentheses, comparison, `not`, `and
 #### Scenario: in_range with a non-attack argument
 - **WHEN** a condition is `in_range(jump)`
 - **THEN** validation fails with a message listing the valid attack names for `in_range`
+
+#### Scenario: Anti-passivity sensors
+- **WHEN** a condition is `passive > 90 or guard >= 3 or repeats >= 5`
+- **THEN** validation succeeds
 
 ### Requirement: Static limits
 The validator SHALL enforce:

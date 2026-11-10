@@ -35,6 +35,12 @@ describe('choosePose', () => {
     expect(choosePose(fr('blockstun', 'high_block', 'active'), 0).pose).toBe('BS');
     expect(choosePose(fr('blockstun', 'blockstun'), 0).pose).toBe('BS');
   });
+  it('has its own dazed pose for a broken guard', () => {
+    const gb = choosePose(fr('guard_break', 'guard_break'), 0);
+    expect(gb).toEqual({ pose: 'GB', fallback: false });
+    for (const other of [fr('hitstun', 'hitstun'), fr('blockstun', 'blockstun'), fr('block', 'high_block', 'active'), fr('idle', 'idle')])
+      expect(choosePose(other, 0).pose).not.toBe('GB');
+  });
   it('lies down for knockdown and ko, and the winner poses', () => {
     expect(choosePose(fr('knockdown', 'knockdown', '', 10), 0).pose).toBe('KD1');
     expect(choosePose(fr('ko', 'ko'), 0).pose).toBe('KD1');

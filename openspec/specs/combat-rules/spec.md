@@ -7,7 +7,7 @@ Defines the deterministic rules of a Prompt Fighter round: the versioned config 
 ## Requirements
 
 ### Requirement: Versioned config table
-All tunables SHALL live in a single config value with a version string. That covers stage geometry, HP, frame budget, per-action frame data, ranges, damage, stun and pushback values, combo parameters, the air-attack zone table, sensor cost, default hold length and script limits. Game logic SHALL use only integer arithmetic: integer units for positions and integer percentages for damage scaling. A built-in default config SHALL exist, and its version SHALL be recorded in every event log. Any change to a default value SHALL bump the config version.
+All tunables SHALL live in a single config value with a version string. That covers stage geometry, HP, frame budget, per-action frame data, ranges, damage, stun and pushback values, combo parameters, the air-attack zone table, sensor cost, default hold length, script limits, and the guard-break, passivity, stale-attack and combo-growth parameters. Game logic SHALL use only integer arithmetic: integer units for positions and integer percentages for damage scaling. A built-in default config SHALL exist, and its version SHALL be recorded in every event log. Any change to a default value SHALL bump the config version.
 
 #### Scenario: Defaults match the build spec
 - **WHEN** the default config is loaded
@@ -20,6 +20,10 @@ All tunables SHALL live in a single config value with a version string. That cov
 #### Scenario: Air zone defaults
 - **WHEN** the default config is loaded
 - **THEN** the air-attack zones by airborne start frame are 1–6 rising overhead, 7–13 peak air-to-air, 14–16 falling overhead and 17–20 landing low
+
+#### Scenario: Anti-passivity defaults
+- **WHEN** the default config is loaded
+- **THEN** its version is `2026.11-3`; a guard breaks on the 4th block in a row, the streak lapses after 60 frames, and guard-break stun lasts 20 frames; the passivity limit is 120 frames, the boost starts at 110% and grows 10 points every 30 frames up to 150%; attacks go stale from the 6th repeat, losing 15% of their range per repeat down to 40%; and combos grow by 15 percentage points per hit
 
 ### Requirement: Stage, geometry and facing
 The stage SHALL span x = 0 to 100 units. Player 1 SHALL start at x=30 and player 2 at x=70, both at y=0 with full HP. Each fighter SHALL have a half-width of 2 units, so fighter centers stay within [2, 98] and are never closer than 4 units apart. Range checks SHALL compare the center-to-center distance against the attack's range. Grounded fighters SHALL always face each other. Fighters SHALL NOT pass through or over each other.
@@ -112,7 +116,7 @@ When a non-throw attack connects with a target that is not guarding against its 
 - **THEN** the target takes damage, is placed at y=0 and enters knockdown
 
 ### Requirement: Blocks
-`high_block` SHALL guard against high attacks and `low_block` against low attacks, but only during the block's hold phase. Startup and recovery frames do not guard. When an attack connects with a target guarding its height:
+`high_block` SHALL guard against high attacks and `low_block` against low attacks, but only during the block's hold phase. Startup and recovery frames do not guard. When an attack connects with a target guarding its height, and the block does not break the guard (see Guard break):
 - The defender SHALL take no damage, enter blockstun for 3 frames (during which it keeps guarding and its hold is extended to cover the blockstun if needed) and be pushed back 2 units, with wall transfer as for hits.
 - The attacker's attack SHALL be abandoned, and the attacker SHALL enter blockstun for the attack's recovery length.
 - A `block` event SHALL be emitted.
@@ -126,6 +130,60 @@ A block of the wrong height SHALL NOT guard.
 #### Scenario: Wrong-height block
 - **WHEN** a `sweep` connects with a target holding `high_block`
 - **THEN** the sweep hits and the target is knocked down
+
+### Requirement: Guard break
+Each fighter SHALL keep a block streak: the number of attacks it has guarded in a row. The streak SHALL reset to 0 when the fighter starts an attack, when 60 frames pass after its last guarded attack, when it is hit or thrown, and when its guard breaks. When an attack connects with a guarding target whose streak is already 3, the block SHALL instead break the guard:
+- The defender SHALL take no damage, have its block abandoned, be pushed back 2 units (with wall transfer as for hits), and enter guard-break stun for 20 frames. During the stun it has no script input and cannot guard, and attacks and throws connect with it as with an idle fighter. Hits during the stun start a new combo at 1.
+- The attacker SHALL NOT enter blockstun. Its attack counts as connected and continues into its normal recovery.
+- A `guard_break` event SHALL be emitted in place of the `block` event.
+
+#### Scenario: Fourth block breaks the guard
+- **WHEN** a fighter holding `high_block` guards three punches in a row, and a fourth punch connects within 60 frames of the third
+- **THEN** the fourth punch emits `guard_break` and no `block` event, the defender takes no damage and is in guard-break stun for 20 frames, and the puncher goes straight into its 5 recovery frames
+
+#### Scenario: Punishing a broken guard
+- **WHEN** an attacker breaks a guard with `punch` and then starts `kick` as soon as the punch recovers
+- **THEN** the kick connects as a hit while the defender is still in guard-break stun
+
+#### Scenario: Streak lapses
+- **WHEN** a fighter guards three attacks, then 60 frames pass without it guarding another
+- **THEN** its streak is 0, and the next guarded attack is an ordinary block
+
+#### Scenario: Attacking resets the streak
+- **WHEN** a fighter guards three attacks, starts a `punch`, then guards another attack
+- **THEN** that block is ordinary and its streak is 1
+
+### Requirement: Passivity boost
+Each fighter SHALL keep a passive counter, in frames. On every frame where the fighter is neither stunned nor knocked down and does not start an attack, the counter SHALL increase by 1. It increases by 2 on frames where the fighter moves away from the opponent, by `move_back` or by the horizontal motion of `jump_back`. The counter SHALL reset to 0 when the fighter starts an attack (including a throw, an air attack or a `low_jab`).
+
+When a fighter's hit or throw lands on a target whose passive counter is at least 120, its damage SHALL be multiplied by the boost: 110% at 120 frames, plus 10 percentage points for every further full 30 frames, capped at 150%. After the boosted hit or throw lands, the target's passive counter SHALL reset to 0. The boost SHALL NOT apply to blocked attacks or guard breaks, which deal no damage. Damage with both a boost and combo growth SHALL be `max(1, base × combo% × boost% / 10000)` with integer division. A hit or throw with a boost above 100% SHALL record `boost` in its event.
+
+#### Scenario: Boost thresholds
+- **WHEN** the target's passive counter is 119, 120, 150, 239 and 240 frames when a hit lands
+- **THEN** the boost is 100%, 110%, 120%, 140% and 150% respectively
+
+#### Scenario: Waiting is punished
+- **WHEN** p1's `kick` (base 9) lands as the first hit of a combo on p2, whose passive counter is 150
+- **THEN** the kick deals 9 × 100 × 120 / 10000 = 10 damage, the `hit` event records `boost: 120`, and p2's passive counter resets to 0
+
+#### Scenario: Running away counts double
+- **WHEN** a fighter does nothing but `move_back` for 60 frames
+- **THEN** its passive counter is 120 and the opponent's next hit is boosted
+
+#### Scenario: Attacking resets the counter
+- **WHEN** a fighter that has been passive for 200 frames starts a `punch`, even one that whiffs
+- **THEN** its passive counter is 0 and the opponent's next hit is not boosted
+
+### Requirement: Stale attacks
+Each fighter SHALL count how many times in a row it has started the same attack. Overlay attacks (`jump_kick`, `dive_punch`, `low_jab`) count as their own attacks, separate from `kick` and `punch`. Starting a different attack SHALL reset the count to 1. Other actions SHALL NOT affect it. From the 6th repeat on, the attack is stale, and its range SHALL be multiplied by `max(40, 100 − 15 × (repeats − 5))` percent with integer division. That gives 85% on the 6th repeat, 70% on the 7th, 55% on the 8th and 40% from the 9th. A `stale` event SHALL be emitted when a stale attack starts. A stale attack whose target is within the attack's full range but beyond its reduced range SHALL whiff with reason `stale`. Staleness SHALL NOT change damage or frame data, and it involves no randomness.
+
+#### Scenario: Sixth punch in a row
+- **WHEN** a fighter starts its 6th `punch` in a row with the target at distance 7
+- **THEN** a `stale` event is emitted with repeats 6, the punch's range is 8 × 85 / 100 = 6, and the punch whiffs with reason `stale`
+
+#### Scenario: Mixing attacks resets
+- **WHEN** a fighter has punched 5 times in a row, then kicks, then punches again
+- **THEN** the kick and the following punch both have repeats 1 and full range
 
 ### Requirement: Throws and the triangle
 A throw that connects SHALL ignore blocking, deal its damage and knock the target down. Attacks beat throws: if a thrower is hit on any frame before or during its throw's active frame, the throw is abandoned along with the rest of its action. If both fighters' throws connect on the same frame, both SHALL be teched: no damage, both pushed back 2 units, a `throw` event with outcome `tech` for each, and both continue into recovery. A successful throw SHALL emit a `throw` event with outcome `success` and a `knockdown` event. Throw recovery SHALL be long enough that a throw repeated immediately after a successful throw does not become active before an attack started on the target's first actionable frame. The triangle therefore holds on wake-up as well.
@@ -157,12 +215,12 @@ Each frame SHALL resolve both fighters simultaneously from the same pre-resoluti
 - **WHEN** two fighters 7 units apart both start `punch` on the same frame
 - **THEN** both punches connect on the same frame, both fighters lose 5 HP, and one `trade` event is emitted
 
-### Requirement: Combo scaling
-A defender's combo count SHALL increment on each hit that lands while it is still in hitstun from a previous hit, and SHALL reset when the defender becomes actionable or is knocked down. The damage multiplier SHALL start at 100% for the first hit and, for each subsequent hit, become the previous multiplier × 80 / 100 (integer division), floored at 30%. Damage SHALL be `max(1, base × multiplier / 100)` with integer division. The 5th hit of a combo SHALL cause knockdown.
+### Requirement: Combo growth
+A defender's combo count SHALL increment on each hit that lands while it is still in hitstun from a previous hit, and SHALL reset when the defender becomes actionable or is knocked down. The combo multiplier SHALL be `100 + 15 × (combo − 1)` percent, so the first hit deals base damage and each further hit 15 percentage points more. Damage SHALL be `max(1, base × combo% / 100)` with integer division, combined with any passivity boost as described in Passivity boost. The 5th hit of a combo SHALL cause knockdown.
 
-#### Scenario: Scaling sequence
-- **WHEN** the multiplier is computed for hits 1 through 7 of a combo (with the knockdown cap set above 7 in config)
-- **THEN** the multipliers are 100, 80, 64, 51, 40, 32, 30 percent, and a base-10 attack deals 10, 8, 6, 5, 4, 3, 3 damage
+#### Scenario: Growth sequence
+- **WHEN** the multiplier is computed for hits 1 through 5 of a combo
+- **THEN** the multipliers are 100, 115, 130, 145 and 160 percent, and a base-10 attack deals 10, 11, 13, 14 and 16 damage
 
 #### Scenario: Combo knockdown cap
 - **WHEN** a defender takes its 5th hit within one combo
@@ -170,7 +228,7 @@ A defender's combo count SHALL increment on each hit that lands while it is stil
 
 #### Scenario: Combos link at the defaults
 - **WHEN** a fighter runs `punch punch kick` against an idle target at distance 6 with the default config
-- **THEN** all three hits connect with combo counts 1, 2 and 3 and damage 5, 4 and 5, leaving the target at 86 HP
+- **THEN** all three hits connect with combo counts 1, 2 and 3 and damage 5, 5 and 11, leaving the target at 79 HP
 
 #### Scenario: Pushback ends punch strings
 - **WHEN** a fighter runs `punch punch punch` against an idle target at distance 6 with the default config

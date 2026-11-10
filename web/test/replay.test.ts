@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { clampFrame, eventLines, faster, frameHash, parseFrameHash, parseLog, resultLine, slower, validateLog } from '../src/replay';
+import { boostMultiplier, clampFrame, eventLines, formatEvent, faster, frameHash, parseFrameHash, parseLog, resultLine, slower, validateLog } from '../src/replay';
 import { goldenLogs, textSnapshots } from './fixtures';
 
 const anyLog = goldenLogs.rushdown_vs_turtle!;
@@ -36,7 +36,7 @@ describe('validateLog', () => {
 describe('event text parity with pf sim', () => {
   const pairs = Object.keys(goldenLogs);
   it('covers all 12 snapshots', () => {
-    expect(Object.keys(textSnapshots)).toHaveLength(12);
+    expect(Object.keys(textSnapshots)).toHaveLength(14);
   });
   for (const pair of pairs) {
     it(`${pair}: lines and result equal pf sim (without and with checks)`, () => {
@@ -73,5 +73,16 @@ describe('frames, hashes, speeds', () => {
     expect(slower(0.25)).toBe(0.25);
     expect(faster(1)).toBe(2);
     expect(faster(4)).toBe(4);
+  });
+});
+
+describe('anti-passivity event lines', () => {
+  it('describes guard breaks, stale attacks and boosted hits like pf sim', () => {
+    const ev = (type: string, detail: Record<string, unknown>, target?: 'p1' | 'p2') => ({ frame: 7, type, actor: 'p1' as const, target, detail });
+    expect(formatEvent(ev('guard_break', { attack: 'punch' }, 'p2'))).toBe("[f 007] p1 punch breaks p2's guard");
+    expect(formatEvent(ev('stale', { attack: 'punch', repeats: 6, range: 6 }))).toBe('[f 007] p1 punch is stale (x6, range 6)');
+    expect(formatEvent(ev('hit', { attack: 'kick', damage: 10, combo: 1, hp: 90, boost: 120 }, 'p2'))).toBe('[f 007] p1 kick hits p2 for 10 (combo 1, hp 90) boosted x1.2');
+    expect(formatEvent(ev('throw', { attack: 'throw', outcome: 'success', damage: 15, hp: 85, boost: 130 }, 'p2'))).toBe('[f 007] p1 throws p2 for 15 (hp 85) boosted x1.3');
+    expect([100, 110, 150, 125].map(boostMultiplier)).toEqual(['1.0', '1.1', '1.5', '1.25']);
   });
 });

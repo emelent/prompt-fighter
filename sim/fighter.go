@@ -17,6 +17,7 @@ const (
 	stunHit
 	stunBlock // attacker whose attack was blocked
 	stunKnockdown
+	stunGuardBreak
 )
 
 type actKind int
@@ -45,6 +46,7 @@ type act struct {
 	zone          AirZoneKind // air attacks: fixed at start from the airborne frame
 	connected     bool
 	reachedActive bool
+	effRange      int // range after any stale reduction, fixed at start
 	reason        string
 
 	// blocks: guarded height; attacks: effective hit height
@@ -102,6 +104,7 @@ func isAirAttack(a dsl.Attack) bool { return a == dsl.AtkJumpKick || a == dsl.At
 // view is the sensor-visible state of a fighter at the end of a tick.
 type view struct {
 	x, hp                                               int
+	guard, passive, repeats                             int
 	airborne, ducking, blocking, attacking, knockedDown bool
 }
 
@@ -128,6 +131,17 @@ type fighter struct {
 
 	combo int
 	in    *Interp
+
+	// Anti-passivity bookkeeping (see Guard break, Passivity boost and Stale
+	// attacks in docs/RULES.md).
+	blockStreak  int        // attacks guarded in a row
+	lastBlockT   int        // tick of the last guarded attack
+	passive      int        // frames without starting an attack
+	lastAtk      dsl.Attack // the most recently started attack
+	repeats      int        // starts of lastAtk in a row (0 before any attack)
+	attackedT    int        // tick of the most recent attack start (-1: none)
+	movedAwayT   int        // tick on which move() last carried f away from the enemy
+	stunnedAtTop bool       // stunned at the start of the current tick
 
 	nextID    int
 	animKey   string
@@ -210,7 +224,7 @@ func (f *fighter) guarding(t int, h Height) bool {
 }
 
 func (f *fighter) view(t int) view {
-	v := view{x: f.x, hp: f.hp}
+	v := view{x: f.x, hp: f.hp, guard: f.blockStreak, passive: min(f.passive, 999), repeats: f.repeats}
 	v.airborne = f.airborne(t)
 	v.ducking = f.ducking(t)
 	if a := f.act; a != nil {
@@ -248,6 +262,14 @@ func (f *fighter) sense(e *dsl.SensorExpr) int {
 		return b2i(en.attacking)
 	case dsl.SenEnemyKnockedDown:
 		return b2i(en.knockedDown)
+	case dsl.SenGuard:
+		return me.guard
+	case dsl.SenPassive:
+		return me.passive
+	case dsl.SenEnemyPassive:
+		return en.passive
+	case dsl.SenRepeats:
+		return me.repeats
 	case dsl.SenInRange:
 		return b2i(dist <= f.cfg().Attacks[e.Arg].Range)
 	}
@@ -279,14 +301,28 @@ func (f *fighter) begin(a *act) {
 }
 
 func (f *fighter) startAttack(atk dsl.Attack, line int) {
-	spec := f.cfg().Attacks[atk]
+	c := f.cfg()
+	spec := c.Attacks[atk]
 	a := &act{kind: akAttack, stmt: true, line: line, attack: atk, spec: spec, height: spec.Height}
 	if isAirAttack(atk) {
 		f.airUsed = true
-		a.zone = f.cfg().airZone(f.stanceK(f.w.t))
+		a.zone = c.airZone(f.stanceK(f.w.t))
 		a.height = a.zone.height()
 	}
+	// Starting any attack ends passivity and the block streak, and counts
+	// towards staleness when it repeats the previous attack.
+	f.passive, f.blockStreak, f.attackedT = 0, 0, f.w.t
+	if f.repeats > 0 && f.lastAtk == atk {
+		f.repeats++
+	} else {
+		f.lastAtk, f.repeats = atk, 1
+	}
+	pct := c.staleRangePct(f.repeats)
+	a.effRange = spec.Range * pct / 100
 	f.begin(a)
+	if pct < 100 {
+		f.emit("stale", Detail{Attack: atk.String(), Repeats: f.repeats, Range: intp(a.effRange)})
+	}
 }
 
 func (f *fighter) tryAction(st *dsl.ActionStmt) bool {
@@ -396,6 +432,16 @@ func (f *fighter) applyKnockdown(t int) {
 	f.in.Interrupt("on_hit")
 }
 
+// applyGuardBreak stuns a fighter whose guard was broken: no input, no
+// guarding, and on_hit when it recovers.
+func (f *fighter) applyGuardBreak(t int) {
+	f.abandon()
+	f.blockStreak = 0
+	f.defBSUntil = -1
+	f.stun, f.stunUntil, f.stunID = stunGuardBreak, t+f.cfg().GuardBreakStun, f.newID()
+	f.in.Interrupt("on_hit")
+}
+
 func (f *fighter) applyBlocked(t, frames int) {
 	f.abandon()
 	f.stun, f.stunUntil, f.stunID = stunBlock, t+frames, f.newID()
@@ -417,6 +463,8 @@ func (f *fighter) frame(t int) FighterFrame {
 		ff.Invulnerable = true
 	case f.stunned(t) && f.stun == stunHit:
 		ff.State, ff.Anim, key = "hitstun", "hitstun", f.stunID
+	case f.stunned(t) && f.stun == stunGuardBreak:
+		ff.State, ff.Anim, key = "guard_break", "guard_break", f.stunID
 	case f.stunned(t) && f.stun == stunBlock:
 		ff.State, ff.Anim, key = "blockstun", "blockstun", f.stunID
 	case t <= f.defBSUntil && a != nil && a.kind == akBlock:

@@ -81,3 +81,13 @@ Implemented by the OpenSpec change `pixel-art-fighters`: the replay stage is now
 - **Sound:** hit, block and KO effects. The game is created with `noAudio` today.
 - **Non-Latin names:** characters outside the 5×7 font draw as boxes on the stage. Full names still show in the script panels.
 - **Custom configs:** the knockdown get-up pose assumes the default 20 knockdown frames, and the round word assumes best of 3. Logs don't carry these values.
+
+## Anti-passivity rules
+
+Implemented by the OpenSpec change `anti-passivity-rules` (config `2026.11-3`): guard break on the 4th block in a row, a passivity damage boost (×1.1–×1.5) after 120 frames without attacking, stale attacks that lose reach from the 6th repeat, and combos that grow 15% per hit. There are new sensors (`guard`, `passive`, `enemy.passive`, `repeats`), new events (`guard_break`, `stale`, `boost` on hits and throws) and viewer callouts. `ducker`, `thrower` and `turtle` were retuned to stay non-transitive.
+
+### Follow-ups
+- **Tune with real matches:** the thresholds (4 blocks, 120 frames, 6 repeats, +15% per hit) were chosen up front. After the samples were retuned, no sample pair produces a guard break, because `turtle` backs off at `guard >= 3`, so the rule mostly shapes behaviour rather than firing. Revisit it once human and LLM scripts have been played.
+- **Stale reach can drop below the minimum distance:** a throw (range 5) at 70% reach is 3, below the 4-unit minimum separation, so it can never connect again. That's intended as a strong penalty, but the guide could say so explicitly.
+- **Golden coverage:** the golden pairs include stale attacks and a boost (`ducker_vs_lazy`) but no guard break. The rule is covered by `sim/guardbreak_test.go` and synthetic viewer tests. A sample pair that breaks a guard would make the replay fixtures show it too.
+- **Rushdown is strong:** after the retune it beats four of five samples and loses only to `ducker`. Balance holds by the test's definition (at least one win and one loss each), but the spread is uneven.

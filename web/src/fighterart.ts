@@ -88,6 +88,8 @@ const POSE_TABLE = {
   KD1: { torso: -92, head: -6, fa: [-100, -96], ba: [-88, -80], fl: [92, 90], bl: [88, 86] },
   KD2: { torso: 20, head: 0, fa: [62, 30], ba: [40, 20], fl: [86, -22], bl: [2, -90] },
   L: P({ torso: 14, fl: [52, -22], bl: [12, -42] }),
+  // Guard broken: dazed, arms dropped, leaning back with the head lolling.
+  GB: { torso: -14, head: 18, fa: [20, 10], ba: [-10, -20], fl: [18, -4], bl: [-26, -14] },
   WIN: { torso: 0, head: -8, fa: [172, 176], ba: [32, 62], fl: [12, -6], bl: [-16, -10] },
 } satisfies Record<string, Pose>;
 
@@ -125,6 +127,8 @@ function stateFallback(state: string): PoseName {
       return 'BS';
     case 'landing':
       return 'L';
+    case 'guard_break':
+      return 'GB';
   }
   return 'G';
 }
@@ -180,6 +184,8 @@ export function choosePose(ff: Pick<FighterFrame, 'state' | 'anim' | 'anim_frame
       return ok('BS');
     case 'hitstun':
       return ok(k <= 4 ? 'H0' : 'H1');
+    case 'guard_break':
+      return ok('GB');
     case 'knockdown':
       return ok(k <= 5 ? 'KD0' : k <= KNOCKDOWN_FRAMES - 4 ? 'KD1' : 'KD2');
     case 'ko':

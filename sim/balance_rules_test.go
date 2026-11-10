@@ -40,13 +40,13 @@ func TestComboLinksAtDefaults(t *testing.T) {
 	if len(hits) != 3 {
 		t.Fatalf("hits = %v, want 3", hits)
 	}
-	for i, want := range []struct{ combo, dmg int }{{1, 5}, {2, 4}, {3, 5}} {
+	for i, want := range []struct{ combo, dmg int }{{1, 5}, {2, 5}, {3, 11}} {
 		if hits[i].Detail.Combo != want.combo || *hits[i].Detail.Damage != want.dmg {
 			t.Errorf("hit %d: %s, want combo %d damage %d", i+1, evStr(hits[i]), want.combo, want.dmg)
 		}
 	}
-	if hp := *hits[2].Detail.HP; hp != 86 {
-		t.Errorf("hp %d, want 86", hp)
+	if hp := *hits[2].Detail.HP; hp != 79 {
+		t.Errorf("hp %d, want 79", hp)
 	}
 }
 

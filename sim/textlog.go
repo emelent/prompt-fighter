@@ -30,7 +30,7 @@ func describeEvent(e Event) string {
 	d := e.Detail
 	switch e.Type {
 	case "hit":
-		return fmt.Sprintf("%s hits %s for %d (combo %d, hp %d)", d.Attack, e.Target, *d.Damage, d.Combo, *d.HP)
+		return fmt.Sprintf("%s hits %s for %d (combo %d, hp %d)", d.Attack, e.Target, *d.Damage, d.Combo, *d.HP) + boostSuffix(d.Boost)
 	case "block":
 		return fmt.Sprintf("%s blocked by %s", d.Attack, e.Target)
 	case "whiff":
@@ -39,7 +39,7 @@ func describeEvent(e Event) string {
 		if d.Outcome == "tech" {
 			return "throw teched"
 		}
-		return fmt.Sprintf("throws %s for %d (hp %d)", e.Target, *d.Damage, *d.HP)
+		return fmt.Sprintf("throws %s for %d (hp %d)", e.Target, *d.Damage, *d.HP) + boostSuffix(d.Boost)
 	case "trade":
 		return fmt.Sprintf("trades %s for %s (%d/%d)", d.Attacks[0], d.Attacks[1], d.Damages[0], d.Damages[1])
 	case "knockdown":
@@ -52,6 +52,22 @@ func describeEvent(e Event) string {
 		return "script ended"
 	case "handler_enter":
 		return "enters " + d.Handler
+	case "guard_break":
+		return fmt.Sprintf("%s breaks %s's guard", d.Attack, e.Target)
+	case "stale":
+		return fmt.Sprintf("%s is stale (x%d, range %d)", d.Attack, d.Repeats, *d.Range)
 	}
 	return e.Type
+}
+
+// boostSuffix renders a passivity boost percent as " boosted x1.3".
+func boostSuffix(pct int) string {
+	if pct <= 100 {
+		return ""
+	}
+	s := fmt.Sprintf(" boosted x%d.%d", pct/100, pct%100/10)
+	if pct%10 != 0 {
+		s += fmt.Sprint(pct % 10)
+	}
+	return s
 }

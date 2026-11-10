@@ -6,45 +6,44 @@ import (
 	"promptfighter/sim/dsl"
 )
 
-// comboConfig makes punch combos possible: long hitstun, no pushback.
+// comboConfig makes punch combos possible: long hitstun, no pushback, and
+// no stale reach (these tests repeat one attack on purpose).
 func comboConfig(c *Config) {
 	c.Hitstun, c.HitPushback = 20, 0
 	c.Attacks[dsl.AtkPunch].Damage = 10
+	c.StaleFrom = 99
 }
 
-func TestComboScalingSequence(t *testing.T) {
-	l := run(t, "repeat 7 { punch }", "", startX(30, 36), frames(80), comboConfig, func(c *Config) { c.ComboKnockdownHits = 99 })
+func TestComboGrowthSequence(t *testing.T) {
+	l := run(t, "repeat 5 { punch }", "", startX(30, 36), frames(80), comboConfig, func(c *Config) { c.ComboKnockdownHits = 99 })
 	hits := events(l, "hit", "p1")
-	if len(hits) != 7 {
-		t.Fatalf("hits = %d, want 7", len(hits))
+	if len(hits) != 5 {
+		t.Fatalf("hits = %d, want 5", len(hits))
 	}
-	wantDmg := []int{10, 8, 6, 5, 4, 3, 3}
+	wantDmg := []int{10, 11, 13, 14, 16}
 	for i, h := range hits {
 		if *h.Detail.Damage != wantDmg[i] || h.Detail.Combo != i+1 {
 			t.Errorf("hit %d: damage %d combo %d, want %d/%d", i+1, *h.Detail.Damage, h.Detail.Combo, wantDmg[i], i+1)
 		}
 	}
-	if hp := *hits[6].Detail.HP; hp != 100-39 {
+	if hp := *hits[4].Detail.HP; hp != 100-64 {
 		t.Errorf("final hp %d", hp)
 	}
 }
 
-func TestComboMultiplierFloor(t *testing.T) {
+func TestDamagePercents(t *testing.T) {
 	c := DefaultConfig()
-	mult := 100
-	var got []int
-	for k := 1; k <= 7; k++ {
-		if k > 1 {
-			mult = max(c.ComboFloorPct, mult*c.ComboScalePct/100)
-		}
-		got = append(got, mult)
-	}
-	want := []int{100, 80, 64, 51, 40, 32, 30}
-	for i := range want {
-		if got[i] != want[i] {
-			t.Fatalf("multipliers %v, want %v", got, want)
+	check := func(name string, f func(int) int, in, want []int) {
+		t.Helper()
+		for i, x := range in {
+			if got := f(x); got != want[i] {
+				t.Errorf("%s(%d) = %d, want %d", name, x, got, want[i])
+			}
 		}
 	}
+	check("comboPct", c.comboPct, []int{1, 2, 3, 4, 5}, []int{100, 115, 130, 145, 160})
+	check("boostPct", c.boostPct, []int{0, 119, 120, 149, 150, 239, 240, 5000}, []int{100, 100, 110, 110, 120, 140, 150, 150})
+	check("staleRangePct", c.staleRangePct, []int{1, 5, 6, 7, 8, 9, 20}, []int{100, 100, 85, 70, 55, 40, 40})
 }
 
 func TestComboKnockdownCap(t *testing.T) {

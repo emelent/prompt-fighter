@@ -1,6 +1,6 @@
 # Prompt Fighter
 
-A fighting game where you don't press buttons: you write a fight script in a small language (`.pf`), and two scripts fight a best-of-3 match. You can write scripts yourself or have an LLM write them for you.
+A fighting game where you don't press buttons: you write a fight script in a small language (`.pf`), and two scripts fight a best-of-3 match. You can write scripts yourself or have an LLM write them for you. The rules punish turtling, running away and spamming one move (guard breaks, passivity boosts and stale attacks), and reward long combos.
 
 ## Host the game
 

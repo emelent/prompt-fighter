@@ -17,6 +17,7 @@ Defines `docs/PLAYER_GUIDE.md`, the document players and their LLMs use to write
 - stances and overlays, including the air-attack zones and the landing-low carry-through
 - the frame data for every attack
 - hits, blocks and blockstun, the throw triangle including on wake-up, and combos
+- guard breaks, the passivity boost and stale attacks, with how to avoid them
 - interrupts and handler resume rules
 - the script limits and the most common validation errors with their fixes
 - strategy notes drawn from the sample bots
@@ -26,7 +27,7 @@ It SHALL state the config version it describes.
 
 #### Scenario: Guide states its version
 - **WHEN** the guide is read
-- **THEN** it names config version `2026.11-2`
+- **THEN** it names config version `2026.11-3`
 
 ### Requirement: Guide stays in sync with the engine
 An automated test SHALL fail when any of these are missing from the guide:

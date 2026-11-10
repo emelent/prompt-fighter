@@ -26,8 +26,8 @@ The log SHALL be a single JSON object containing:
 `frames` SHALL be an array with one entry per simulated frame, indexed from 0, each recording the state at the end of that frame. Each entry SHALL contain `f` (frame index) and, for each player in order p1 then p2:
 - `x`, `y` (integers)
 - `facing` (`1` = facing +x, `-1` = facing -x)
-- `state`: one of `idle`, `walk`, `attack`, `block`, `duck`, `airborne`, `landing`, `hitstun`, `blockstun`, `knockdown`, `ko`
-- `anim`: e.g. `idle`, `check`, `walk_forward`, `walk_back`, `punch`, `kick`, `sweep`, `throw`, `jump`, `jump_kick`, `dive_punch`, `duck`, `low_jab`, `high_block`, `low_block`, `hitstun`, `blockstun`, `knockdown`, `ko`, `wait`
+- `state`: one of `idle`, `walk`, `attack`, `block`, `duck`, `airborne`, `landing`, `hitstun`, `blockstun`, `guard_break`, `knockdown`, `ko`
+- `anim`: e.g. `idle`, `check`, `walk_forward`, `walk_back`, `punch`, `kick`, `sweep`, `throw`, `jump`, `jump_kick`, `dive_punch`, `duck`, `low_jab`, `high_block`, `low_block`, `hitstun`, `blockstun`, `guard_break`, `knockdown`, `ko`, `wait`
 - `anim_frame`: frames elapsed since `anim` began, starting at 0
 - `phase`: `startup`, `active`, `recovery` or empty
 - `hp`
@@ -48,11 +48,13 @@ The log SHALL be a single JSON object containing:
 - **THEN** its frame entry has `state` `airborne`, `anim` `jump_kick`, `phase` `active` and its current `x` and `y`, with no other derivation required
 
 ### Requirement: Events
-`events` SHALL be an array of objects `{frame, type, actor, target?, detail}`, where `type` is one of `hit`, `block`, `whiff`, `throw`, `trade`, `knockdown`, `ko`, `check`, `script_end`, `handler_enter`. `detail` SHALL be a JSON object whose fields depend on the type and are documented in `docs/RULES.md`. At minimum:
-- `hit`: attack, damage, combo, hp
+`events` SHALL be an array of objects `{frame, type, actor, target?, detail}`, where `type` is one of `hit`, `block`, `whiff`, `throw`, `trade`, `knockdown`, `ko`, `check`, `script_end`, `handler_enter`, `guard_break`, `stale`. `detail` SHALL be a JSON object whose fields depend on the type and are documented in `docs/RULES.md`. At minimum:
+- `hit`: attack, damage, combo, hp, and `boost` (percent) when above 100
 - `block`: attack
-- `whiff`: attack, reason
-- `throw`: outcome
+- `whiff`: attack, reason (including `stale`)
+- `throw`: outcome, and `boost` when above 100
+- `guard_break`: attack (actor is the attacker, target the defender)
+- `stale`: attack, repeats, range (the reduced range in units)
 - `trade`: both attacks and damages
 - `check`: sensor, value, line, cost
 - `handler_enter`: handler
@@ -66,6 +68,14 @@ Events SHALL be ordered by frame, then p1's events before p2's within a frame, t
 #### Scenario: Hit event
 - **WHEN** p1's kick hits p2 for 9 damage leaving 91 HP
 - **THEN** an event with `type` `hit`, `actor` `p1`, `target` `p2` and detail containing `attack: "kick"`, `damage: 9`, `combo: 1`, `hp: 91` is emitted
+
+#### Scenario: Guard break event
+- **WHEN** p1's punch breaks p2's guard
+- **THEN** an event with `type` `guard_break`, `actor` `p1`, `target` `p2` and `detail.attack` `punch` is emitted, and no `block` event for that punch
+
+#### Scenario: Boosted hit event
+- **WHEN** p1's kick lands on p2 while p2's passive counter is 150
+- **THEN** the `hit` event's detail includes `boost: 120`
 
 ### Requirement: Determinism
 Simulating the same two scripts with the same config and frame budget SHALL produce byte-identical JSON output, across runs and across processes. The simulation SHALL NOT use randomness, wall-clock time, floating point in game logic, or map iteration order.

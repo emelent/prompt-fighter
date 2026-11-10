@@ -1,4 +1,4 @@
-# Prompt Fighter — Engine Rules (config `2026.11-2`, log format `1`)
+# Prompt Fighter — Engine Rules (config `2026.11-3`, log format `1`)
 
 This is the reference for how the Phase 1 simulation engine behaves. It records every rule, including each decision taken where the build spec was silent; those are marked **[gap-fill]**. All tunables live in `sim.DefaultConfig()`. Changing any default bumps the config version. Open balance questions are tracked in [`ISSUES.md`](ISSUES.md).
 
@@ -48,6 +48,9 @@ The jump_kick, dive_punch and low_jab rows are **[gap-fill]** values. jump_kick 
 | defender blockstun | 3 frames. The defender keeps guarding, and its hold is extended to cover the blockstun |
 | block pushback | 2 units |
 | knockdown | 20 frames after the knockdown frame. Invulnerable, no script input |
+| guard break | the 4th attack guarded in a row (blocks less than 60 frames apart) breaks the guard: 20 frames of stun, no script input, can't guard (§6) |
+| passivity | 120 frames without starting an attack makes the opponent's next hit or throw deal ×1.1, rising 0.1 every 30 frames to ×1.5 (§6) |
+| stale attacks | from the 6th start of the same attack in a row, its range is 85%, 70%, 55%, then 40% (§5) |
 | sensor read | 2 frames |
 | counts (`xN`, `hold N`, `wait N`, `repeat N`) | 1–100 **[gap-fill]**. Condition literals are 0–999 |
 
@@ -85,7 +88,7 @@ While a stance is active:
 - Any other action, including a second air attack, waits until the stance has fully ended (including landing or duck recovery) and then runs normally. Those waiting frames show the stance animation.
 
 ### Interrupts and handlers
-- **Hit** (hitstun, or knockdown including from a throw). The current action and stance are abandoned. When the fighter can act again, `on_hit` runs if it is defined, and then the script resumes at the statement after the interrupted one. Waking up from a knockdown counts as leaving the interrupt, so `on_hit` runs then too **[gap-fill]**.
+- **Hit** (hitstun, or knockdown including from a throw), and **guard break** (§6). The current action and stance are abandoned. When the fighter can act again, `on_hit` runs if it is defined, and then the script resumes at the statement after the interrupted one. Waking up from a knockdown counts as leaving the interrupt, so `on_hit` runs then too **[gap-fill]**.
 - **Your attack was blocked** **[gap-fill, confirmed in the Phase 1 review; see §6]**. The attack is abandoned and you enter blockstun. When the blockstun ends, `on_block` runs, then the script resumes after the attack.
 - **"The statement after"** is worked out structurally. Inside a block it is the next statement. If the interrupt came during an `if`/`elif` condition, the whole `if` chain is skipped. If the interrupted statement was the last one in a `repeat` or `loop`, the next iteration starts (or the `repeat` ends).
 - **Interrupted inside a handler.** The handler is abandoned, then restarts from the top after the new stun. The resume point stays the one saved by the first interrupt.
@@ -103,6 +106,9 @@ While a stance is active:
 | `enemy.blocking` | bool | the enemy is in a block's hold phase or in blockstun. Block startup and recovery don't count **[gap-fill]** |
 | `enemy.attacking` | bool | the enemy has an attack (overlays included) in startup or active. Recovery doesn't count **[gap-fill]** |
 | `enemy.knocked_down` | bool | the enemy is in knockdown |
+| `guard` | int | your block streak: attacks guarded in a row, 0–3. The next guarded attack at 3 breaks your guard (§6) |
+| `passive`, `enemy.passive` | int | frames of passivity (yours, the enemy's), capped at 999. At 120 or more, the other fighter's next hit or throw is boosted (§6) |
+| `repeats` | int | how many times in a row you have started your most recent attack (0 before your first). At 5 or more, starting it again is stale (§5) |
 
 **Reaction windows (intended).** Because reads cost 2 frames and see the previous frame's state, a script that polls `loop { if enemy.attacking { high_block } }` blocks every kick and every sweep (using `low_block` for the sweep), whatever frame the attack starts on. It can never react to a punch: 3 startup frames is shorter than the read plus the block startup. The engine tests confirm this. This is intended: punch is the one attack you can't react to, so it is the fast poke, and you have to predict it (decided in the Phase 1 review).
 
@@ -113,11 +119,15 @@ On each active frame, an attack that has not yet connected connects if the targe
 | reason | condition |
 |---|---|
 | `out_of_range` | distance > range |
+| `stale` | distance ≤ range but > the attack's stale range (see below) |
 | `invulnerable` | target is knocked down |
 | `ducked` | grounded high attack (`punch`, `kick`) against a target in the duck hold. Air attacks are not dodged by ducking |
 | `grounded` | air-to-air attack against a target that is not airborne |
 | `airborne` | overhead air attack, low attack (including landing low) or throw against an airborne target |
 | `stunned` | throw against a target in hitstun |
+
+### Stale attacks
+Each fighter counts how many times in a row it has started the same attack. `jump_kick`, `dive_punch` and `low_jab` count as their own attacks, not as `kick` or `punch`. Starting a different attack resets the count to 1; moves, blocks, waits and reads don't affect it. From the 6th repeat on, the attack's range is multiplied by `max(40, 100 − 15 × (repeats − 5))` percent (integer division): 85%, 70%, 55%, then 40%. The reduced range is fixed when the attack starts and recorded in a `stale` event. Damage and frame data don't change, and there is no randomness. `in_range(a)` still reports the attack's full range, so use `repeats` to know when you're about to go stale.
 
 ### Air-attack zones
 `jump_kick` and `dive_punch` take their zone from the airborne frame (1–20) on which they **start**, and keep it for their whole duration. One air attack is still allowed per jump.
@@ -141,12 +151,17 @@ All connections on a frame are resolved together from the pre-resolution state.
 - **Throw tech.** If both throws connect on the same frame, there is no damage and both fighters are pushed back 2. Each emits `throw` with outcome `tech`, and both throws continue into recovery **[gap-fill]**.
 - **Hit.** The target takes damage, enters hitstun (or knockdown, if the attack knocks down) and is pushed back 2.
 - **Anti-air.** Any attack that hits an airborne target knocks it down and snaps its y to 0. There are no air juggles **[gap-fill]**.
-- **Block.** An attack that meets a target guarding its height during the hold phase is blocked.
+- **Block.** An attack that meets a target guarding its height during the hold phase is blocked, unless it breaks the guard (below).
   - Defender: no damage, 3 frames of blockstun with the guard held, pushed back 2. The defender is not interrupted.
   - Attacker: the attack is abandoned, and the attacker is stunned for the attack's **recovery** length. It then runs `on_block` **[gap-fill]**.
 
   This reading of the build spec, confirmed in the Phase 1 review ("`on_block` runs after blockstun when *your* attack was blocked") keeps blocks beating attacks. A flat 3-frame stun would make a blocked attack recover faster than a whiff. A block of the wrong height does not guard. Throws ignore blocks.
-- **Throw success.** 12 damage and a knockdown **[gap-fill]**.
+- **Guard break.** Each fighter keeps a block streak: attacks guarded in a row. It resets when the fighter starts an attack, 60 frames after its last guarded attack, when it is hit or thrown, and when its guard breaks. An attack that would be the 4th guarded in a row breaks the guard instead:
+  - Defender: no damage, block abandoned, pushed back 2, then 20 frames of guard-break stun (`state`/`anim` `guard_break`). It has no script input and can't guard, so attacks and throws connect as against an idle fighter. A hit during the stun starts a new combo at 1. Afterwards it runs `on_hit`.
+  - Attacker: no blockstun. The attack counts as connected and runs its normal recovery, which leaves time to punish (a punch recovers in 5 frames, so a follow-up kick lands well inside the 20-frame stun).
+  - A `guard_break` event is emitted instead of `block`.
+- **Passivity boost.** Each fighter keeps a passive counter. Every frame it is neither stunned nor knocked down and doesn't start an attack adds 1, or 2 when it moved away from the opponent (`move_back`, or `jump_back` drift; pushback doesn't count). Starting any attack (throws, air attacks and `low_jab` included, whether or not it connects) resets it to 0. When a hit or throw lands on a target whose counter is 120 or more, its damage is multiplied by the boost: 110% at 120, plus 10 points every full 30 frames, up to 150% (at 240). The target's counter then resets to 0, and the event records `boost`. Blocks and guard breaks deal no damage and don't use the boost.
+- **Throw success.** 12 damage (boosted if the target is passive) and a knockdown **[gap-fill]**.
 - **Wake-up after a throw.** Throw recovery (18) is set so that an immediately repeated throw goes active on the same frame as an attack the target starts on its first actionable frame. If the first throw is active on frame k, the target wakes on k+21 and the re-throw is active on k+24, the same frame a punch started at k+21 goes active. So the triangle holds on wake-up too:
   - Attacking on wake-up beats the re-throw.
   - The re-throw beats a wake-up block, or a target that does nothing.
@@ -158,16 +173,16 @@ All connections on a frame are resolved together from the pre-resolution state.
 
 ### Combos
 A hit landing while the defender is still in hitstun from an earlier hit increases the defender's combo count. The count resets when the defender can act again or is knocked down.
-- Damage multiplier: 100% for the first hit, then `previous × 80 / 100` (integer division), never below 30%. That gives 100, 80, 64, 51, 40, 32, 30…
-- Damage is `max(1, base × mult / 100)`.
+- Damage multiplier: combos **grow** by 15 points per hit: 100, 115, 130, 145, 160%.
+- Damage is `max(1, base × combo% × boost% / 10000)` with integer division, where `boost%` is the passivity boost (100 when the target isn't passive).
 - The 5th hit of a combo causes a knockdown.
 
 At the defaults (hitstun 13, pushback 2), short chains link:
 - `punch kick` is a 2-hit combo.
-- `punch punch kick` is 3 hits (5 + 4 + 5 damage).
+- `punch punch kick` is 3 hits (5 + 5 + 11 damage).
 - A third punch in a row whiffs `out_of_range`, because two pushbacks carry the target out of punch range. Pushback is what ends a combo.
 
-The 5th-hit knockdown is a safety cap that the default frame data doesn't reach.
+The 5th-hit knockdown is a safety cap that the default frame data doesn't reach. (Config `2026.11-2` and earlier scaled combos down instead: ×0.8 per hit, floored at 30%.)
 
 ### Knockdown
 20 frames on the ground, invulnerable to attacks and throws, with no script input. The fighter then stands up idle, can be hit again and can act (and runs `on_hit`).
@@ -187,8 +202,8 @@ The log is a single JSON object with these fields:
 |---|---|
 | `x`, `y` | integers |
 | `facing` | 1 (facing +x) or −1 |
-| `state` | idle, walk, attack, block, duck, airborne, landing, hitstun, blockstun, knockdown, ko |
-| `anim` | idle, check, wait, walk_forward, walk_back, punch, kick, sweep, throw, jump, jump_kick, dive_punch, duck, low_jab, high_block, low_block, landing, hitstun, blockstun, knockdown, ko |
+| `state` | idle, walk, attack, block, duck, airborne, landing, hitstun, blockstun, guard_break, knockdown, ko |
+| `anim` | idle, check, wait, walk_forward, walk_back, punch, kick, sweep, throw, jump, jump_kick, dive_punch, duck, low_jab, high_block, low_block, landing, hitstun, blockstun, guard_break, knockdown, ko |
 | `anim_frame` | frames since `anim` (for this action instance) began, from 0 |
 | `phase` | startup, active, recovery, or "" |
 | `hp`, `combo` | integers. `combo` is this fighter's current combo count as defender |
@@ -202,10 +217,12 @@ Each event is `{frame, type, actor, target?, detail}`. `detail` fields by type:
 
 | type | actor | target | detail |
 |---|---|---|---|
-| `hit` | attacker | defender | `attack`, `damage`, `combo`, `hp` (defender's HP after) |
+| `hit` | attacker | defender | `attack`, `damage`, `combo`, `hp` (defender's HP after), `boost` (percent, only when above 100) |
 | `block` | attacker | defender | `attack` |
+| `guard_break` | attacker | defender | `attack` (the attack that broke the guard; no `block` event is emitted for it) |
+| `stale` | attacker | — | `attack`, `repeats` (starts in a row, 6 or more), `range` (the reduced range) |
 | `whiff` | attacker | — | `attack`, `reason` (§5) |
-| `throw` | thrower | defender (success only) | `attack: "throw"`, `outcome: success|tech`, plus `damage` and `hp` on success |
+| `throw` | thrower | defender (success only) | `attack: "throw"`, `outcome: success|tech`, plus `damage`, `hp` and (when above 100) `boost` on success |
 | `trade` | p1 | p2 | `attacks: [p1's, p2's]`, `damages: [to p2, to p1]` |
 | `knockdown` | fighter knocked down | — | `attack` (what caused it), `reason`: `airborne` / `combo` / `sweep` / `throw` |
 | `ko` | KO'd fighter | — | (empty) |

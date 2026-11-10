@@ -1,35 +1,38 @@
-[f 050] p1 kick blocked by p2
-[f 066] p1 punch whiffs (out_of_range)
-[f 086] p1 kick hits p2 for 9 (combo 1, hp 91)
-[f 100] p2 enters on_hit
-[f 104] p1 punch whiffs (out_of_range)
-[f 124] p1 kick blocked by p2
-[f 140] p1 punch whiffs (out_of_range)
-[f 160] p1 kick blocked by p2
-[f 176] p1 punch whiffs (out_of_range)
-[f 190] p1 kick blocked by p2
-[f 206] p1 punch whiffs (out_of_range)
-[f 226] p1 kick blocked by p2
-[f 242] p1 punch whiffs (out_of_range)
-[f 256] p1 kick blocked by p2
-[f 272] p1 punch whiffs (out_of_range)
-[f 292] p1 kick blocked by p2
-[f 308] p1 punch whiffs (out_of_range)
-[f 322] p1 kick blocked by p2
-[f 338] p1 punch whiffs (out_of_range)
-[f 358] p1 kick blocked by p2
-[f 374] p1 punch whiffs (out_of_range)
-[f 388] p1 kick blocked by p2
-[f 404] p1 punch whiffs (out_of_range)
-[f 424] p1 kick blocked by p2
-[f 440] p1 punch whiffs (out_of_range)
-[f 454] p1 kick blocked by p2
-[f 470] p1 punch whiffs (out_of_range)
-[f 490] p1 kick blocked by p2
-[f 506] p1 punch whiffs (out_of_range)
-[f 520] p1 kick blocked by p2
-[f 536] p1 punch whiffs (out_of_range)
-[f 556] p1 kick blocked by p2
-[f 572] p1 punch whiffs (out_of_range)
-[f 586] p1 kick blocked by p2
-result: p1 wins by timeout at f599 (hp 100-91)
+[f 050] p1 kick hits p2 for 9 (combo 1, hp 91)
+[f 064] p2 enters on_hit
+[f 068] p1 punch whiffs (out_of_range)
+[f 094] p1 kick hits p2 for 9 (combo 1, hp 82)
+[f 108] p2 enters on_hit
+[f 112] p1 punch whiffs (out_of_range)
+[f 132] p1 kick hits p2 for 9 (combo 1, hp 73)
+[f 146] p2 enters on_hit
+[f 150] p1 punch whiffs (out_of_range)
+[f 170] p1 kick hits p2 for 9 (combo 1, hp 64)
+[f 184] p2 enters on_hit
+[f 188] p1 punch whiffs (out_of_range)
+[f 208] p1 kick hits p2 for 9 (combo 1, hp 55)
+[f 222] p2 enters on_hit
+[f 226] p1 punch whiffs (out_of_range)
+[f 252] p1 kick hits p2 for 9 (combo 1, hp 46)
+[f 266] p2 enters on_hit
+[f 270] p1 punch whiffs (out_of_range)
+[f 284] p1 kick hits p2 for 9 (combo 1, hp 37)
+[f 298] p2 enters on_hit
+[f 302] p1 punch whiffs (out_of_range)
+[f 322] p1 kick hits p2 for 9 (combo 1, hp 28)
+[f 336] p2 enters on_hit
+[f 340] p1 punch whiffs (out_of_range)
+[f 354] p1 kick hits p2 for 9 (combo 1, hp 19)
+[f 368] p2 enters on_hit
+[f 372] p1 punch whiffs (out_of_range)
+[f 387] p2 kick is stale (x6, range 10)
+[f 392] p1 kick hits p2 for 9 (combo 1, hp 10)
+[f 406] p2 enters on_hit
+[f 410] p1 punch whiffs (out_of_range)
+[f 424] p1 kick hits p2 for 9 (combo 1, hp 1)
+[f 438] p2 enters on_hit
+[f 442] p1 punch whiffs (out_of_range)
+[f 457] p2 kick is stale (x7, range 8)
+[f 462] p1 kick hits p2 for 9 (combo 1, hp 0)
+[f 462] p2 KO
+result: p1 wins by ko at f462 (hp 100-0)

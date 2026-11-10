@@ -1,6 +1,6 @@
 # Prompt Fighter — Player Guide
 
-You don't press buttons in Prompt Fighter. You write your fighter's brain as a small script in the **`.pf` language**, usually with the help of an LLM, and the engine plays it frame by frame against an opponent's script. This guide teaches everything a script author needs. It describes engine config **`2026.11-2`**. The full engine reference is [`RULES.md`](RULES.md).
+You don't press buttons in Prompt Fighter. You write your fighter's brain as a small script in the **`.pf` language**, usually with the help of an LLM, and the engine plays it frame by frame against an opponent's script. This guide teaches everything a script author needs. It describes engine config **`2026.11-3`**. The full engine reference is [`RULES.md`](RULES.md).
 
 ## 1. The round
 
@@ -62,6 +62,10 @@ Conditions read **sensors**. **Every sensor read costs 2 frames**, and the value
 | `enemy.blocking` | true/false | the opponent is holding a block (not its startup or recovery), or is in blockstun |
 | `enemy.attacking` | true/false | the opponent's attack is in its startup or active phase (not recovery) |
 | `enemy.knocked_down` | true/false | the opponent is on the ground after a knockdown |
+| `guard` | number | your block streak: attacks you've blocked in a row, 0–3. Block a 4th and your guard breaks (§7) |
+| `passive` | number | frames since you last started an attack (backing away counts double; capped at 999). At 120+, the opponent's next hit on you is boosted (§7) |
+| `enemy.passive` | number | the same for the opponent. At 120+, your next hit on them is boosted |
+| `repeats` | number | how many times in a row you've started your last attack (0 before your first). At 5+, using it again is stale (§7) |
 
 **Conditions** combine these:
 - Comparisons: `<`, `<=`, `>`, `>=`, `==`, `!=`, between numbers. Number literals run from 0 to 999.
@@ -164,9 +168,32 @@ loop {
 - **Knockdown:** 20 frames on the ground, invulnerable and with no input. Caused by a sweep, a throw, any hit on an airborne fighter, or the 5th hit of a combo.
 - **Trade:** if both attacks hit on the same frame, both take damage.
 
+### Don't turtle, run or repeat yourself
+
+Three rules punish passive and repetitive play.
+- **Guard break.** Blocking a 4th attack in a row breaks your guard. You take no damage, but you're stunned for **20 frames** and can't block, and the attacker isn't stunned, so it gets a free hit. Your streak resets when you start an attack, when you're hit, or after **60 frames** without blocking. Check `guard`: at 3, attack, throw or back off instead of blocking again.
+- **Passivity boost.** Every frame you don't start an attack adds 1 to your `passive` counter, or 2 while you `move_back` or `jump_back`. Frames you spend stunned or knocked down don't count. Once it reaches **120**, the opponent's next hit or throw on you deals **×1.1**, rising by 0.1 every 30 frames to **×1.5** at 240. Starting any attack, even one that misses, resets it, and so does taking the boosted hit. The flip side: when `enemy.passive >= 120`, your next hit is boosted.
+- **Stale attacks.** Using the same attack 6 or more times in a row shrinks its reach: 85%, 70%, 55%, then 40% of its range. Using any other attack resets the count, and `jump_kick`, `dive_punch` and `low_jab` count as their own attacks. `in_range(...)` still reports the full range, so watch `repeats`.
+
+```pf
+# Mix it up: block up to 3 times, then throw; swap to a kick before a 6th punch.
+loop {
+  if enemy.attacking {
+    if guard >= 3 { throw } else { high_block hold 6 }
+  } elif in_range(punch) {
+    if repeats >= 5 { kick } else { punch }
+  } elif enemy.passive >= 120 {
+    move_forward x4
+    kick
+  } else {
+    move_forward x2
+  }
+}
+```
+
 ### Combos
 
-A hit that lands while the opponent is still in hitstun extends a **combo**. Each extra hit's damage is scaled: ×80% per hit, never below 30% (100, 80, 64, 51, 40…). The 5th hit knocks down. At the defaults, short chains link:
+A hit that lands while the opponent is still in hitstun extends a **combo**. Combos get **stronger** the longer you keep them going: each extra hit deals 15% more (×1.0, ×1.15, ×1.3, ×1.45, ×1.6). The 5th hit knocks down. At the defaults, short chains link:
 
 ```pf
 punch
@@ -174,11 +201,11 @@ punch
 kick
 ```
 
-From distance 6 that's a 3-hit combo for 5 + 4 + 5 damage. A third punch in a row misses, because two pushbacks carry the opponent out of punch range.
+From distance 6 that's a 3-hit combo for 5 + 5 + 11 damage. A third punch in a row misses, because two pushbacks carry the opponent out of punch range.
 
 ## 8. Interrupts and handlers
 
-When you are hit (hitstun or knockdown), your current action and stance are abandoned and your script freezes. When you can act again:
+When you are hit (hitstun or knockdown) or your guard breaks, your current action and stance are abandoned and your script freezes. When you can act again:
 1. `on_hit` runs, if you have one.
 2. The script continues at the **statement after** the one that was interrupted.
    - Interrupted during an `if` condition? The whole `if` chain is skipped.
@@ -211,21 +238,24 @@ kik          → 1:1: unknown action "kik" — did you mean "kick"?
 
 ## 10. Strategy notes
 
-These come from the six sample bots (`pf selfplay scripts/` at config 2026.11-2). Every bot beats at least one other and loses to at least one other:
+These come from the six sample bots (`pf selfplay scripts/` at config 2026.11-3). Every bot beats at least one other and loses to at least one other:
 
 | bot | idea | beats | loses to |
 |---|---|---|---|
-| `turtle` | holds `high_block`, punches when close, throws when its own attack is blocked | jumper, thrower | lazy, rushdown |
-| `rushdown` | walks in and kicks, sweeps blockers | lazy, thrower, turtle | jumper, ducker |
-| `jumper` | jumps in with landing-low kicks | ducker, lazy, rushdown, thrower | turtle |
-| `thrower` | walks in and throws | lazy | everyone else |
-| `ducker` | ducks under high attacks, jabs and sweeps | lazy, rushdown, thrower | jumper |
-| `lazy` | a fixed routine with no sensor reads | turtle | everyone else |
+| `turtle` | blocks attacks, kicks back at kick range, backs off at `guard >= 3` | thrower | jumper, lazy, rushdown (draws ducker) |
+| `rushdown` | walks in, kicks, then punches or sweeps blockers; never repeats one attack | jumper, lazy, thrower, turtle | ducker |
+| `jumper` | jumps in with landing-low kicks | ducker, lazy, thrower, turtle | rushdown |
+| `thrower` | walks in and throws, with a punch after 5 throws so they never go stale | lazy | everyone else |
+| `ducker` | ducks under high attacks, jabs and sweeps; jabs instead of a stale 6th sweep | rushdown, thrower | jumper, lazy |
+| `lazy` | a fixed routine with no sensor reads | ducker, turtle | jumper, rushdown, thrower |
 
 - **Sensors cost time.** A script that checks three sensors before acting is 6 frames late. Check the one that matters, or don't check at all, as `lazy` shows.
 - **Punch is unreactable.** Use it to interrupt throws and slow attacks.
 - **Ducking beats high pokes** but loses to overheads. **Jumping beats ducking and throws** but loses to anti-air hits, because any hit on a jumper knocks it down.
-- **Blocking is strong:** a blocked kick leaves the attacker stunned for 9 frames, so throw or attack straight after a block.
+- **Blocking is strong, but not forever:** a blocked kick leaves the attacker stunned for 9 frames, so throw or attack straight after a block. Block a 4th time in a row and your guard breaks, so answer before then.
+- **Waiting gets punished.** After 2 seconds (120 frames) without attacking, your opponent's hits on you get stronger. Even a whiffed punch resets your counter, and `enemy.passive` tells you when the opponent is open to a boosted hit.
+- **Vary your attacks.** The 6th use of an attack in a row loses reach. Alternate (`kick` then `punch`, as `rushdown` does), or use `repeats` to switch in time.
+- **Long combos pay.** Each extra hit deals 15% more, so a combo that links is worth more than the same hits spread out.
 - **Long `hold` values** leave you committed. Short blocks inside a `loop` re-check more often.
 
 ## 11. How to play

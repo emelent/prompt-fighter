@@ -1,6 +1,6 @@
 {
   "format_version": "1",
-  "config_version": "2026.11-2",
+  "config_version": "2026.11-3",
   "frame_budget": 600,
   "players": [
     {
@@ -8041,6 +8041,16 @@
       }
     },
     {
+      "frame": 162,
+      "type": "stale",
+      "actor": "p1",
+      "detail": {
+        "attack": "jump_kick",
+        "repeats": 6,
+        "range": 8
+      }
+    },
+    {
       "frame": 165,
       "type": "hit",
       "actor": "p1",
@@ -8061,6 +8071,16 @@
         "value": 6,
         "line": 8,
         "cost": 2
+      }
+    },
+    {
+      "frame": 188,
+      "type": "stale",
+      "actor": "p1",
+      "detail": {
+        "attack": "jump_kick",
+        "repeats": 7,
+        "range": 7
       }
     },
     {
@@ -8096,6 +8116,16 @@
       }
     },
     {
+      "frame": 214,
+      "type": "stale",
+      "actor": "p1",
+      "detail": {
+        "attack": "jump_kick",
+        "repeats": 8,
+        "range": 5
+      }
+    },
+    {
       "frame": 217,
       "type": "hit",
       "actor": "p1",
@@ -8116,6 +8146,16 @@
         "value": 6,
         "line": 8,
         "cost": 2
+      }
+    },
+    {
+      "frame": 240,
+      "type": "stale",
+      "actor": "p1",
+      "detail": {
+        "attack": "jump_kick",
+        "repeats": 9,
+        "range": 4
       }
     },
     {
@@ -8148,6 +8188,16 @@
         "value": 6,
         "line": 8,
         "cost": 2
+      }
+    },
+    {
+      "frame": 266,
+      "type": "stale",
+      "actor": "p1",
+      "detail": {
+        "attack": "jump_kick",
+        "repeats": 10,
+        "range": 4
       }
     },
     {

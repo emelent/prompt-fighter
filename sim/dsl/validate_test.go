@@ -16,6 +16,8 @@ func TestValidateMessages(t *testing.T) {
 		{"valid compound condition", "if (distance <= 12 or enemy.attacking) and not enemy.knocked_down { kick }", nil},
 		{"nesting at limit", "loop { if distance < 10 { repeat 2 { if enemy.ducking { sweep } } } }", nil},
 		{"empty script", "", nil},
+		{"anti-passivity sensors", "if passive > 90 or guard >= 3 or repeats >= 5 or enemy.passive >= 120 { kick }", nil},
+		{"passive used as boolean", "if passive { kick }", []string{"1:4: `passive` is a number and must be compared, e.g. `passive < 30`"}},
 
 		// structure
 		{"duplicate handler", "on_hit { kick }\non_hit { punch }", []string{"2:1: only one `on_hit` handler is allowed"}},

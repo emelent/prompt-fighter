@@ -55,9 +55,12 @@ Sensors SHALL report the following, from the reading fighter's perspective:
 - `in_range(a)`: whether `distance` is less than or equal to attack `a`'s range.
 - `enemy.airborne`: the enemy is in jump frames 1–20.
 - `enemy.ducking`: the enemy is in the hold phase of `duck`, including during a `low_jab` overlay.
-- `enemy.blocking`: the enemy is in the guard (hold) phase of `high_block` or `low_block`, or in blockstun.
+- `enemy.blocking`: the enemy is in the guard (hold) phase of `high_block` or `low_block`, or in blockstun (not in guard-break stun).
 - `enemy.attacking`: the enemy has an attack, including an overlay attack, in its startup or active phase.
 - `enemy.knocked_down`: the enemy is in knockdown.
+- `guard`: the reading fighter's block streak (0–3; see Guard break in combat rules).
+- `passive` and `enemy.passive`: the reading fighter's and the enemy's passive counters, capped at 999. A value of 120 or more means the opponent's next hit or throw is boosted.
+- `repeats`: how many times in a row the reading fighter has started its most recent attack (0 before its first attack). The next start of that same attack is stale when `repeats` is 5 or more.
 
 #### Scenario: Blocking sensor excludes block startup
 - **WHEN** the enemy is on the startup frame of `high_block`
@@ -66,6 +69,10 @@ Sensors SHALL report the following, from the reading fighter's perspective:
 #### Scenario: Attacking sensor excludes recovery
 - **WHEN** the enemy is in the recovery phase of `kick`
 - **THEN** `enemy.attacking` reads false
+
+#### Scenario: Reading your own passivity
+- **WHEN** a fighter has neither attacked nor been stunned for the first 100 frames and then reads `passive`
+- **THEN** the value is 100
 
 ### Requirement: Stances and overlays
 `jump`, `jump_forward`, `jump_back` and `duck` SHALL be stances. After a stance starts, the interpreter continues with the next statement on the following frame while the stance runs. While a stance is active:
@@ -106,7 +113,7 @@ An air attack still in progress when the fighter lands SHALL end on landing, unl
 - **THEN** the jump kick keeps all 5 of its active frames after touchdown, and the `wait` starts only after both the attack and landing recovery have finished
 
 ### Requirement: Interrupts and handlers
-When a fighter is hit (entering hitstun or knockdown, including from a throw), its current action and any active stance SHALL be abandoned and its interpreter frozen. When it becomes actionable again, it SHALL run `on_hit` if defined, then resume at the statement after the interrupted one. When a fighter's own attack is blocked, its attack SHALL be abandoned and it SHALL enter blockstun. When that blockstun ends, it SHALL run `on_block` if defined, then resume at the statement after the interrupted one.
+When a fighter is hit (entering hitstun or knockdown, including from a throw) or has its guard broken, its current action and any active stance SHALL be abandoned and its interpreter frozen. When it becomes actionable again, it SHALL run `on_hit` if defined, then resume at the statement after the interrupted one. When a fighter's own attack is blocked, its attack SHALL be abandoned and it SHALL enter blockstun. When that blockstun ends, it SHALL run `on_block` if defined, then resume at the statement after the interrupted one.
 
 "The statement after" SHALL be resolved structurally:
 - An interrupted action inside a block continues with the next statement in that block.
@@ -134,6 +141,10 @@ If a fighter is interrupted while running a handler, the handler SHALL be abando
 #### Scenario: Interrupt inside handler
 - **WHEN** a fighter is hit again while executing its `on_hit` handler
 - **THEN** after the new hitstun, `on_hit` starts again from its first statement, and afterward the fighter resumes at the original resume point
+
+#### Scenario: on_hit after a guard break
+- **WHEN** a fighter's guard is broken and its script has `on_hit { move_back x3 }`
+- **THEN** after the 20-frame guard-break stun it emits `handler_enter` for `on_hit` and moves back 3 units
 
 ### Requirement: Script end and idling
 When the main program finishes, a `script_end` event SHALL be emitted once and the fighter SHALL idle for the rest of the round. A fighter idling after its script has ended SHALL still run `on_hit`/`on_block` when interrupted, then return to idling.

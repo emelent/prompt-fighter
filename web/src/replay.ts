@@ -57,7 +57,7 @@ export function describeEvent(e: GameEvent): string {
   const d = e.detail;
   switch (e.type) {
     case 'hit':
-      return `${d.attack} hits ${e.target} for ${d.damage} (combo ${d.combo ?? 0}, hp ${d.hp})`;
+      return `${d.attack} hits ${e.target} for ${d.damage} (combo ${d.combo ?? 0}, hp ${d.hp})${boostSuffix(d.boost)}`;
     case 'block':
       return `${d.attack} blocked by ${e.target}`;
     case 'whiff':
@@ -66,7 +66,7 @@ export function describeEvent(e: GameEvent): string {
       if (d.outcome === 'tech') {
         return 'throw teched';
       }
-      return `throws ${e.target} for ${d.damage} (hp ${d.hp})`;
+      return `throws ${e.target} for ${d.damage} (hp ${d.hp})${boostSuffix(d.boost)}`;
     case 'trade':
       return `trades ${d.attacks?.[0]} for ${d.attacks?.[1]} (${d.damages?.[0]}/${d.damages?.[1]})`;
     case 'knockdown':
@@ -79,8 +79,22 @@ export function describeEvent(e: GameEvent): string {
       return 'script ended';
     case 'handler_enter':
       return `enters ${d.handler}`;
+    case 'guard_break':
+      return `${d.attack} breaks ${e.target}'s guard`;
+    case 'stale':
+      return `${d.attack} is stale (x${d.repeats}, range ${d.range})`;
   }
   return e.type;
+}
+
+/** A passivity boost percent as a multiplier, e.g. 130 → "1.3" (boostSuffix in Go). */
+export function boostMultiplier(pct: number): string {
+  const tenths = `${Math.floor(pct / 100)}.${Math.floor((pct % 100) / 10)}`;
+  return pct % 10 === 0 ? tenths : `${tenths}${pct % 10}`;
+}
+
+function boostSuffix(pct: number | undefined): string {
+  return pct !== undefined && pct > 100 ? ` boosted x${boostMultiplier(pct)}` : '';
 }
 
 /** A `pf sim` event line: "[f NNN] <actor> <description>". */

@@ -1,9 +1,11 @@
 # thrower.pf — grappler.
 # Strategy: close the distance and throw. Throws ignore blocks, so this beats
-# defensive scripts, but any attack interrupts a throw in startup.
+# defensive scripts, but any attack interrupts a throw in startup. After 5
+# throws in a row it mixes in a punch, so its throws never go stale.
 loop {
   if in_range(throw) {
     throw
+    if repeats >= 5 { punch }
   } else {
     move_forward x3
   }

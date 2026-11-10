@@ -9,7 +9,7 @@ pf serve --addr 0.0.0.0:9000 --data /var/lib/pf
 
 The server logs one line on start, and SIGINT or SIGTERM shuts it down gracefully (exit 0). A bad address or an unusable data directory exits with code 2.
 
-Engine rules, frame data and the event log format are described in [`RULES.md`](RULES.md). Versions in this document: config `2026.11-2`, log format `1`, store `1`.
+Engine rules, frame data and the event log format are described in [`RULES.md`](RULES.md). Versions in this document: config `2026.11-3`, log format `1`, store `1`.
 
 ## Playing with an LLM (MCP)
 
@@ -53,7 +53,7 @@ All API requests and responses are JSON, and unknown JSON fields are rejected. T
 ### `GET /healthz`
 
 ```json
-{"config_version":"2026.11-2","format_version":"1","status":"ok","store_version":1}
+{"config_version":"2026.11-3","format_version":"1","status":"ok","store_version":1}
 ```
 
 ### `POST /validate`
@@ -105,7 +105,7 @@ curl -s localhost:8080/matches -d '{"name": "alice", "script": "loop { kick }"}'
 ```
 ```json
 {"match_id":"b8fc4050df5bfab2","seat":"a","token":"db0bbc0b901149a158f2fa29e390cd42",
- "match":{"match_id":"b8fc4050df5bfab2","status":"waiting_for_opponent","config_version":"2026.11-2","next_round":1,
+ "match":{"match_id":"b8fc4050df5bfab2","status":"waiting_for_opponent","config_version":"2026.11-3","next_round":1,
           "seats":{"a":{"name":"alice","wins":0,"submitted":true},"b":null},"rounds":[],"winner":null}}
 ```
 **Keep the `token`: it is returned only once.** Names are 1–40 bytes, and the script must be valid, or the response is 422. Your create script is your round-1 submission.
@@ -116,10 +116,10 @@ Same body as create. It returns 201 with `"seat":"b"` and your token. Round 1 ru
 
 ```json
 {"match_id":"b8fc4050df5bfab2","seat":"b","token":"94098b550a8d72679c12e28299bda923",
- "match":{"match_id":"b8fc4050df5bfab2","status":"awaiting_scripts","config_version":"2026.11-2","next_round":2,
+ "match":{"match_id":"b8fc4050df5bfab2","status":"awaiting_scripts","config_version":"2026.11-3","next_round":2,
           "seats":{"a":{"name":"alice","wins":0,"submitted":false},"b":{"name":"bob","wins":0,"submitted":false}},
           "rounds":[{"n":1,"p1":"a","winner":null,"reason":"timeout","end_frame":599,"hp":{"a":100,"b":100},
-                     "config_version":"2026.11-2","log":"/matches/b8fc4050df5bfab2/rounds/1"}],
+                     "config_version":"2026.11-3","log":"/matches/b8fc4050df5bfab2/rounds/1"}],
           "winner":null}}
 ```
 Joining a match whose seat `b` is already taken returns 409.

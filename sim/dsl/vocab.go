@@ -106,6 +106,10 @@ const (
 	SenDistance Sensor = iota
 	SenHealth
 	SenEnemyHealth
+	SenGuard        // own block streak
+	SenPassive      // own passive frames
+	SenEnemyPassive // enemy passive frames
+	SenRepeats      // starts of own last attack in a row
 	SenEnemyAirborne
 	SenEnemyDucking
 	SenEnemyBlocking
@@ -116,7 +120,7 @@ const (
 )
 
 var sensorNames = [NumSensors]string{
-	"distance", "health", "enemy.health",
+	"distance", "health", "enemy.health", "guard", "passive", "enemy.passive", "repeats",
 	"enemy.airborne", "enemy.ducking", "enemy.blocking", "enemy.attacking", "enemy.knocked_down",
 	"in_range",
 }
@@ -155,6 +159,8 @@ var sensorAliases = map[string]string{
 	"enemy.distance": "distance", "range": "distance", "dist": "distance",
 	"enemy.down": "enemy.knocked_down", "enemy.knockdown": "enemy.knocked_down",
 	"enemy.guarding": "enemy.blocking", "enemy.attack": "enemy.attacking",
+	"my.passive": "passive", "enemy.idle": "enemy.passive", "streak": "guard", "block_streak": "guard",
+	"repeat_count": "repeats", "stale": "repeats",
 }
 
 // suggest returns the best suggestion for word among candidates (alias table

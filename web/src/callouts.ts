@@ -1,12 +1,13 @@
 // Event callouts ("BLOCKED", "THROW", "TECH", "TRADE", "K.O.") and the frame
 // countdown. Pure functions of (log, frame), so stepping, scrubbing and frame
 // links show exactly what playing up to that frame shows.
+import { boostMultiplier } from './replay';
 import type { Log, PlayerID } from './types';
 
 /** Frames a callout stays up after its event (K.O. lasts to the end). */
 export const CALLOUT_FRAMES = 30;
 
-export type CalloutKind = 'block' | 'throw' | 'tech' | 'trade' | 'ko';
+export type CalloutKind = 'block' | 'throw' | 'tech' | 'trade' | 'ko' | 'guard_break' | 'boost' | 'stale';
 
 export interface Callout {
   text: string;
@@ -16,6 +17,8 @@ export interface Callout {
   /** Frames since the event (0 on the event frame). */
   age: number;
   frame: number;
+  /** Opacity: 1 on the event frame, fading to 0 as the callout expires (K.O. stays 1). */
+  alpha: number;
 }
 
 /** The callouts visible on frame f, oldest first. */
@@ -26,20 +29,30 @@ export function calloutsAt(log: Log, f: number): Callout[] {
     if (e.frame > f) break; // events are ordered by frame
     const age = f - e.frame;
     if (e.type === 'ko') {
-      if (!out.some((c) => c.kind === 'ko')) out.push({ text: 'K.O.', kind: 'ko', anchor: 'center', age, frame: e.frame });
+      if (!out.some((c) => c.kind === 'ko')) out.push({ text: 'K.O.', kind: 'ko', anchor: 'center', age, frame: e.frame, alpha: 1 });
       continue;
     }
     if (age >= CALLOUT_FRAMES) continue;
+    const push = (text: string, kind: CalloutKind, anchor: Callout['anchor']) =>
+      out.push({ text, kind, anchor, age, frame: e.frame, alpha: 1 - age / CALLOUT_FRAMES });
     if (e.type === 'block' && e.target) {
-      out.push({ text: 'BLOCKED', kind: 'block', anchor: e.target, age, frame: e.frame });
+      push('BLOCKED', 'block', e.target);
+    } else if (e.type === 'guard_break' && e.target) {
+      push('GUARD BREAK!', 'guard_break', e.target);
     } else if (e.type === 'throw' && e.detail.outcome === 'success' && e.target) {
-      out.push({ text: 'THROW', kind: 'throw', anchor: e.target, age, frame: e.frame });
+      push('THROW', 'throw', e.target);
     } else if (e.type === 'throw' && e.detail.outcome === 'tech') {
       // Both fighters emit a tech event on the same frame; show it once.
-      if (techFrame !== e.frame) out.push({ text: 'TECH', kind: 'tech', anchor: 'mid', age, frame: e.frame });
+      if (techFrame !== e.frame) push('TECH', 'tech', 'mid');
       techFrame = e.frame;
     } else if (e.type === 'trade') {
-      out.push({ text: 'TRADE', kind: 'trade', anchor: 'mid', age, frame: e.frame });
+      push('TRADE', 'trade', 'mid');
+    } else if (e.type === 'stale') {
+      push('STALE', 'stale', e.actor);
+    }
+    // A boosted hit or throw also shows its multiplier above the target.
+    if ((e.type === 'hit' || e.type === 'throw') && e.target && (e.detail.boost ?? 0) > 100) {
+      push(`×${boostMultiplier(e.detail.boost!)}`, 'boost', e.target);
     }
   }
   return out;

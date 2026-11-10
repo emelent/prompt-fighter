@@ -1,12 +1,12 @@
 {
   "format_version": "1",
-  "config_version": "2026.11-2",
+  "config_version": "2026.11-3",
   "frame_budget": 600,
   "players": [
     {
       "id": "p1",
       "name": "thrower.pf",
-      "script": "# thrower.pf — grappler.\n# Strategy: close the distance and throw. Throws ignore blocks, so this beats\n# defensive scripts, but any attack interrupts a throw in startup.\nloop {\n  if in_range(throw) {\n    throw\n  } else {\n    move_forward x3\n  }\n}\non_hit { move_forward x2 }\n"
+      "script": "# thrower.pf — grappler.\n# Strategy: close the distance and throw. Throws ignore blocks, so this beats\n# defensive scripts, but any attack interrupts a throw in startup. After 5\n# throws in a row it mixes in a punch, so its throws never go stale.\nloop {\n  if in_range(throw) {\n    throw\n    if repeats >= 5 { punch }\n  } else {\n    move_forward x3\n  }\n}\non_hit { move_forward x2 }\n"
     },
     {
       "id": "p2",
@@ -37,7 +37,7 @@
         "hp": 100,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 5
+        "script_line": 6
       },
       "p2": {
         "x": 70,
@@ -66,7 +66,7 @@
         "hp": 100,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 5
+        "script_line": 6
       },
       "p2": {
         "x": 70,
@@ -95,7 +95,7 @@
         "hp": 100,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 8
+        "script_line": 10
       },
       "p2": {
         "x": 69,
@@ -124,7 +124,7 @@
         "hp": 100,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 8
+        "script_line": 10
       },
       "p2": {
         "x": 68,
@@ -153,7 +153,7 @@
         "hp": 100,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 8
+        "script_line": 10
       },
       "p2": {
         "x": 67,
@@ -182,7 +182,7 @@
         "hp": 100,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 5
+        "script_line": 6
       },
       "p2": {
         "x": 66,
@@ -211,7 +211,7 @@
         "hp": 100,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 5
+        "script_line": 6
       },
       "p2": {
         "x": 66,
@@ -240,7 +240,7 @@
         "hp": 100,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 8
+        "script_line": 10
       },
       "p2": {
         "x": 66,
@@ -269,7 +269,7 @@
         "hp": 100,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 8
+        "script_line": 10
       },
       "p2": {
         "x": 65,
@@ -298,7 +298,7 @@
         "hp": 100,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 8
+        "script_line": 10
       },
       "p2": {
         "x": 64,
@@ -327,7 +327,7 @@
         "hp": 100,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 5
+        "script_line": 6
       },
       "p2": {
         "x": 63,
@@ -356,7 +356,7 @@
         "hp": 100,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 5
+        "script_line": 6
       },
       "p2": {
         "x": 62,
@@ -385,7 +385,7 @@
         "hp": 100,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 8
+        "script_line": 10
       },
       "p2": {
         "x": 62,
@@ -414,7 +414,7 @@
         "hp": 100,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 8
+        "script_line": 10
       },
       "p2": {
         "x": 62,
@@ -443,7 +443,7 @@
         "hp": 100,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 8
+        "script_line": 10
       },
       "p2": {
         "x": 61,
@@ -472,7 +472,7 @@
         "hp": 100,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 5
+        "script_line": 6
       },
       "p2": {
         "x": 60,
@@ -501,7 +501,7 @@
         "hp": 100,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 5
+        "script_line": 6
       },
       "p2": {
         "x": 59,
@@ -530,7 +530,7 @@
         "hp": 100,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 8
+        "script_line": 10
       },
       "p2": {
         "x": 58,
@@ -559,7 +559,7 @@
         "hp": 100,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 8
+        "script_line": 10
       },
       "p2": {
         "x": 58,
@@ -588,7 +588,7 @@
         "hp": 100,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 8
+        "script_line": 10
       },
       "p2": {
         "x": 58,
@@ -617,7 +617,7 @@
         "hp": 100,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 5
+        "script_line": 6
       },
       "p2": {
         "x": 57,
@@ -646,7 +646,7 @@
         "hp": 100,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 5
+        "script_line": 6
       },
       "p2": {
         "x": 56,
@@ -675,7 +675,7 @@
         "hp": 100,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 8
+        "script_line": 10
       },
       "p2": {
         "x": 55,
@@ -704,7 +704,7 @@
         "hp": 100,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 8
+        "script_line": 10
       },
       "p2": {
         "x": 54,
@@ -733,7 +733,7 @@
         "hp": 100,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 8
+        "script_line": 10
       },
       "p2": {
         "x": 54,
@@ -762,7 +762,7 @@
         "hp": 100,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 5
+        "script_line": 6
       },
       "p2": {
         "x": 54,
@@ -791,7 +791,7 @@
         "hp": 100,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 5
+        "script_line": 6
       },
       "p2": {
         "x": 54,
@@ -820,7 +820,7 @@
         "hp": 100,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 8
+        "script_line": 10
       },
       "p2": {
         "x": 54,
@@ -849,7 +849,7 @@
         "hp": 100,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 8
+        "script_line": 10
       },
       "p2": {
         "x": 54,
@@ -878,7 +878,7 @@
         "hp": 100,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 8
+        "script_line": 10
       },
       "p2": {
         "x": 54,
@@ -907,7 +907,7 @@
         "hp": 100,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 5
+        "script_line": 6
       },
       "p2": {
         "x": 54,
@@ -936,7 +936,7 @@
         "hp": 100,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 5
+        "script_line": 6
       },
       "p2": {
         "x": 54,
@@ -1371,7 +1371,7 @@
         "hp": 91,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 11
+        "script_line": 13
       },
       "p2": {
         "x": 54,
@@ -1400,7 +1400,7 @@
         "hp": 91,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 11
+        "script_line": 13
       },
       "p2": {
         "x": 54,
@@ -1429,7 +1429,7 @@
         "hp": 91,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 5
+        "script_line": 6
       },
       "p2": {
         "x": 54,
@@ -1864,7 +1864,7 @@
         "hp": 86,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 11
+        "script_line": 13
       },
       "p2": {
         "x": 54,
@@ -2299,7 +2299,7 @@
         "hp": 77,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 11
+        "script_line": 13
       },
       "p2": {
         "x": 54,
@@ -2328,7 +2328,7 @@
         "hp": 77,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 11
+        "script_line": 13
       },
       "p2": {
         "x": 54,
@@ -2357,7 +2357,7 @@
         "hp": 77,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 5
+        "script_line": 6
       },
       "p2": {
         "x": 54,
@@ -2792,7 +2792,7 @@
         "hp": 72,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 11
+        "script_line": 13
       },
       "p2": {
         "x": 54,
@@ -3227,7 +3227,7 @@
         "hp": 63,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 11
+        "script_line": 13
       },
       "p2": {
         "x": 54,
@@ -3256,7 +3256,7 @@
         "hp": 63,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 11
+        "script_line": 13
       },
       "p2": {
         "x": 54,
@@ -3285,7 +3285,7 @@
         "hp": 63,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 5
+        "script_line": 6
       },
       "p2": {
         "x": 54,
@@ -3720,7 +3720,7 @@
         "hp": 58,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 11
+        "script_line": 13
       },
       "p2": {
         "x": 54,
@@ -4155,7 +4155,7 @@
         "hp": 49,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 11
+        "script_line": 13
       },
       "p2": {
         "x": 54,
@@ -4184,7 +4184,7 @@
         "hp": 49,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 11
+        "script_line": 13
       },
       "p2": {
         "x": 54,
@@ -4213,7 +4213,7 @@
         "hp": 49,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 5
+        "script_line": 6
       },
       "p2": {
         "x": 54,
@@ -4648,7 +4648,7 @@
         "hp": 44,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 11
+        "script_line": 13
       },
       "p2": {
         "x": 54,
@@ -5083,7 +5083,7 @@
         "hp": 35,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 11
+        "script_line": 13
       },
       "p2": {
         "x": 54,
@@ -5112,7 +5112,7 @@
         "hp": 35,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 11
+        "script_line": 13
       },
       "p2": {
         "x": 54,
@@ -5141,7 +5141,7 @@
         "hp": 35,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 5
+        "script_line": 6
       },
       "p2": {
         "x": 54,
@@ -5576,7 +5576,7 @@
         "hp": 30,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 11
+        "script_line": 13
       },
       "p2": {
         "x": 54,
@@ -6011,7 +6011,7 @@
         "hp": 21,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 11
+        "script_line": 13
       },
       "p2": {
         "x": 54,
@@ -6040,7 +6040,7 @@
         "hp": 21,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 11
+        "script_line": 13
       },
       "p2": {
         "x": 54,
@@ -6069,7 +6069,7 @@
         "hp": 21,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 5
+        "script_line": 6
       },
       "p2": {
         "x": 54,
@@ -6504,7 +6504,7 @@
         "hp": 16,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 11
+        "script_line": 13
       },
       "p2": {
         "x": 54,
@@ -6939,7 +6939,7 @@
         "hp": 7,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 11
+        "script_line": 13
       },
       "p2": {
         "x": 54,
@@ -6968,7 +6968,7 @@
         "hp": 7,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 11
+        "script_line": 13
       },
       "p2": {
         "x": 54,
@@ -6997,7 +6997,7 @@
         "hp": 7,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 5
+        "script_line": 6
       },
       "p2": {
         "x": 54,
@@ -7432,7 +7432,7 @@
         "hp": 2,
         "invulnerable": false,
         "combo": 0,
-        "script_line": 11
+        "script_line": 13
       },
       "p2": {
         "x": 54,
@@ -7486,7 +7486,7 @@
       "detail": {
         "sensor": "in_range(throw)",
         "value": false,
-        "line": 5,
+        "line": 6,
         "cost": 2
       }
     },
@@ -7508,7 +7508,7 @@
       "detail": {
         "sensor": "in_range(throw)",
         "value": false,
-        "line": 5,
+        "line": 6,
         "cost": 2
       }
     },
@@ -7530,7 +7530,7 @@
       "detail": {
         "sensor": "in_range(throw)",
         "value": false,
-        "line": 5,
+        "line": 6,
         "cost": 2
       }
     },
@@ -7552,7 +7552,7 @@
       "detail": {
         "sensor": "in_range(throw)",
         "value": false,
-        "line": 5,
+        "line": 6,
         "cost": 2
       }
     },
@@ -7574,7 +7574,7 @@
       "detail": {
         "sensor": "in_range(throw)",
         "value": false,
-        "line": 5,
+        "line": 6,
         "cost": 2
       }
     },
@@ -7596,7 +7596,7 @@
       "detail": {
         "sensor": "in_range(throw)",
         "value": false,
-        "line": 5,
+        "line": 6,
         "cost": 2
       }
     },
@@ -7607,7 +7607,7 @@
       "detail": {
         "sensor": "in_range(throw)",
         "value": false,
-        "line": 5,
+        "line": 6,
         "cost": 2
       }
     },
@@ -7649,7 +7649,7 @@
       "detail": {
         "sensor": "in_range(throw)",
         "value": true,
-        "line": 5,
+        "line": 6,
         "cost": 2
       }
     },
@@ -7722,7 +7722,7 @@
       "detail": {
         "sensor": "in_range(throw)",
         "value": true,
-        "line": 5,
+        "line": 6,
         "cost": 2
       }
     },
@@ -7795,7 +7795,7 @@
       "detail": {
         "sensor": "in_range(throw)",
         "value": true,
-        "line": 5,
+        "line": 6,
         "cost": 2
       }
     },
@@ -7868,7 +7868,7 @@
       "detail": {
         "sensor": "in_range(throw)",
         "value": true,
-        "line": 5,
+        "line": 6,
         "cost": 2
       }
     },
@@ -7941,7 +7941,7 @@
       "detail": {
         "sensor": "in_range(throw)",
         "value": true,
-        "line": 5,
+        "line": 6,
         "cost": 2
       }
     },
@@ -8014,7 +8014,7 @@
       "detail": {
         "sensor": "in_range(throw)",
         "value": true,
-        "line": 5,
+        "line": 6,
         "cost": 2
       }
     },
@@ -8087,7 +8087,7 @@
       "detail": {
         "sensor": "in_range(throw)",
         "value": true,
-        "line": 5,
+        "line": 6,
         "cost": 2
       }
     },

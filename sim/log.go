@@ -82,6 +82,9 @@ type Detail struct {
 	Handler string          `json:"handler,omitempty"`
 	Attacks []string        `json:"attacks,omitempty"`
 	Damages []int           `json:"damages,omitempty"`
+	Boost   int             `json:"boost,omitempty"`   // hit/throw: damage percent from the target's passivity, when above 100
+	Repeats int             `json:"repeats,omitempty"` // stale: starts of this attack in a row
+	Range   *int            `json:"range,omitempty"`   // stale: the reduced range
 }
 
 func intp(v int) *int { return &v }

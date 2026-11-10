@@ -23,14 +23,14 @@ func simLog(t *testing.T, a, b string, mod func(*sim.Config)) *sim.Log {
 
 func TestSummaryStats(t *testing.T) {
 	// Hand-checked: punch punch kick from distance 6 is a 3-hit combo for
-	// 5+4+5 damage; p2 checks distance once per loop iteration.
+	// 5+5+11 damage (combos grow 15% per hit); p2 checks distance once per loop iteration.
 	l := simLog(t, "punch punch kick", "loop { if distance > 50 { wait 1 } }", func(c *sim.Config) {
 		c.StartX = [2]int{30, 36}
 		c.FrameBudget = 60
 	})
 	s := summarise(l, false)
 	p1, p2 := s.Stats.P1, s.Stats.P2
-	if p1.Hits != 3 || p1.DamageDealt != 14 || p1.MaxCombo != 3 || p1.Whiffs != 0 || p1.Checks != 0 {
+	if p1.Hits != 3 || p1.DamageDealt != 21 || p1.MaxCombo != 3 || p1.Whiffs != 0 || p1.Checks != 0 {
 		t.Errorf("p1 stats %+v", p1)
 	}
 	if p2.Hits != 0 || p2.Checks == 0 || p2.Blocks != 0 || p2.Knockdowns != 0 {
@@ -39,7 +39,7 @@ func TestSummaryStats(t *testing.T) {
 	if s.Players[0] != (PlayerRef{"p1", "alice"}) || s.Players[1] != (PlayerRef{"p2", "bob"}) {
 		t.Errorf("players %+v", s.Players)
 	}
-	if s.Result.Reason != "timeout" || s.Result.HP != [2]int{100, 86} || *s.Result.Winner != "p1" {
+	if s.Result.Reason != "timeout" || s.Result.HP != [2]int{100, 79} || *s.Result.Winner != "p1" {
 		t.Errorf("result %+v", s.Result)
 	}
 	if strings.Join(s.Events, "\n") != strings.Join(l.EventLines(false), "\n") || s.EventsTruncated || s.EventsTotal != len(s.Events) {

@@ -97,10 +97,10 @@ For the current frame, the stage SHALL draw each fighter from that frame's entry
 - Its facing. The sprite is mirrored to face the opponent.
 - One character design shared by both players, with distinct colour palettes for p1 and p2 that stay the same in every state.
 - A sprite frame chosen from the frame's `state`, `anim`, `phase` and `anim_frame`:
-  - every `anim` in format "1" logs (idle, check, wait, walk_forward, walk_back, punch, kick, sweep, throw, jump, jump_kick, dive_punch, landing, duck, low_jab, high_block, low_block, hitstun, blockstun, knockdown, ko) has its own animation
+  - every `anim` in format "1" logs (idle, check, wait, walk_forward, walk_back, punch, kick, sweep, throw, jump, jump_kick, dive_punch, landing, duck, low_jab, high_block, low_block, hitstun, blockstun, guard_break, knockdown, ko) has its own animation
   - an attack's startup, active and recovery phases show different sprite frames, and the active frame shows the attacking limb extended
   - walk and idle animations cycle while the fighter stays in that anim
-  - `duck` and `low_jab` are drawn crouched, airborne states raised and tucked, `knockdown` and `ko` lying down, and `hitstun`, `blockstun` and `block` each with their own recognisable pose
+  - `duck` and `low_jab` are drawn crouched, airborne states raised and tucked, `knockdown` and `ko` lying down, and `hitstun`, `blockstun`, `guard_break` and `block` each with their own recognisable pose
   - an unknown `anim` falls back to the standing pose for its `state`, and never fails to draw
 - A translucent look while `invulnerable`.
 - On the last frame of a round won by KO or timeout, the winner in a win pose.
@@ -150,7 +150,7 @@ It SHALL also draw:
 - **THEN** the fighters and backdrop draw fully, and the viewer makes no requests for images
 
 ### Requirement: Event callouts
-The stage SHALL show a short pixel-font callout above the fighters for these events, starting on the event's frame and lasting about half a second (30 frames) of log time:
+The stage SHALL show a short pixel-font callout above the fighters for these events, starting on the event's frame and lasting about half a second (30 frames) of log time. Each callout except `K.O.` SHALL fade out over its lifetime, fully opaque on the event frame and fully transparent when it expires:
 
 | event | callout | where |
 |---|---|---|
@@ -158,6 +158,9 @@ The stage SHALL show a short pixel-font callout above the fighters for these eve
 | `throw` with outcome `success` | `THROW` | above the thrown fighter |
 | `throw` with outcome `tech` | `TECH` | once, between the fighters |
 | `trade` | `TRADE` | once, between the fighters |
+| `guard_break` | `GUARD BREAK!` | above the defender |
+| `hit` or successful `throw` with a `boost` | the multiplier, e.g. `×1.3` | above the target, alongside any other callout |
+| `stale` | `STALE` | above the fighter starting the stale attack |
 | `ko` | `K.O.` | large, centred above the result banner, from the event's frame to the end of the log |
 
 A callout SHALL be determined by the current frame alone, so stepping, scrubbing or opening a frame link shows the same callouts as playing up to that frame. Callouts SHALL NOT overlap the result banner, the HP bars or the frame counter. (In format "1" logs the `ko` event is on the last frame, so `K.O.` and the result banner appear together.)
@@ -177,6 +180,22 @@ A callout SHALL be determined by the current frame alone, so stepping, scrubbing
 #### Scenario: Knockout
 - **WHEN** the player reaches the last frame of a round that ended by KO
 - **THEN** a large `K.O.` callout is shown above the result banner, and both are fully readable
+
+#### Scenario: Guard break callout
+- **WHEN** the current frame is 2 frames after a `guard_break` event whose target is p2
+- **THEN** `GUARD BREAK!` is shown above p2
+
+#### Scenario: Boost callout
+- **WHEN** the current frame is the frame of a `hit` event with `boost` 130 and target p1
+- **THEN** `×1.3` is shown above p1
+
+#### Scenario: Stale callout
+- **WHEN** the current frame is 3 frames after a `stale` event whose actor is p2
+- **THEN** `STALE` is shown above p2
+
+#### Scenario: Callouts fade
+- **WHEN** the same `BLOCKED` callout is drawn 0 frames and 20 frames after its event
+- **THEN** it is fully opaque at 0 frames and noticeably more transparent at 20 frames
 
 ### Requirement: Round intro
 When playback starts from frame 0 (pressing play at frame 0, replaying from the end, or auto-play), the round player SHALL first show a round intro lasting about 1.5 seconds of wall-clock time at any playback speed:

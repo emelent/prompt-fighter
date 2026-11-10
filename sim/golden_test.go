@@ -13,7 +13,8 @@ import (
 var update = flag.Bool("update", false, "rewrite golden event logs")
 
 var goldenPairs = [][2]string{
-	{"rushdown", "turtle"},  // timeout
+	{"rushdown", "turtle"},  // ko (turtle's kicks go stale)
+	{"ducker", "lazy"},      // timeout, with a passivity boost
 	{"turtle", "jumper"},    // ko (anti-air pokes)
 	{"jumper", "lazy"},      // ko
 	{"thrower", "rushdown"}, // ko

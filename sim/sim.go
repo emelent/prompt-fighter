@@ -82,6 +82,7 @@ func Simulate(cfg Config, a, b Entrant) (*Log, error) {
 			w: w, idx: i, id: fmt.Sprintf("p%d", i+1),
 			x: cfg.StartX[i], hp: cfg.MaxHP,
 			stunUntil: -1, defBSUntil: -1,
+			lastBlockT: -1, attackedT: -1, movedAwayT: -1,
 			in: NewInterp(scripts[i]),
 		}
 	}
@@ -103,9 +104,13 @@ func (w *world) tick(t int) bool {
 	for i, f := range w.f {
 		w.snap[i] = f.view(t - 1)
 	}
-	// 2. Stance bookkeeping that depends only on time.
+	// 2. Stance bookkeeping that depends only on time, and the block-streak lapse.
 	for _, f := range w.f {
 		f.preThink(t)
+		f.stunnedAtTop = f.stunned(t)
+		if f.blockStreak > 0 && t-f.lastBlockT >= c.GuardStreakWindow {
+			f.blockStreak = 0
+		}
 	}
 	// 3. Think: each actionable, unoccupied fighter steps its interpreter.
 	for _, f := range w.f {
@@ -123,6 +128,18 @@ func (w *world) tick(t int) bool {
 	conns := [2]*conn{w.f[0].connect(t), w.f[1].connect(t)}
 	// 6. Resolve simultaneously.
 	w.resolve(t, conns)
+	// 6b. Passivity: a frame without starting an attack, not stunned at any
+	// point of it, counts once, or twice when the fighter moved away.
+	for _, f := range w.f {
+		if f.stunnedAtTop || f.stunned(t) || f.attackedT == t {
+			continue
+		}
+		inc := 1
+		if f.movedAwayT == t {
+			inc = 2
+		}
+		f.passive = min(f.passive+inc, 100000)
+	}
 	// 7. Whiffs at the end of active frames.
 	for _, f := range w.f {
 		if a := f.act; a != nil && a.kind == akAttack && !a.connected && a.k(t) == a.spec.Startup+a.spec.Active {
@@ -213,6 +230,11 @@ func (w *world) move(t int) {
 		}
 	}
 	for i, f := range w.f {
+		if (nx[i]-f.x)*sign(w.f[1-i].x-f.x) < 0 {
+			f.movedAwayT = t
+		}
+	}
+	for i, f := range w.f {
 		f.x = nx[i]
 		f.y = 0
 		if f.airborne(t) {
@@ -260,6 +282,8 @@ func (f *fighter) connect(t int) *conn {
 	switch {
 	case abs(f.x-e.x) > a.spec.Range:
 		reason = "out_of_range"
+	case abs(f.x-e.x) > a.effRange:
+		reason = "stale"
 	case e.knockedDown(t):
 		reason = "invulnerable"
 	case !air && a.height == HeightHigh && e.ducking(t):
@@ -289,6 +313,7 @@ type outcome struct {
 	atk       dsl.Attack
 	dmg       int
 	combo     int
+	boost     int
 	knockdown bool
 	kdReason  string
 }
@@ -320,20 +345,16 @@ func (w *world) resolve(t int, conns [2]*conn) {
 		}
 		cn.a.connected = true
 		target := w.f[1-i]
-		o := &outcome{kind: cn.kind, atk: cn.a.attack}
+		o := &outcome{kind: cn.kind, atk: cn.a.attack, boost: c.boostPct(target.passive)}
 		switch cn.kind {
 		case cThrow:
-			o.dmg, o.combo, o.knockdown, o.kdReason = cn.a.spec.Damage, 1, true, "throw"
+			o.dmg, o.combo, o.knockdown, o.kdReason = max(1, cn.a.spec.Damage*o.boost/100), 1, true, "throw"
 		case cHit:
 			o.combo = 1
 			if target.inHitstun(t) {
 				o.combo = target.combo + 1
 			}
-			mult := 100
-			for k := 2; k <= o.combo; k++ {
-				mult = max(c.ComboFloorPct, mult*c.ComboScalePct/100)
-			}
-			o.dmg = max(1, cn.a.spec.Damage*mult/100)
+			o.dmg = max(1, cn.a.spec.Damage*c.comboPct(o.combo)*o.boost/10000)
 			switch {
 			case target.airborne(t):
 				o.knockdown, o.kdReason = true, "airborne"
@@ -354,6 +375,16 @@ func (w *world) resolve(t int, conns [2]*conn) {
 		att, tgt := w.f[i], w.f[1-i]
 		switch o.kind {
 		case cBlock:
+			if tgt.blockStreak >= c.GuardBreakBlocks-1 {
+				// The guard breaks: no damage, no blockstun for the attacker,
+				// who recovers normally and can punish the stunned defender.
+				w.emit(i, Event{Type: "guard_break", Actor: att.id, Target: tgt.id, Detail: Detail{Attack: o.atk.String()}})
+				tgt.applyGuardBreak(t)
+				push[1-i] += c.BlockPushback
+				continue
+			}
+			tgt.blockStreak++
+			tgt.lastBlockT = t
 			w.emit(i, Event{Type: "block", Actor: att.id, Target: tgt.id, Detail: Detail{Attack: o.atk.String()}})
 			ba := tgt.act
 			ba.hold = max(ba.hold, ba.k(t)+c.Blockstun-c.BlockStartup)
@@ -362,12 +393,18 @@ func (w *world) resolve(t int, conns [2]*conn) {
 			att.applyBlocked(t, max(conns[i].a.spec.Recovery, c.Blockstun))
 		case cHit, cThrow:
 			tgt.hp = max(0, tgt.hp-o.dmg)
+			tgt.blockStreak = 0
+			boost := 0
+			if o.boost > 100 {
+				boost = o.boost
+				tgt.passive = 0 // the boost is consumed
+			}
 			if o.kind == cHit {
-				ev := Event{Type: "hit", Actor: att.id, Target: tgt.id, Detail: Detail{Attack: o.atk.String(), Damage: intp(o.dmg), Combo: o.combo, HP: intp(tgt.hp)}}
+				ev := Event{Type: "hit", Actor: att.id, Target: tgt.id, Detail: Detail{Attack: o.atk.String(), Damage: intp(o.dmg), Combo: o.combo, HP: intp(tgt.hp), Boost: boost}}
 				w.emit(i, ev)
 				push[1-i] += c.HitPushback
 			} else {
-				w.emit(i, Event{Type: "throw", Actor: att.id, Target: tgt.id, Detail: Detail{Attack: "throw", Outcome: "success", Damage: intp(o.dmg), HP: intp(tgt.hp)}})
+				w.emit(i, Event{Type: "throw", Actor: att.id, Target: tgt.id, Detail: Detail{Attack: "throw", Outcome: "success", Damage: intp(o.dmg), HP: intp(tgt.hp), Boost: boost}})
 			}
 			if o.knockdown {
 				tgt.applyKnockdown(t)

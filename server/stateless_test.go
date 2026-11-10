@@ -17,7 +17,7 @@ func TestHealth(t *testing.T) {
 	if rec.Code != 200 || b["status"] != "ok" || b["config_version"] != sim.DefaultConfig().Version || b["format_version"] != sim.FormatVersion || b["store_version"] != float64(1) {
 		t.Errorf("%d %v", rec.Code, b)
 	}
-	if b["config_version"] != "2026.11-2" || b["format_version"] != "1" {
+	if b["config_version"] != "2026.11-3" || b["format_version"] != "1" {
 		t.Errorf("versions %v", b)
 	}
 }

@@ -50,6 +50,12 @@ export interface EventDetail {
   handler?: string;
   attacks?: string[];
   damages?: number[];
+  /** hit/throw: damage percent from the target's passivity, when above 100. */
+  boost?: number;
+  /** stale: starts of this attack in a row. */
+  repeats?: number;
+  /** stale: the reduced range. */
+  range?: number;
 }
 
 export interface GameEvent {

@@ -123,9 +123,29 @@ type Config struct {
 	BlockPushback   int `json:"block_pushback"`
 	KnockdownFrames int `json:"knockdown_frames"`
 
-	ComboScalePct      int `json:"combo_scale_pct"`
-	ComboFloorPct      int `json:"combo_floor_pct"`
+	ComboGrowthPct     int `json:"combo_growth_pct"` // extra damage percent per hit after the first
 	ComboKnockdownHits int `json:"combo_knockdown_hits"`
+
+	// Guard break: the GuardBreakBlocks-th attack guarded in a row (with less
+	// than GuardStreakWindow frames between blocks) breaks the guard.
+	GuardBreakBlocks  int `json:"guard_break_blocks"`
+	GuardStreakWindow int `json:"guard_streak_window"`
+	GuardBreakStun    int `json:"guard_break_stun"`
+
+	// Passivity: after PassiveLimit frames without starting an attack, the
+	// opponent's next hit or throw is boosted, from PassiveBoostStartPct by
+	// PassiveBoostStepPct every PassiveBoostStepFrames, up to PassiveBoostMaxPct.
+	PassiveLimit           int `json:"passive_limit"`
+	PassiveBoostStartPct   int `json:"passive_boost_start_pct"`
+	PassiveBoostStepPct    int `json:"passive_boost_step_pct"`
+	PassiveBoostStepFrames int `json:"passive_boost_step_frames"`
+	PassiveBoostMaxPct     int `json:"passive_boost_max_pct"`
+
+	// Stale attacks: from the StaleFrom-th start of the same attack in a row,
+	// its range loses StaleStepPct per repeat, down to StaleFloorPct.
+	StaleFrom     int `json:"stale_from"`
+	StaleStepPct  int `json:"stale_step_pct"`
+	StaleFloorPct int `json:"stale_floor_pct"`
 
 	SensorCost int `json:"sensor_cost"`
 
@@ -134,7 +154,7 @@ type Config struct {
 
 // DefaultVersion is the version string of DefaultConfig. Bump it whenever a
 // default value changes (TestConfigHashPinned enforces this).
-const DefaultVersion = "2026.11-2"
+const DefaultVersion = "2026.11-3"
 
 // DefaultConfig returns the build-spec defaults plus the gap-fill values
 // documented in docs/RULES.md.
@@ -166,9 +186,22 @@ func DefaultConfig() Config {
 		BlockPushback:   2,
 		KnockdownFrames: 20,
 
-		ComboScalePct:      80,
-		ComboFloorPct:      30,
+		ComboGrowthPct:     15,
 		ComboKnockdownHits: 5,
+
+		GuardBreakBlocks:  4,
+		GuardStreakWindow: 60,
+		GuardBreakStun:    20,
+
+		PassiveLimit:           120,
+		PassiveBoostStartPct:   110,
+		PassiveBoostStepPct:    10,
+		PassiveBoostStepFrames: 30,
+		PassiveBoostMaxPct:     150,
+
+		StaleFrom:     6,
+		StaleStepPct:  15,
+		StaleFloorPct: 40,
 
 		SensorCost: 2,
 		Limits:     dsl.DefaultLimits(),
@@ -214,3 +247,23 @@ func (c *Config) airZone(k int) AirZoneKind {
 	return ZoneAirToAir
 }
 func (c *Config) minSep() int { return 2 * c.HalfWidth }
+
+// comboPct is the damage percent for hit n (1-based) of a combo.
+func (c *Config) comboPct(n int) int { return 100 + c.ComboGrowthPct*(n-1) }
+
+// boostPct is the damage percent a hit or throw gets against a target that
+// has been passive for p frames.
+func (c *Config) boostPct(p int) int {
+	if p < c.PassiveLimit {
+		return 100
+	}
+	return min(c.PassiveBoostMaxPct, c.PassiveBoostStartPct+c.PassiveBoostStepPct*((p-c.PassiveLimit)/c.PassiveBoostStepFrames))
+}
+
+// staleRangePct is the range percent of an attack started for the n-th time in a row.
+func (c *Config) staleRangePct(n int) int {
+	if n < c.StaleFrom {
+		return 100
+	}
+	return max(c.StaleFloorPct, 100-c.StaleStepPct*(n-c.StaleFrom+1))
+}
