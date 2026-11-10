@@ -1,0 +1,10 @@
+# lazy.pf — never looks at the opponent.
+# Strategy: a fixed routine with no sensor reads at all: walk in, kick,
+# sweep, block a little, repeat. Predictable, but it never wastes frames
+# on checks.
+loop {
+  move_forward x6
+  kick
+  sweep
+  high_block hold 4
+}

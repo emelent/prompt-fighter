@@ -1,0 +1,11 @@
+# rushdown.pf — relentless pressure.
+# Strategy: walk in fast and keep attacking. Kick from max range, follow up
+# with a punch, and mix in a sweep against blockers.
+loop {
+  if in_range(kick) {
+    kick
+    if enemy.blocking { sweep } else { punch }
+  } else {
+    move_forward x4
+  }
+}

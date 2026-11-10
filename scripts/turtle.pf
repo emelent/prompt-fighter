@@ -1,0 +1,16 @@
+# turtle.pf — patient defender.
+# Strategy: spend most of the round holding high_block, switch to low_block
+# when the enemy is close enough to sweep, and only attack when the enemy is
+# whiffing or recovering right in front of us. A blocked attack is answered
+# with a throw, since a throw beats a block.
+loop {
+  if enemy.attacking {
+    high_block hold 6
+  } elif in_range(punch) {
+    punch
+  } else {
+    high_block hold 8
+  }
+}
+on_block { throw }
+on_hit { move_back x3 }

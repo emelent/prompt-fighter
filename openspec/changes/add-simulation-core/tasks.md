@@ -20,32 +20,32 @@
 ## 4. Frame simulation and rules
 
 - [x] 4.1 Implement fighter state, the symmetric tick order (design D3) and movement: walking, jumps with y-curve and landing recovery, edge clamping, symmetric overlap reversion, and auto-facing. Add tests for edge clamp, no-overlap with both fighters moving, walking into the opponent, and jump-forward distance and peak. Verify that `go test ./sim -run Move` passes.
-- [ ] 4.2 Implement attack phases and connection checks: range, ducking/airborne/invulnerable/stunned whiff conditions, the single-connect rule, and `whiff` events with reasons. Add a test for each whiff scenario in the combat-rules spec. Verify that `go test ./sim -run Whiff` passes.
-- [ ] 4.3 Implement simultaneous resolution: hits (damage, hitstun, pushback with wall transfer, anti-air knockdown), blocks (defender blockstun and hold extension, attacker blockstun = recovery, design D7), throws (unblockable, knockdown, attack-beats-throw, tech) and trades. Add tests for each triangle edge, the trade, pushback, wall transfer and wrong-height block. Verify that `go test ./sim -run 'Hit|Block|Throw|Trade'` passes.
-- [ ] 4.4 Implement combo counting and scaling (integer, floor 30%, knockdown on the 5th hit), knockdown (20f invulnerable, wake-up into `on_hit`), KO, double KO and timeout results. Test the scaling sequence with a test-only config (long hitstun, zero pushback), the combo knockdown cap, knockdown invulnerability, wake-up, early KO end, timeout draw and double KO. Verify that `go test ./sim -run 'Combo|Knockdown|Result'` passes.
+- [x] 4.2 Implement attack phases and connection checks: range, ducking/airborne/invulnerable/stunned whiff conditions, the single-connect rule, and `whiff` events with reasons. Add a test for each whiff scenario in the combat-rules spec. Verify that `go test ./sim -run Whiff` passes.
+- [x] 4.3 Implement simultaneous resolution: hits (damage, hitstun, pushback with wall transfer, anti-air knockdown), blocks (defender blockstun and hold extension, attacker blockstun = recovery, design D7), throws (unblockable, knockdown, attack-beats-throw, tech) and trades. Add tests for each triangle edge, the trade, pushback, wall transfer and wrong-height block. Verify that `go test ./sim -run 'Hit|Block|Throw|Trade'` passes.
+- [x] 4.4 Implement combo counting and scaling (integer, floor 30%, knockdown on the 5th hit), knockdown (20f invulnerable, wake-up into `on_hit`), KO, double KO and timeout results. Test the scaling sequence with a test-only config (long hitstun, zero pushback), the combo knockdown cap, knockdown invulnerability, wake-up, early KO end, timeout draw and double KO. Verify that `go test ./sim -run 'Combo|Knockdown|Result'` passes.
 
 ## 5. Event log
 
-- [ ] 5.1 Implement the log types (header, players, result, per-frame fighter entries with all replay-log fields, events with typed `Detail` using pointer fields for meaningful zeros), event ordering, and the `Simulate(cfg, a, b) (*Log, error)` entry point. Test header contents, frame count and indexing, `script_line`/`anim` during checks, and that a `false` check value serializes. Verify that `go test ./sim -run Log` passes.
-- [ ] 5.2 Write `docs/RULES.md`: the frame data table, tick order, every gap-fill decision from design D2/D7/D8, sensor semantics and reaction windows, and the event `detail` fields per type. Verify that every event type and detail field emitted by the code is listed, by cross-checking against the `Detail` struct.
+- [x] 5.1 Implement the log types (header, players, result, per-frame fighter entries with all replay-log fields, events with typed `Detail` using pointer fields for meaningful zeros), event ordering, and the `Simulate(cfg, a, b) (*Log, error)` entry point. Test header contents, frame count and indexing, `script_line`/`anim` during checks, and that a `false` check value serializes. Verify that `go test ./sim -run Log` passes.
+- [x] 5.2 Write `docs/RULES.md`: the frame data table, tick order, every gap-fill decision from design D2/D7/D8, sensor semantics and reaction windows, and the event `detail` fields per type. Verify that every event type and detail field emitted by the code is listed, by cross-checking against the `Detail` struct.
 
 ## 6. CLI
 
-- [ ] 6.1 Implement `pf validate` (output format and exit codes 0/1/2). Test it with `testing` by calling the subcommand function with fixture files: valid, invalid, and missing. Verify that `go test ./cmd/pf -run Validate` passes.
-- [ ] 6.2 Implement `pf sim` with the text log (check events only with `-v`, result summary line), `--json` and `--frames`, plus validation-error passthrough. Test text output shape, JSON byte-equality with `sim.Simulate`, and the `--frames 120` frame count. Verify that `go test ./cmd/pf -run Sim` passes.
-- [ ] 6.3 Implement `pf selfplay`: sorted file discovery, invalid-script reporting and exclusion, both-sides round-robin, and a `W-D-L` matrix with diagonal `—` and a totals column. Test matrix shape and mirror consistency on a temp dir of small scripts. Verify that `go test ./cmd/pf -run Selfplay` passes.
+- [x] 6.1 Implement `pf validate` (output format and exit codes 0/1/2). Test it with `testing` by calling the subcommand function with fixture files: valid, invalid, and missing. Verify that `go test ./cmd/pf -run Validate` passes.
+- [x] 6.2 Implement `pf sim` with the text log (check events only with `-v`, result summary line), `--json` and `--frames`, plus validation-error passthrough. Test text output shape, JSON byte-equality with `sim.Simulate`, and the `--frames 120` frame count. Verify that `go test ./cmd/pf -run Sim` passes.
+- [x] 6.3 Implement `pf selfplay`: sorted file discovery, invalid-script reporting and exclusion, both-sides round-robin, and a `W-D-L` matrix with diagonal `—` and a totals column. Test matrix shape and mirror consistency on a temp dir of small scripts. Verify that `go test ./cmd/pf -run Selfplay` passes.
 
 ## 7. Sample scripts and balance
 
-- [ ] 7.1 Write `scripts/turtle.pf`, `rushdown.pf`, `jumper.pf`, `thrower.pf` and `lazy.pf` (lazy with zero sensor reads), each with strategy header comments. Verify that `go run ./cmd/pf validate scripts/*.pf` prints `ok` for all five.
-- [ ] 7.2 Run `go run ./cmd/pf selfplay scripts/` and tune the scripts (not config, per the design risks) until every script beats at least one other and loses to at least one other. Add the automated balance test from the sample-scripts spec, plus a test asserting `lazy.pf` emits no `check` events. Verify that `go test ./... -run Balance` passes.
+- [x] 7.1 Write `scripts/turtle.pf`, `rushdown.pf`, `jumper.pf`, `thrower.pf` and `lazy.pf` (lazy with zero sensor reads), each with strategy header comments. Verify that `go run ./cmd/pf validate scripts/*.pf` prints `ok` for all five.
+- [x] 7.2 Run `go run ./cmd/pf selfplay scripts/` and tune the scripts (not config, per the design risks) until every script beats at least one other and loses to at least one other. Add the automated balance test from the sample-scripts spec, plus a test asserting `lazy.pf` emits no `check` events. Verify that `go test ./... -run Balance` passes.
 
 ## 8. Golden logs, determinism, symmetry
 
-- [ ] 8.1 Add golden-file tests with an `-update` flag for at least 4 sample pairs (including a KO and a timeout result). Verify that `go test ./sim -run Golden` passes and the files exist under `sim/testdata/golden/`.
-- [ ] 8.2 Add a determinism test (two in-process runs plus a built `pf sim --json` subprocess, all byte-identical) and a symmetry test (every sample vs itself draws with mirrored x; every swapped pair mirrors frames and keeps the same winning script). Verify that `go test ./... -run 'Determinism|Symmetry'` passes.
+- [x] 8.1 Add golden-file tests with an `-update` flag for at least 4 sample pairs (including a KO and a timeout result). Verify that `go test ./sim -run Golden` passes and the files exist under `sim/testdata/golden/`.
+- [x] 8.2 Add a determinism test (two in-process runs plus a built `pf sim --json` subprocess, all byte-identical) and a symmetry test (every sample vs itself draws with mirrored x; every swapped pair mirrors frames and keeps the same winning script). Verify that `go test ./... -run 'Determinism|Symmetry'` passes.
 
 ## 9. Integration check and Phase 1 review
 
-- [ ] 9.1 Run `go vet ./...` and `go test ./... -count=1` and confirm both pass. Run `go test -race ./sim` to confirm `Simulate` has no shared state.
-- [ ] 9.2 Produce the Phase 1 review summary for the user: the design decisions where the spec was silent (from RULES.md), the `pf selfplay scripts/` matrix, and the balance observations (combo dormancy, duck vs air attacks, D7 block interpretation, anything selfplay surfaces). Stop before Phase 2.
+- [x] 9.1 Run `go vet ./...` and `go test ./... -count=1` and confirm both pass. Run `go test -race ./sim` to confirm `Simulate` has no shared state.
+- [x] 9.2 Produce the Phase 1 review summary for the user: the design decisions where the spec was silent (from RULES.md), the `pf selfplay scripts/` matrix, and the balance observations (combo dormancy, duck vs air attacks, D7 block interpretation, anything selfplay surfaces). Stop before Phase 2.

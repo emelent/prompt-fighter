@@ -1,0 +1,11 @@
+# thrower.pf — grappler.
+# Strategy: close the distance and throw. Throws ignore blocks, so this beats
+# defensive scripts, but any attack interrupts a throw in startup.
+loop {
+  if in_range(throw) {
+    throw
+  } else {
+    move_forward x3
+  }
+}
+on_hit { move_forward x2 }

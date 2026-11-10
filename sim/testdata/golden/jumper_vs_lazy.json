@@ -1,0 +1,9290 @@
+{
+  "format_version": "1",
+  "config_version": "2026.11-1",
+  "frame_budget": 600,
+  "players": [
+    {
+      "id": "p1",
+      "name": "jumper.pf",
+      "script": "# jumper.pf — air assault.\n# Strategy: approach and attack from the air. Jump kicks are high, so they\n# beat sweeps and throws on the ground but lose to ducking and anti-air kicks.\nloop {\n  if distance > 20 {\n    move_forward x5\n  } else {\n    jump_forward\n    kick\n  }\n}\non_hit { move_back x2 }\n"
+    },
+    {
+      "id": "p2",
+      "name": "lazy.pf",
+      "script": "# lazy.pf — never looks at the opponent.\n# Strategy: a fixed routine with no sensor reads at all: walk in, kick,\n# sweep, block a little, repeat. Predictable, but it never wastes frames\n# on checks.\nloop {\n  move_forward x6\n  kick\n  sweep\n  high_block hold 4\n}\n"
+    }
+  ],
+  "result": {
+    "winner": "p1",
+    "reason": "ko",
+    "end_frame": 304,
+    "hp": [
+      76,
+      0
+    ]
+  },
+  "frames": [
+    {
+      "f": 0,
+      "p1": {
+        "x": 30,
+        "y": 0,
+        "facing": 1,
+        "state": "idle",
+        "anim": "check",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 5
+      },
+      "p2": {
+        "x": 69,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 1,
+      "p1": {
+        "x": 30,
+        "y": 0,
+        "facing": 1,
+        "state": "idle",
+        "anim": "check",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 5
+      },
+      "p2": {
+        "x": 68,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 2,
+      "p1": {
+        "x": 31,
+        "y": 0,
+        "facing": 1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      },
+      "p2": {
+        "x": 67,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 2,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 3,
+      "p1": {
+        "x": 32,
+        "y": 0,
+        "facing": 1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      },
+      "p2": {
+        "x": 66,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 3,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 4,
+      "p1": {
+        "x": 33,
+        "y": 0,
+        "facing": 1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 2,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      },
+      "p2": {
+        "x": 65,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 4,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 5,
+      "p1": {
+        "x": 34,
+        "y": 0,
+        "facing": 1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 3,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      },
+      "p2": {
+        "x": 64,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 5,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 6,
+      "p1": {
+        "x": 35,
+        "y": 0,
+        "facing": 1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 4,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      },
+      "p2": {
+        "x": 64,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 0,
+        "phase": "startup",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 7,
+      "p1": {
+        "x": 35,
+        "y": 0,
+        "facing": 1,
+        "state": "idle",
+        "anim": "check",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 5
+      },
+      "p2": {
+        "x": 64,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 1,
+        "phase": "startup",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 8,
+      "p1": {
+        "x": 35,
+        "y": 0,
+        "facing": 1,
+        "state": "idle",
+        "anim": "check",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 5
+      },
+      "p2": {
+        "x": 64,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 2,
+        "phase": "startup",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 9,
+      "p1": {
+        "x": 36,
+        "y": 0,
+        "facing": 1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      },
+      "p2": {
+        "x": 64,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 3,
+        "phase": "startup",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 10,
+      "p1": {
+        "x": 37,
+        "y": 0,
+        "facing": 1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      },
+      "p2": {
+        "x": 64,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 4,
+        "phase": "startup",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 11,
+      "p1": {
+        "x": 38,
+        "y": 0,
+        "facing": 1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 2,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      },
+      "p2": {
+        "x": 64,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 5,
+        "phase": "startup",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 12,
+      "p1": {
+        "x": 39,
+        "y": 0,
+        "facing": 1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 3,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      },
+      "p2": {
+        "x": 64,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 6,
+        "phase": "active",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 13,
+      "p1": {
+        "x": 40,
+        "y": 0,
+        "facing": 1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 4,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      },
+      "p2": {
+        "x": 64,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 7,
+        "phase": "active",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 14,
+      "p1": {
+        "x": 40,
+        "y": 0,
+        "facing": 1,
+        "state": "idle",
+        "anim": "check",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 5
+      },
+      "p2": {
+        "x": 64,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 8,
+        "phase": "active",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 15,
+      "p1": {
+        "x": 40,
+        "y": 0,
+        "facing": 1,
+        "state": "idle",
+        "anim": "check",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 5
+      },
+      "p2": {
+        "x": 64,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 9,
+        "phase": "recovery",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 16,
+      "p1": {
+        "x": 41,
+        "y": 0,
+        "facing": 1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      },
+      "p2": {
+        "x": 64,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 10,
+        "phase": "recovery",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 17,
+      "p1": {
+        "x": 42,
+        "y": 0,
+        "facing": 1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      },
+      "p2": {
+        "x": 64,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 11,
+        "phase": "recovery",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 18,
+      "p1": {
+        "x": 43,
+        "y": 0,
+        "facing": 1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 2,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      },
+      "p2": {
+        "x": 64,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 12,
+        "phase": "recovery",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 19,
+      "p1": {
+        "x": 44,
+        "y": 0,
+        "facing": 1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 3,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      },
+      "p2": {
+        "x": 64,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 13,
+        "phase": "recovery",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 20,
+      "p1": {
+        "x": 45,
+        "y": 0,
+        "facing": 1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 4,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      },
+      "p2": {
+        "x": 64,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 14,
+        "phase": "recovery",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 21,
+      "p1": {
+        "x": 45,
+        "y": 0,
+        "facing": 1,
+        "state": "idle",
+        "anim": "check",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 5
+      },
+      "p2": {
+        "x": 64,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 15,
+        "phase": "recovery",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 22,
+      "p1": {
+        "x": 45,
+        "y": 0,
+        "facing": 1,
+        "state": "idle",
+        "anim": "check",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 5
+      },
+      "p2": {
+        "x": 64,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 16,
+        "phase": "recovery",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 23,
+      "p1": {
+        "x": 46,
+        "y": 2,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 64,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 17,
+        "phase": "recovery",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 24,
+      "p1": {
+        "x": 47,
+        "y": 4,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 0,
+        "phase": "startup",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 64,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 0,
+        "phase": "startup",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 25,
+      "p1": {
+        "x": 48,
+        "y": 6,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 1,
+        "phase": "startup",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 64,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 1,
+        "phase": "startup",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 26,
+      "p1": {
+        "x": 49,
+        "y": 8,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 2,
+        "phase": "startup",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 64,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 2,
+        "phase": "startup",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 27,
+      "p1": {
+        "x": 50,
+        "y": 10,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 3,
+        "phase": "active",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 64,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 3,
+        "phase": "startup",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 28,
+      "p1": {
+        "x": 51,
+        "y": 12,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 4,
+        "phase": "active",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 64,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 4,
+        "phase": "startup",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 29,
+      "p1": {
+        "x": 52,
+        "y": 14,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 5,
+        "phase": "active",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 64,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 5,
+        "phase": "startup",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 30,
+      "p1": {
+        "x": 53,
+        "y": 16,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 6,
+        "phase": "active",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 64,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 6,
+        "phase": "startup",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 31,
+      "p1": {
+        "x": 54,
+        "y": 18,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 7,
+        "phase": "active",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 67,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 90,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 32,
+      "p1": {
+        "x": 55,
+        "y": 20,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 5
+      },
+      "p2": {
+        "x": 67,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 90,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 33,
+      "p1": {
+        "x": 56,
+        "y": 18,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 5
+      },
+      "p2": {
+        "x": 67,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 2,
+        "phase": "",
+        "hp": 90,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 34,
+      "p1": {
+        "x": 57,
+        "y": 16,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 2,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 67,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 3,
+        "phase": "",
+        "hp": 90,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 35,
+      "p1": {
+        "x": 58,
+        "y": 14,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 3,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 67,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 4,
+        "phase": "",
+        "hp": 90,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 36,
+      "p1": {
+        "x": 59,
+        "y": 12,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 4,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 67,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 5,
+        "phase": "",
+        "hp": 90,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 37,
+      "p1": {
+        "x": 60,
+        "y": 10,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 5,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 67,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 0,
+        "phase": "startup",
+        "hp": 90,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 38,
+      "p1": {
+        "x": 61,
+        "y": 8,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 6,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 67,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 1,
+        "phase": "active",
+        "hp": 90,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 39,
+      "p1": {
+        "x": 62,
+        "y": 6,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 7,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 67,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 2,
+        "phase": "active",
+        "hp": 90,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 40,
+      "p1": {
+        "x": 63,
+        "y": 4,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 8,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 67,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 3,
+        "phase": "active",
+        "hp": 90,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 41,
+      "p1": {
+        "x": 63,
+        "y": 2,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 9,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 67,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 4,
+        "phase": "active",
+        "hp": 90,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 42,
+      "p1": {
+        "x": 63,
+        "y": 0,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 10,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 67,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 5,
+        "phase": "recovery",
+        "hp": 90,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 43,
+      "p1": {
+        "x": 63,
+        "y": 0,
+        "facing": 1,
+        "state": "landing",
+        "anim": "landing",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 67,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 90,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 44,
+      "p1": {
+        "x": 63,
+        "y": 0,
+        "facing": 1,
+        "state": "landing",
+        "anim": "landing",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 67,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 90,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 45,
+      "p1": {
+        "x": 63,
+        "y": 2,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 67,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 2,
+        "phase": "",
+        "hp": 90,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 46,
+      "p1": {
+        "x": 63,
+        "y": 4,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 0,
+        "phase": "startup",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 67,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 3,
+        "phase": "",
+        "hp": 90,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 47,
+      "p1": {
+        "x": 63,
+        "y": 6,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 1,
+        "phase": "startup",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 67,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 4,
+        "phase": "",
+        "hp": 90,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 48,
+      "p1": {
+        "x": 63,
+        "y": 8,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 2,
+        "phase": "startup",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 67,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 5,
+        "phase": "",
+        "hp": 90,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 49,
+      "p1": {
+        "x": 63,
+        "y": 10,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 3,
+        "phase": "active",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 50,
+      "p1": {
+        "x": 64,
+        "y": 12,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 4,
+        "phase": "active",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 51,
+      "p1": {
+        "x": 65,
+        "y": 14,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 5,
+        "phase": "active",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 2,
+        "phase": "",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 52,
+      "p1": {
+        "x": 66,
+        "y": 16,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 6,
+        "phase": "active",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 3,
+        "phase": "",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 53,
+      "p1": {
+        "x": 66,
+        "y": 18,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 7,
+        "phase": "active",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 4,
+        "phase": "",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 54,
+      "p1": {
+        "x": 66,
+        "y": 20,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 5
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 5,
+        "phase": "",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 55,
+      "p1": {
+        "x": 66,
+        "y": 18,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 5
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 0,
+        "phase": "startup",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 56,
+      "p1": {
+        "x": 66,
+        "y": 16,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 2,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 1,
+        "phase": "startup",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 57,
+      "p1": {
+        "x": 66,
+        "y": 14,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 3,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 2,
+        "phase": "startup",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 58,
+      "p1": {
+        "x": 66,
+        "y": 12,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 4,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 3,
+        "phase": "startup",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 59,
+      "p1": {
+        "x": 66,
+        "y": 10,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 5,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 4,
+        "phase": "startup",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 60,
+      "p1": {
+        "x": 66,
+        "y": 8,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 6,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 5,
+        "phase": "startup",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 61,
+      "p1": {
+        "x": 66,
+        "y": 6,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 7,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 6,
+        "phase": "startup",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 62,
+      "p1": {
+        "x": 66,
+        "y": 4,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 8,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 7,
+        "phase": "startup",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 63,
+      "p1": {
+        "x": 66,
+        "y": 2,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 9,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 8,
+        "phase": "active",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 64,
+      "p1": {
+        "x": 66,
+        "y": 0,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 10,
+        "phase": "",
+        "hp": 100,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 9,
+        "phase": "active",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 65,
+      "p1": {
+        "x": 63,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 10,
+        "phase": "active",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 66,
+      "p1": {
+        "x": 63,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 11,
+        "phase": "recovery",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 67,
+      "p1": {
+        "x": 63,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 2,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 12,
+        "phase": "recovery",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 68,
+      "p1": {
+        "x": 63,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 3,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 13,
+        "phase": "recovery",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 69,
+      "p1": {
+        "x": 63,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 4,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 14,
+        "phase": "recovery",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 70,
+      "p1": {
+        "x": 63,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 5,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 15,
+        "phase": "recovery",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 71,
+      "p1": {
+        "x": 63,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 6,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 16,
+        "phase": "recovery",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 72,
+      "p1": {
+        "x": 63,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 7,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 17,
+        "phase": "recovery",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 73,
+      "p1": {
+        "x": 63,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 8,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 18,
+        "phase": "recovery",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 74,
+      "p1": {
+        "x": 63,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 9,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 19,
+        "phase": "recovery",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 75,
+      "p1": {
+        "x": 63,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 10,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 20,
+        "phase": "recovery",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 76,
+      "p1": {
+        "x": 63,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 11,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 21,
+        "phase": "recovery",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 77,
+      "p1": {
+        "x": 63,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 12,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 22,
+        "phase": "recovery",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 78,
+      "p1": {
+        "x": 63,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 13,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 23,
+        "phase": "recovery",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 79,
+      "p1": {
+        "x": 63,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 14,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 24,
+        "phase": "recovery",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 80,
+      "p1": {
+        "x": 63,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 15,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 0,
+        "phase": "startup",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 81,
+      "p1": {
+        "x": 63,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 16,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 1,
+        "phase": "active",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 82,
+      "p1": {
+        "x": 63,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 17,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 2,
+        "phase": "active",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 83,
+      "p1": {
+        "x": 63,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 18,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 3,
+        "phase": "active",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 84,
+      "p1": {
+        "x": 63,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 19,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 4,
+        "phase": "active",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 85,
+      "p1": {
+        "x": 63,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 20,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 5,
+        "phase": "recovery",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 86,
+      "p1": {
+        "x": 62,
+        "y": 0,
+        "facing": 1,
+        "state": "walk",
+        "anim": "walk_back",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 12
+      },
+      "p2": {
+        "x": 69,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 87,
+      "p1": {
+        "x": 61,
+        "y": 0,
+        "facing": 1,
+        "state": "walk",
+        "anim": "walk_back",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 12
+      },
+      "p2": {
+        "x": 68,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 88,
+      "p1": {
+        "x": 61,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 0,
+        "phase": "startup",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 67,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 2,
+        "phase": "",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 89,
+      "p1": {
+        "x": 61,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 1,
+        "phase": "startup",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 66,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 3,
+        "phase": "",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 90,
+      "p1": {
+        "x": 61,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 2,
+        "phase": "startup",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 65,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 4,
+        "phase": "",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 91,
+      "p1": {
+        "x": 61,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 3,
+        "phase": "startup",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 65,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 5,
+        "phase": "",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 92,
+      "p1": {
+        "x": 61,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 4,
+        "phase": "startup",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 65,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 0,
+        "phase": "startup",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 93,
+      "p1": {
+        "x": 61,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 5,
+        "phase": "startup",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 65,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 1,
+        "phase": "startup",
+        "hp": 80,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 94,
+      "p1": {
+        "x": 61,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 6,
+        "phase": "active",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 68,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 71,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 95,
+      "p1": {
+        "x": 61,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 7,
+        "phase": "active",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 68,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 71,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 96,
+      "p1": {
+        "x": 61,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 8,
+        "phase": "active",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 68,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 2,
+        "phase": "",
+        "hp": 71,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 97,
+      "p1": {
+        "x": 61,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 9,
+        "phase": "recovery",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 68,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 3,
+        "phase": "",
+        "hp": 71,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 98,
+      "p1": {
+        "x": 61,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 10,
+        "phase": "recovery",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 68,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 4,
+        "phase": "",
+        "hp": 71,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 99,
+      "p1": {
+        "x": 61,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 11,
+        "phase": "recovery",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 68,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 5,
+        "phase": "",
+        "hp": 71,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 100,
+      "p1": {
+        "x": 61,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 12,
+        "phase": "recovery",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 68,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 0,
+        "phase": "startup",
+        "hp": 71,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 101,
+      "p1": {
+        "x": 61,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 13,
+        "phase": "recovery",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 68,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 1,
+        "phase": "startup",
+        "hp": 71,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 102,
+      "p1": {
+        "x": 61,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 14,
+        "phase": "recovery",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 68,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 2,
+        "phase": "startup",
+        "hp": 71,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 103,
+      "p1": {
+        "x": 61,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 15,
+        "phase": "recovery",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 68,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 3,
+        "phase": "startup",
+        "hp": 71,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 104,
+      "p1": {
+        "x": 61,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 16,
+        "phase": "recovery",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 68,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 4,
+        "phase": "startup",
+        "hp": 71,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 105,
+      "p1": {
+        "x": 61,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 17,
+        "phase": "recovery",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 68,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 5,
+        "phase": "startup",
+        "hp": 71,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 106,
+      "p1": {
+        "x": 61,
+        "y": 0,
+        "facing": 1,
+        "state": "idle",
+        "anim": "check",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 5
+      },
+      "p2": {
+        "x": 68,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 6,
+        "phase": "startup",
+        "hp": 71,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 107,
+      "p1": {
+        "x": 61,
+        "y": 0,
+        "facing": 1,
+        "state": "idle",
+        "anim": "check",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 5
+      },
+      "p2": {
+        "x": 68,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 7,
+        "phase": "startup",
+        "hp": 71,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 108,
+      "p1": {
+        "x": 62,
+        "y": 2,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 68,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 8,
+        "phase": "active",
+        "hp": 71,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 109,
+      "p1": {
+        "x": 63,
+        "y": 4,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 0,
+        "phase": "startup",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 68,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 9,
+        "phase": "active",
+        "hp": 71,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 110,
+      "p1": {
+        "x": 64,
+        "y": 6,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 1,
+        "phase": "startup",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 68,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 10,
+        "phase": "active",
+        "hp": 71,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 111,
+      "p1": {
+        "x": 64,
+        "y": 8,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 2,
+        "phase": "startup",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 68,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 11,
+        "phase": "recovery",
+        "hp": 71,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 112,
+      "p1": {
+        "x": 64,
+        "y": 10,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 3,
+        "phase": "active",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 71,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 61,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 113,
+      "p1": {
+        "x": 65,
+        "y": 12,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 4,
+        "phase": "active",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 71,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 61,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 114,
+      "p1": {
+        "x": 66,
+        "y": 14,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 5,
+        "phase": "active",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 71,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 2,
+        "phase": "",
+        "hp": 61,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 115,
+      "p1": {
+        "x": 67,
+        "y": 16,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 6,
+        "phase": "active",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 71,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 3,
+        "phase": "",
+        "hp": 61,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 116,
+      "p1": {
+        "x": 67,
+        "y": 18,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 7,
+        "phase": "active",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 71,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 4,
+        "phase": "",
+        "hp": 61,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 117,
+      "p1": {
+        "x": 67,
+        "y": 20,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 5
+      },
+      "p2": {
+        "x": 71,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 5,
+        "phase": "",
+        "hp": 61,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 118,
+      "p1": {
+        "x": 67,
+        "y": 18,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 5
+      },
+      "p2": {
+        "x": 71,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 0,
+        "phase": "startup",
+        "hp": 61,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 119,
+      "p1": {
+        "x": 67,
+        "y": 16,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 2,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 71,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 1,
+        "phase": "active",
+        "hp": 61,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 120,
+      "p1": {
+        "x": 67,
+        "y": 14,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 3,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 71,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 2,
+        "phase": "active",
+        "hp": 61,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 121,
+      "p1": {
+        "x": 67,
+        "y": 12,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 4,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 71,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 3,
+        "phase": "active",
+        "hp": 61,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 122,
+      "p1": {
+        "x": 67,
+        "y": 10,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 5,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 71,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 4,
+        "phase": "active",
+        "hp": 61,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 123,
+      "p1": {
+        "x": 67,
+        "y": 8,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 6,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 71,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 5,
+        "phase": "recovery",
+        "hp": 61,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 124,
+      "p1": {
+        "x": 67,
+        "y": 6,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 7,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 71,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 61,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 125,
+      "p1": {
+        "x": 67,
+        "y": 4,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 8,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 71,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 61,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 126,
+      "p1": {
+        "x": 67,
+        "y": 2,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 9,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 71,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 2,
+        "phase": "",
+        "hp": 61,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 127,
+      "p1": {
+        "x": 67,
+        "y": 0,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 10,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 71,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 3,
+        "phase": "",
+        "hp": 61,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 128,
+      "p1": {
+        "x": 67,
+        "y": 0,
+        "facing": 1,
+        "state": "landing",
+        "anim": "landing",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 71,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 4,
+        "phase": "",
+        "hp": 61,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 129,
+      "p1": {
+        "x": 67,
+        "y": 0,
+        "facing": 1,
+        "state": "landing",
+        "anim": "landing",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 71,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 5,
+        "phase": "",
+        "hp": 61,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 130,
+      "p1": {
+        "x": 67,
+        "y": 2,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 71,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 0,
+        "phase": "startup",
+        "hp": 61,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 131,
+      "p1": {
+        "x": 67,
+        "y": 4,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 0,
+        "phase": "startup",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 71,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 1,
+        "phase": "startup",
+        "hp": 61,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 132,
+      "p1": {
+        "x": 67,
+        "y": 6,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 1,
+        "phase": "startup",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 71,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 2,
+        "phase": "startup",
+        "hp": 61,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 133,
+      "p1": {
+        "x": 67,
+        "y": 8,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 2,
+        "phase": "startup",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 71,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 3,
+        "phase": "startup",
+        "hp": 61,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 134,
+      "p1": {
+        "x": 67,
+        "y": 10,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 3,
+        "phase": "active",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 135,
+      "p1": {
+        "x": 68,
+        "y": 12,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 4,
+        "phase": "active",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 136,
+      "p1": {
+        "x": 69,
+        "y": 14,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 5,
+        "phase": "active",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 2,
+        "phase": "",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 137,
+      "p1": {
+        "x": 70,
+        "y": 16,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 6,
+        "phase": "active",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 3,
+        "phase": "",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 138,
+      "p1": {
+        "x": 70,
+        "y": 18,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 7,
+        "phase": "active",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 4,
+        "phase": "",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 139,
+      "p1": {
+        "x": 70,
+        "y": 20,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 5
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 5,
+        "phase": "",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 140,
+      "p1": {
+        "x": 70,
+        "y": 18,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 5
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 0,
+        "phase": "startup",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 141,
+      "p1": {
+        "x": 70,
+        "y": 16,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 2,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 1,
+        "phase": "startup",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 142,
+      "p1": {
+        "x": 70,
+        "y": 14,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 3,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 2,
+        "phase": "startup",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 143,
+      "p1": {
+        "x": 70,
+        "y": 12,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 4,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 3,
+        "phase": "startup",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 144,
+      "p1": {
+        "x": 70,
+        "y": 10,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 5,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 4,
+        "phase": "startup",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 145,
+      "p1": {
+        "x": 70,
+        "y": 8,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 6,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 5,
+        "phase": "startup",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 146,
+      "p1": {
+        "x": 70,
+        "y": 6,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 7,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 6,
+        "phase": "startup",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 147,
+      "p1": {
+        "x": 70,
+        "y": 4,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 8,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 7,
+        "phase": "startup",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 148,
+      "p1": {
+        "x": 70,
+        "y": 2,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 9,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 8,
+        "phase": "active",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 149,
+      "p1": {
+        "x": 70,
+        "y": 0,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 10,
+        "phase": "",
+        "hp": 92,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 9,
+        "phase": "active",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 150,
+      "p1": {
+        "x": 67,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 10,
+        "phase": "active",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 151,
+      "p1": {
+        "x": 67,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 11,
+        "phase": "recovery",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 152,
+      "p1": {
+        "x": 67,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 2,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 12,
+        "phase": "recovery",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 153,
+      "p1": {
+        "x": 67,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 3,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 13,
+        "phase": "recovery",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 154,
+      "p1": {
+        "x": 67,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 4,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 14,
+        "phase": "recovery",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 155,
+      "p1": {
+        "x": 67,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 5,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 15,
+        "phase": "recovery",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 156,
+      "p1": {
+        "x": 67,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 6,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 16,
+        "phase": "recovery",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 157,
+      "p1": {
+        "x": 67,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 7,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 17,
+        "phase": "recovery",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 158,
+      "p1": {
+        "x": 67,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 8,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 18,
+        "phase": "recovery",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 159,
+      "p1": {
+        "x": 67,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 9,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 19,
+        "phase": "recovery",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 160,
+      "p1": {
+        "x": 67,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 10,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 20,
+        "phase": "recovery",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 161,
+      "p1": {
+        "x": 67,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 11,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 21,
+        "phase": "recovery",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 162,
+      "p1": {
+        "x": 67,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 12,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 22,
+        "phase": "recovery",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 163,
+      "p1": {
+        "x": 67,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 13,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 23,
+        "phase": "recovery",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 164,
+      "p1": {
+        "x": 67,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 14,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 24,
+        "phase": "recovery",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 165,
+      "p1": {
+        "x": 67,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 15,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 0,
+        "phase": "startup",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 166,
+      "p1": {
+        "x": 67,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 16,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 1,
+        "phase": "active",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 167,
+      "p1": {
+        "x": 67,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 17,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 2,
+        "phase": "active",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 168,
+      "p1": {
+        "x": 67,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 18,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 3,
+        "phase": "active",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 169,
+      "p1": {
+        "x": 67,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 19,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 4,
+        "phase": "active",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 170,
+      "p1": {
+        "x": 67,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 20,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 5,
+        "phase": "recovery",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 171,
+      "p1": {
+        "x": 66,
+        "y": 0,
+        "facing": 1,
+        "state": "walk",
+        "anim": "walk_back",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 12
+      },
+      "p2": {
+        "x": 73,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 172,
+      "p1": {
+        "x": 65,
+        "y": 0,
+        "facing": 1,
+        "state": "walk",
+        "anim": "walk_back",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 12
+      },
+      "p2": {
+        "x": 72,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 173,
+      "p1": {
+        "x": 65,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 0,
+        "phase": "startup",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 71,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 2,
+        "phase": "",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 174,
+      "p1": {
+        "x": 65,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 1,
+        "phase": "startup",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 70,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 3,
+        "phase": "",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 175,
+      "p1": {
+        "x": 65,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 2,
+        "phase": "startup",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 69,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 4,
+        "phase": "",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 176,
+      "p1": {
+        "x": 65,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 3,
+        "phase": "startup",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 69,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 5,
+        "phase": "",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 177,
+      "p1": {
+        "x": 65,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 4,
+        "phase": "startup",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 69,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 0,
+        "phase": "startup",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 178,
+      "p1": {
+        "x": 65,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 5,
+        "phase": "startup",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 69,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 1,
+        "phase": "startup",
+        "hp": 51,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 179,
+      "p1": {
+        "x": 65,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 6,
+        "phase": "active",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 72,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 42,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 180,
+      "p1": {
+        "x": 65,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 7,
+        "phase": "active",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 72,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 42,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 181,
+      "p1": {
+        "x": 65,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 8,
+        "phase": "active",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 72,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 2,
+        "phase": "",
+        "hp": 42,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 182,
+      "p1": {
+        "x": 65,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 9,
+        "phase": "recovery",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 72,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 3,
+        "phase": "",
+        "hp": 42,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 183,
+      "p1": {
+        "x": 65,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 10,
+        "phase": "recovery",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 72,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 4,
+        "phase": "",
+        "hp": 42,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 184,
+      "p1": {
+        "x": 65,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 11,
+        "phase": "recovery",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 72,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 5,
+        "phase": "",
+        "hp": 42,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 185,
+      "p1": {
+        "x": 65,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 12,
+        "phase": "recovery",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 72,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 0,
+        "phase": "startup",
+        "hp": 42,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 186,
+      "p1": {
+        "x": 65,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 13,
+        "phase": "recovery",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 72,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 1,
+        "phase": "startup",
+        "hp": 42,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 187,
+      "p1": {
+        "x": 65,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 14,
+        "phase": "recovery",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 72,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 2,
+        "phase": "startup",
+        "hp": 42,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 188,
+      "p1": {
+        "x": 65,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 15,
+        "phase": "recovery",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 72,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 3,
+        "phase": "startup",
+        "hp": 42,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 189,
+      "p1": {
+        "x": 65,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 16,
+        "phase": "recovery",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 72,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 4,
+        "phase": "startup",
+        "hp": 42,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 190,
+      "p1": {
+        "x": 65,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 17,
+        "phase": "recovery",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 72,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 5,
+        "phase": "startup",
+        "hp": 42,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 191,
+      "p1": {
+        "x": 65,
+        "y": 0,
+        "facing": 1,
+        "state": "idle",
+        "anim": "check",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 5
+      },
+      "p2": {
+        "x": 72,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 6,
+        "phase": "startup",
+        "hp": 42,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 192,
+      "p1": {
+        "x": 65,
+        "y": 0,
+        "facing": 1,
+        "state": "idle",
+        "anim": "check",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 5
+      },
+      "p2": {
+        "x": 72,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 7,
+        "phase": "startup",
+        "hp": 42,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 193,
+      "p1": {
+        "x": 66,
+        "y": 2,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 72,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 8,
+        "phase": "active",
+        "hp": 42,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 194,
+      "p1": {
+        "x": 67,
+        "y": 4,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 0,
+        "phase": "startup",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 72,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 9,
+        "phase": "active",
+        "hp": 42,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 195,
+      "p1": {
+        "x": 68,
+        "y": 6,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 1,
+        "phase": "startup",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 72,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 10,
+        "phase": "active",
+        "hp": 42,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 196,
+      "p1": {
+        "x": 68,
+        "y": 8,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 2,
+        "phase": "startup",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 72,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 11,
+        "phase": "recovery",
+        "hp": 42,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 197,
+      "p1": {
+        "x": 68,
+        "y": 10,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 3,
+        "phase": "active",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 75,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 32,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 198,
+      "p1": {
+        "x": 69,
+        "y": 12,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 4,
+        "phase": "active",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 75,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 32,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 199,
+      "p1": {
+        "x": 70,
+        "y": 14,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 5,
+        "phase": "active",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 75,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 2,
+        "phase": "",
+        "hp": 32,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 200,
+      "p1": {
+        "x": 71,
+        "y": 16,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 6,
+        "phase": "active",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 75,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 3,
+        "phase": "",
+        "hp": 32,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 201,
+      "p1": {
+        "x": 71,
+        "y": 18,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 7,
+        "phase": "active",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 75,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 4,
+        "phase": "",
+        "hp": 32,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 202,
+      "p1": {
+        "x": 71,
+        "y": 20,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 5
+      },
+      "p2": {
+        "x": 75,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 5,
+        "phase": "",
+        "hp": 32,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 203,
+      "p1": {
+        "x": 71,
+        "y": 18,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 5
+      },
+      "p2": {
+        "x": 75,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 0,
+        "phase": "startup",
+        "hp": 32,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 204,
+      "p1": {
+        "x": 71,
+        "y": 16,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 2,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 75,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 1,
+        "phase": "active",
+        "hp": 32,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 205,
+      "p1": {
+        "x": 71,
+        "y": 14,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 3,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 75,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 2,
+        "phase": "active",
+        "hp": 32,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 206,
+      "p1": {
+        "x": 71,
+        "y": 12,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 4,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 75,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 3,
+        "phase": "active",
+        "hp": 32,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 207,
+      "p1": {
+        "x": 71,
+        "y": 10,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 5,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 75,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 4,
+        "phase": "active",
+        "hp": 32,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 208,
+      "p1": {
+        "x": 71,
+        "y": 8,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 6,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 75,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 5,
+        "phase": "recovery",
+        "hp": 32,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 209,
+      "p1": {
+        "x": 71,
+        "y": 6,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 7,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 75,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 32,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 210,
+      "p1": {
+        "x": 71,
+        "y": 4,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 8,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 75,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 32,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 211,
+      "p1": {
+        "x": 71,
+        "y": 2,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 9,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 75,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 2,
+        "phase": "",
+        "hp": 32,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 212,
+      "p1": {
+        "x": 71,
+        "y": 0,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 10,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 75,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 3,
+        "phase": "",
+        "hp": 32,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 213,
+      "p1": {
+        "x": 71,
+        "y": 0,
+        "facing": 1,
+        "state": "landing",
+        "anim": "landing",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 75,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 4,
+        "phase": "",
+        "hp": 32,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 214,
+      "p1": {
+        "x": 71,
+        "y": 0,
+        "facing": 1,
+        "state": "landing",
+        "anim": "landing",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 75,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 5,
+        "phase": "",
+        "hp": 32,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 215,
+      "p1": {
+        "x": 71,
+        "y": 2,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 75,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 0,
+        "phase": "startup",
+        "hp": 32,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 216,
+      "p1": {
+        "x": 71,
+        "y": 4,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 0,
+        "phase": "startup",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 75,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 1,
+        "phase": "startup",
+        "hp": 32,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 217,
+      "p1": {
+        "x": 71,
+        "y": 6,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 1,
+        "phase": "startup",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 75,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 2,
+        "phase": "startup",
+        "hp": 32,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 218,
+      "p1": {
+        "x": 71,
+        "y": 8,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 2,
+        "phase": "startup",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 75,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 3,
+        "phase": "startup",
+        "hp": 32,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 219,
+      "p1": {
+        "x": 71,
+        "y": 10,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 3,
+        "phase": "active",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 220,
+      "p1": {
+        "x": 72,
+        "y": 12,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 4,
+        "phase": "active",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 221,
+      "p1": {
+        "x": 73,
+        "y": 14,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 5,
+        "phase": "active",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 2,
+        "phase": "",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 222,
+      "p1": {
+        "x": 74,
+        "y": 16,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 6,
+        "phase": "active",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 3,
+        "phase": "",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 223,
+      "p1": {
+        "x": 74,
+        "y": 18,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 7,
+        "phase": "active",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 4,
+        "phase": "",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 224,
+      "p1": {
+        "x": 74,
+        "y": 20,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 5
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 5,
+        "phase": "",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 225,
+      "p1": {
+        "x": 74,
+        "y": 18,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 5
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 0,
+        "phase": "startup",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 226,
+      "p1": {
+        "x": 74,
+        "y": 16,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 2,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 1,
+        "phase": "startup",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 227,
+      "p1": {
+        "x": 74,
+        "y": 14,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 3,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 2,
+        "phase": "startup",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 228,
+      "p1": {
+        "x": 74,
+        "y": 12,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 4,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 3,
+        "phase": "startup",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 229,
+      "p1": {
+        "x": 74,
+        "y": 10,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 5,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 4,
+        "phase": "startup",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 230,
+      "p1": {
+        "x": 74,
+        "y": 8,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 6,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 5,
+        "phase": "startup",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 231,
+      "p1": {
+        "x": 74,
+        "y": 6,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 7,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 6,
+        "phase": "startup",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 232,
+      "p1": {
+        "x": 74,
+        "y": 4,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 8,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 7,
+        "phase": "startup",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 233,
+      "p1": {
+        "x": 74,
+        "y": 2,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 9,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 8,
+        "phase": "active",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 234,
+      "p1": {
+        "x": 74,
+        "y": 0,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 10,
+        "phase": "",
+        "hp": 84,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 9,
+        "phase": "active",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 235,
+      "p1": {
+        "x": 71,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 10,
+        "phase": "active",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 236,
+      "p1": {
+        "x": 71,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 11,
+        "phase": "recovery",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 237,
+      "p1": {
+        "x": 71,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 2,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 12,
+        "phase": "recovery",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 238,
+      "p1": {
+        "x": 71,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 3,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 13,
+        "phase": "recovery",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 239,
+      "p1": {
+        "x": 71,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 4,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 14,
+        "phase": "recovery",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 240,
+      "p1": {
+        "x": 71,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 5,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 15,
+        "phase": "recovery",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 241,
+      "p1": {
+        "x": 71,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 6,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 16,
+        "phase": "recovery",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 242,
+      "p1": {
+        "x": 71,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 7,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 17,
+        "phase": "recovery",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 243,
+      "p1": {
+        "x": 71,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 8,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 18,
+        "phase": "recovery",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 244,
+      "p1": {
+        "x": 71,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 9,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 19,
+        "phase": "recovery",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 245,
+      "p1": {
+        "x": 71,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 10,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 20,
+        "phase": "recovery",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 246,
+      "p1": {
+        "x": 71,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 11,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 21,
+        "phase": "recovery",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 247,
+      "p1": {
+        "x": 71,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 12,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 22,
+        "phase": "recovery",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 248,
+      "p1": {
+        "x": 71,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 13,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 23,
+        "phase": "recovery",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 249,
+      "p1": {
+        "x": 71,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 14,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 24,
+        "phase": "recovery",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 250,
+      "p1": {
+        "x": 71,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 15,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 0,
+        "phase": "startup",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 251,
+      "p1": {
+        "x": 71,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 16,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 1,
+        "phase": "active",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 252,
+      "p1": {
+        "x": 71,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 17,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 2,
+        "phase": "active",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 253,
+      "p1": {
+        "x": 71,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 18,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 3,
+        "phase": "active",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 254,
+      "p1": {
+        "x": 71,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 19,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 4,
+        "phase": "active",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 255,
+      "p1": {
+        "x": 71,
+        "y": 0,
+        "facing": 1,
+        "state": "knockdown",
+        "anim": "knockdown",
+        "anim_frame": 20,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": true,
+        "combo": 0,
+        "script_line": 0
+      },
+      "p2": {
+        "x": 78,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 5,
+        "phase": "recovery",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 256,
+      "p1": {
+        "x": 70,
+        "y": 0,
+        "facing": 1,
+        "state": "walk",
+        "anim": "walk_back",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 12
+      },
+      "p2": {
+        "x": 77,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 257,
+      "p1": {
+        "x": 69,
+        "y": 0,
+        "facing": 1,
+        "state": "walk",
+        "anim": "walk_back",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 12
+      },
+      "p2": {
+        "x": 76,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 258,
+      "p1": {
+        "x": 69,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 0,
+        "phase": "startup",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 75,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 2,
+        "phase": "",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 259,
+      "p1": {
+        "x": 69,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 1,
+        "phase": "startup",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 74,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 3,
+        "phase": "",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 260,
+      "p1": {
+        "x": 69,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 2,
+        "phase": "startup",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 73,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 4,
+        "phase": "",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 261,
+      "p1": {
+        "x": 69,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 3,
+        "phase": "startup",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 73,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 5,
+        "phase": "",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 262,
+      "p1": {
+        "x": 69,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 4,
+        "phase": "startup",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 73,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 0,
+        "phase": "startup",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 263,
+      "p1": {
+        "x": 69,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 5,
+        "phase": "startup",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 73,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 1,
+        "phase": "startup",
+        "hp": 22,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 264,
+      "p1": {
+        "x": 69,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 6,
+        "phase": "active",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 76,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 13,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 265,
+      "p1": {
+        "x": 69,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 7,
+        "phase": "active",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 76,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 13,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 266,
+      "p1": {
+        "x": 69,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 8,
+        "phase": "active",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 76,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 2,
+        "phase": "",
+        "hp": 13,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 267,
+      "p1": {
+        "x": 69,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 9,
+        "phase": "recovery",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 76,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 3,
+        "phase": "",
+        "hp": 13,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 268,
+      "p1": {
+        "x": 69,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 10,
+        "phase": "recovery",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 76,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 4,
+        "phase": "",
+        "hp": 13,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 269,
+      "p1": {
+        "x": 69,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 11,
+        "phase": "recovery",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 76,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 5,
+        "phase": "",
+        "hp": 13,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 270,
+      "p1": {
+        "x": 69,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 12,
+        "phase": "recovery",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 76,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 0,
+        "phase": "startup",
+        "hp": 13,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 271,
+      "p1": {
+        "x": 69,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 13,
+        "phase": "recovery",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 76,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 1,
+        "phase": "startup",
+        "hp": 13,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 272,
+      "p1": {
+        "x": 69,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 14,
+        "phase": "recovery",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 76,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 2,
+        "phase": "startup",
+        "hp": 13,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 273,
+      "p1": {
+        "x": 69,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 15,
+        "phase": "recovery",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 76,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 3,
+        "phase": "startup",
+        "hp": 13,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 274,
+      "p1": {
+        "x": 69,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 16,
+        "phase": "recovery",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 76,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 4,
+        "phase": "startup",
+        "hp": 13,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 275,
+      "p1": {
+        "x": 69,
+        "y": 0,
+        "facing": 1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 17,
+        "phase": "recovery",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 76,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 5,
+        "phase": "startup",
+        "hp": 13,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 276,
+      "p1": {
+        "x": 69,
+        "y": 0,
+        "facing": 1,
+        "state": "idle",
+        "anim": "check",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 5
+      },
+      "p2": {
+        "x": 76,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 6,
+        "phase": "startup",
+        "hp": 13,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 277,
+      "p1": {
+        "x": 69,
+        "y": 0,
+        "facing": 1,
+        "state": "idle",
+        "anim": "check",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 5
+      },
+      "p2": {
+        "x": 76,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 7,
+        "phase": "startup",
+        "hp": 13,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 278,
+      "p1": {
+        "x": 70,
+        "y": 2,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 76,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 8,
+        "phase": "active",
+        "hp": 13,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 279,
+      "p1": {
+        "x": 71,
+        "y": 4,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 0,
+        "phase": "startup",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 76,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 9,
+        "phase": "active",
+        "hp": 13,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 280,
+      "p1": {
+        "x": 72,
+        "y": 6,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 1,
+        "phase": "startup",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 76,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 10,
+        "phase": "active",
+        "hp": 13,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 281,
+      "p1": {
+        "x": 72,
+        "y": 8,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 2,
+        "phase": "startup",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 76,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "sweep",
+        "anim_frame": 11,
+        "phase": "recovery",
+        "hp": 13,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      }
+    },
+    {
+      "f": 282,
+      "p1": {
+        "x": 72,
+        "y": 10,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 3,
+        "phase": "active",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 79,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 3,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 283,
+      "p1": {
+        "x": 73,
+        "y": 12,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 4,
+        "phase": "active",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 79,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 3,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 284,
+      "p1": {
+        "x": 74,
+        "y": 14,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 5,
+        "phase": "active",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 79,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 2,
+        "phase": "",
+        "hp": 3,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 285,
+      "p1": {
+        "x": 75,
+        "y": 16,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 6,
+        "phase": "active",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 79,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 3,
+        "phase": "",
+        "hp": 3,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 286,
+      "p1": {
+        "x": 75,
+        "y": 18,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 7,
+        "phase": "active",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 79,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 4,
+        "phase": "",
+        "hp": 3,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 287,
+      "p1": {
+        "x": 75,
+        "y": 20,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 5
+      },
+      "p2": {
+        "x": 79,
+        "y": 0,
+        "facing": -1,
+        "state": "hitstun",
+        "anim": "hitstun",
+        "anim_frame": 5,
+        "phase": "",
+        "hp": 3,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    },
+    {
+      "f": 288,
+      "p1": {
+        "x": 75,
+        "y": 18,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 5
+      },
+      "p2": {
+        "x": 79,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 0,
+        "phase": "startup",
+        "hp": 3,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 289,
+      "p1": {
+        "x": 75,
+        "y": 16,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 2,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 79,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 1,
+        "phase": "active",
+        "hp": 3,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 290,
+      "p1": {
+        "x": 75,
+        "y": 14,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 3,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 79,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 2,
+        "phase": "active",
+        "hp": 3,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 291,
+      "p1": {
+        "x": 75,
+        "y": 12,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 4,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 79,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 3,
+        "phase": "active",
+        "hp": 3,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 292,
+      "p1": {
+        "x": 75,
+        "y": 10,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 5,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 79,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 4,
+        "phase": "active",
+        "hp": 3,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 293,
+      "p1": {
+        "x": 75,
+        "y": 8,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 6,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 79,
+        "y": 0,
+        "facing": -1,
+        "state": "block",
+        "anim": "high_block",
+        "anim_frame": 5,
+        "phase": "recovery",
+        "hp": 3,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      }
+    },
+    {
+      "f": 294,
+      "p1": {
+        "x": 75,
+        "y": 6,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 7,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 79,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 3,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 295,
+      "p1": {
+        "x": 75,
+        "y": 4,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 8,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 79,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 3,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 296,
+      "p1": {
+        "x": 75,
+        "y": 2,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 9,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 79,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 2,
+        "phase": "",
+        "hp": 3,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 297,
+      "p1": {
+        "x": 75,
+        "y": 0,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 10,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 79,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 3,
+        "phase": "",
+        "hp": 3,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 298,
+      "p1": {
+        "x": 75,
+        "y": 0,
+        "facing": 1,
+        "state": "landing",
+        "anim": "landing",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 79,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 4,
+        "phase": "",
+        "hp": 3,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 299,
+      "p1": {
+        "x": 75,
+        "y": 0,
+        "facing": 1,
+        "state": "landing",
+        "anim": "landing",
+        "anim_frame": 1,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 79,
+        "y": 0,
+        "facing": -1,
+        "state": "walk",
+        "anim": "walk_forward",
+        "anim_frame": 5,
+        "phase": "",
+        "hp": 3,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 6
+      }
+    },
+    {
+      "f": 300,
+      "p1": {
+        "x": 75,
+        "y": 2,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 8
+      },
+      "p2": {
+        "x": 79,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 0,
+        "phase": "startup",
+        "hp": 3,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 301,
+      "p1": {
+        "x": 75,
+        "y": 4,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 0,
+        "phase": "startup",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 79,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 1,
+        "phase": "startup",
+        "hp": 3,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 302,
+      "p1": {
+        "x": 75,
+        "y": 6,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 1,
+        "phase": "startup",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 79,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 2,
+        "phase": "startup",
+        "hp": 3,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 303,
+      "p1": {
+        "x": 75,
+        "y": 8,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 2,
+        "phase": "startup",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 79,
+        "y": 0,
+        "facing": -1,
+        "state": "attack",
+        "anim": "kick",
+        "anim_frame": 3,
+        "phase": "startup",
+        "hp": 3,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 7
+      }
+    },
+    {
+      "f": 304,
+      "p1": {
+        "x": 75,
+        "y": 10,
+        "facing": 1,
+        "state": "airborne",
+        "anim": "jump_kick",
+        "anim_frame": 3,
+        "phase": "active",
+        "hp": 76,
+        "invulnerable": false,
+        "combo": 0,
+        "script_line": 9
+      },
+      "p2": {
+        "x": 82,
+        "y": 0,
+        "facing": -1,
+        "state": "ko",
+        "anim": "ko",
+        "anim_frame": 0,
+        "phase": "",
+        "hp": 0,
+        "invulnerable": false,
+        "combo": 1,
+        "script_line": 0
+      }
+    }
+  ],
+  "events": [
+    {
+      "frame": 0,
+      "type": "check",
+      "actor": "p1",
+      "detail": {
+        "sensor": "distance",
+        "value": 40,
+        "line": 5,
+        "cost": 2
+      }
+    },
+    {
+      "frame": 7,
+      "type": "check",
+      "actor": "p1",
+      "detail": {
+        "sensor": "distance",
+        "value": 29,
+        "line": 5,
+        "cost": 2
+      }
+    },
+    {
+      "frame": 14,
+      "type": "check",
+      "actor": "p1",
+      "detail": {
+        "sensor": "distance",
+        "value": 24,
+        "line": 5,
+        "cost": 2
+      }
+    },
+    {
+      "frame": 14,
+      "type": "whiff",
+      "actor": "p2",
+      "detail": {
+        "attack": "kick",
+        "reason": "out_of_range"
+      }
+    },
+    {
+      "frame": 21,
+      "type": "check",
+      "actor": "p1",
+      "detail": {
+        "sensor": "distance",
+        "value": 19,
+        "line": 5,
+        "cost": 2
+      }
+    },
+    {
+      "frame": 31,
+      "type": "hit",
+      "actor": "p1",
+      "target": "p2",
+      "detail": {
+        "attack": "jump_kick",
+        "damage": 10,
+        "combo": 1,
+        "hp": 90
+      }
+    },
+    {
+      "frame": 32,
+      "type": "check",
+      "actor": "p1",
+      "detail": {
+        "sensor": "distance",
+        "value": 13,
+        "line": 5,
+        "cost": 2
+      }
+    },
+    {
+      "frame": 49,
+      "type": "hit",
+      "actor": "p1",
+      "target": "p2",
+      "detail": {
+        "attack": "jump_kick",
+        "damage": 10,
+        "combo": 1,
+        "hp": 80
+      }
+    },
+    {
+      "frame": 54,
+      "type": "check",
+      "actor": "p1",
+      "detail": {
+        "sensor": "distance",
+        "value": 4,
+        "line": 5,
+        "cost": 2
+      }
+    },
+    {
+      "frame": 65,
+      "type": "knockdown",
+      "actor": "p1",
+      "detail": {
+        "attack": "sweep",
+        "reason": "sweep"
+      }
+    },
+    {
+      "frame": 65,
+      "type": "hit",
+      "actor": "p2",
+      "target": "p1",
+      "detail": {
+        "attack": "sweep",
+        "damage": 8,
+        "combo": 1,
+        "hp": 92
+      }
+    },
+    {
+      "frame": 86,
+      "type": "handler_enter",
+      "actor": "p1",
+      "detail": {
+        "handler": "on_hit"
+      }
+    },
+    {
+      "frame": 94,
+      "type": "hit",
+      "actor": "p1",
+      "target": "p2",
+      "detail": {
+        "attack": "kick",
+        "damage": 9,
+        "combo": 1,
+        "hp": 71
+      }
+    },
+    {
+      "frame": 106,
+      "type": "check",
+      "actor": "p1",
+      "detail": {
+        "sensor": "distance",
+        "value": 7,
+        "line": 5,
+        "cost": 2
+      }
+    },
+    {
+      "frame": 110,
+      "type": "whiff",
+      "actor": "p2",
+      "detail": {
+        "attack": "sweep",
+        "reason": "airborne"
+      }
+    },
+    {
+      "frame": 112,
+      "type": "hit",
+      "actor": "p1",
+      "target": "p2",
+      "detail": {
+        "attack": "jump_kick",
+        "damage": 10,
+        "combo": 1,
+        "hp": 61
+      }
+    },
+    {
+      "frame": 117,
+      "type": "check",
+      "actor": "p1",
+      "detail": {
+        "sensor": "distance",
+        "value": 4,
+        "line": 5,
+        "cost": 2
+      }
+    },
+    {
+      "frame": 134,
+      "type": "hit",
+      "actor": "p1",
+      "target": "p2",
+      "detail": {
+        "attack": "jump_kick",
+        "damage": 10,
+        "combo": 1,
+        "hp": 51
+      }
+    },
+    {
+      "frame": 139,
+      "type": "check",
+      "actor": "p1",
+      "detail": {
+        "sensor": "distance",
+        "value": 4,
+        "line": 5,
+        "cost": 2
+      }
+    },
+    {
+      "frame": 150,
+      "type": "knockdown",
+      "actor": "p1",
+      "detail": {
+        "attack": "sweep",
+        "reason": "sweep"
+      }
+    },
+    {
+      "frame": 150,
+      "type": "hit",
+      "actor": "p2",
+      "target": "p1",
+      "detail": {
+        "attack": "sweep",
+        "damage": 8,
+        "combo": 1,
+        "hp": 84
+      }
+    },
+    {
+      "frame": 171,
+      "type": "handler_enter",
+      "actor": "p1",
+      "detail": {
+        "handler": "on_hit"
+      }
+    },
+    {
+      "frame": 179,
+      "type": "hit",
+      "actor": "p1",
+      "target": "p2",
+      "detail": {
+        "attack": "kick",
+        "damage": 9,
+        "combo": 1,
+        "hp": 42
+      }
+    },
+    {
+      "frame": 191,
+      "type": "check",
+      "actor": "p1",
+      "detail": {
+        "sensor": "distance",
+        "value": 7,
+        "line": 5,
+        "cost": 2
+      }
+    },
+    {
+      "frame": 195,
+      "type": "whiff",
+      "actor": "p2",
+      "detail": {
+        "attack": "sweep",
+        "reason": "airborne"
+      }
+    },
+    {
+      "frame": 197,
+      "type": "hit",
+      "actor": "p1",
+      "target": "p2",
+      "detail": {
+        "attack": "jump_kick",
+        "damage": 10,
+        "combo": 1,
+        "hp": 32
+      }
+    },
+    {
+      "frame": 202,
+      "type": "check",
+      "actor": "p1",
+      "detail": {
+        "sensor": "distance",
+        "value": 4,
+        "line": 5,
+        "cost": 2
+      }
+    },
+    {
+      "frame": 219,
+      "type": "hit",
+      "actor": "p1",
+      "target": "p2",
+      "detail": {
+        "attack": "jump_kick",
+        "damage": 10,
+        "combo": 1,
+        "hp": 22
+      }
+    },
+    {
+      "frame": 224,
+      "type": "check",
+      "actor": "p1",
+      "detail": {
+        "sensor": "distance",
+        "value": 4,
+        "line": 5,
+        "cost": 2
+      }
+    },
+    {
+      "frame": 235,
+      "type": "knockdown",
+      "actor": "p1",
+      "detail": {
+        "attack": "sweep",
+        "reason": "sweep"
+      }
+    },
+    {
+      "frame": 235,
+      "type": "hit",
+      "actor": "p2",
+      "target": "p1",
+      "detail": {
+        "attack": "sweep",
+        "damage": 8,
+        "combo": 1,
+        "hp": 76
+      }
+    },
+    {
+      "frame": 256,
+      "type": "handler_enter",
+      "actor": "p1",
+      "detail": {
+        "handler": "on_hit"
+      }
+    },
+    {
+      "frame": 264,
+      "type": "hit",
+      "actor": "p1",
+      "target": "p2",
+      "detail": {
+        "attack": "kick",
+        "damage": 9,
+        "combo": 1,
+        "hp": 13
+      }
+    },
+    {
+      "frame": 276,
+      "type": "check",
+      "actor": "p1",
+      "detail": {
+        "sensor": "distance",
+        "value": 7,
+        "line": 5,
+        "cost": 2
+      }
+    },
+    {
+      "frame": 280,
+      "type": "whiff",
+      "actor": "p2",
+      "detail": {
+        "attack": "sweep",
+        "reason": "airborne"
+      }
+    },
+    {
+      "frame": 282,
+      "type": "hit",
+      "actor": "p1",
+      "target": "p2",
+      "detail": {
+        "attack": "jump_kick",
+        "damage": 10,
+        "combo": 1,
+        "hp": 3
+      }
+    },
+    {
+      "frame": 287,
+      "type": "check",
+      "actor": "p1",
+      "detail": {
+        "sensor": "distance",
+        "value": 4,
+        "line": 5,
+        "cost": 2
+      }
+    },
+    {
+      "frame": 304,
+      "type": "hit",
+      "actor": "p1",
+      "target": "p2",
+      "detail": {
+        "attack": "jump_kick",
+        "damage": 10,
+        "combo": 1,
+        "hp": 0
+      }
+    },
+    {
+      "frame": 304,
+      "type": "ko",
+      "actor": "p2",
+      "detail": {}
+    }
+  ]
+}

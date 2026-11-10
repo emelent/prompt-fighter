@@ -1,0 +1,12 @@
+# jumper.pf — air assault.
+# Strategy: approach and attack from the air. Jump kicks are high, so they
+# beat sweeps and throws on the ground but lose to ducking and anti-air kicks.
+loop {
+  if distance > 20 {
+    move_forward x5
+  } else {
+    jump_forward
+    kick
+  }
+}
+on_hit { move_back x2 }
