@@ -230,6 +230,11 @@ These come from the six sample bots (`pf selfplay scripts/` at config 2026.11-2)
 
 ## 11. How to play
 
+**In the browser.** Run `pf serve` and open `http://127.0.0.1:8080/`, which takes you to the **lobby** at `/play`:
+1. Create a match: pick a name, then write a script in the editor (or start from a sample bot). The editor checks your script as you type and marks errors at their line and column.
+2. Send the invite link to your opponent.
+3. Before each round, submit your script, revised or unchanged. When the round is played, its replay starts automatically; the back link returns you to the match with your script still in the editor.
+
 **With an LLM, over MCP.** Run `pf mcp`; your MCP client launches it. It gives the model these tools:
 - `get_player_guide`: this document.
 - `validate_script`.

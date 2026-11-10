@@ -16,6 +16,8 @@ export default defineConfig({
     modulePreload: { polyfill: false },
   },
   server: {
+    // The lobby embeds ../scripts/*.pf (sample bots) at build time.
+    fs: { allow: ['..'] },
     // `npm run dev` against a running `pf serve` on the default address.
     proxy: {
       '/matches': 'http://127.0.0.1:8080',

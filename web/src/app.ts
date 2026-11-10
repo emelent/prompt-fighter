@@ -7,58 +7,17 @@ import { eventLines, frameHash, lastFrame, parseFrameHash, parseLog, SPEEDS, typ
 import { buildScene } from './scene';
 import { mountStage } from './stage';
 import type { GameEvent, Log, MatchView } from './types';
-
-type Child = Node | string | null | undefined | false;
-
-/** Creates an element; string children become text nodes, never markup. */
-function el<K extends keyof HTMLElementTagNameMap>(tag: K, attrs: Record<string, string> = {}, ...children: Child[]): HTMLElementTagNameMap[K] {
-  const e = document.createElement(tag);
-  for (const [k, v] of Object.entries(attrs)) {
-    if (k === 'class') e.className = v;
-    else e.setAttribute(k, v);
-  }
-  for (const c of children) {
-    if (c === null || c === undefined || c === false) continue;
-    e.append(typeof c === 'string' ? document.createTextNode(c) : c);
-  }
-  return e;
-}
-
-const app = document.getElementById('app') as HTMLElement;
-
-function show(...nodes: Child[]): void {
-  app.replaceChildren();
-  for (const n of nodes) if (n) app.append(typeof n === 'string' ? document.createTextNode(n) : n);
-}
-
-function alertBox(text: string, ...extra: Child[]): HTMLElement {
-  return el('div', { class: 'alert', role: 'alert' }, text, ...extra);
-}
-
-async function fetchJSON<T>(url: string): Promise<{ ok: true; data: T } | { ok: false; status: number; message: string }> {
-  try {
-    const r = await fetch(url, { headers: { Accept: 'application/json' } });
-    if (!r.ok) {
-      let message = `HTTP ${r.status}`;
-      try {
-        const body = (await r.json()) as { error?: { message?: string } };
-        if (body.error?.message) message = body.error.message;
-      } catch {
-        /* not JSON */
-      }
-      return { ok: false, status: r.status, message };
-    }
-    return { ok: true, data: (await r.json()) as T };
-  } catch (e) {
-    return { ok: false, status: 0, message: e instanceof Error ? e.message : String(e) };
-  }
-}
+import { alertBox, el, fetchJSON, show } from './dom';
+import { lobbyPage, playPage } from './play';
 
 // --- round player -----------------------------------------------------------
 
 interface PlayerContext {
   heading: string;
   matchLink?: string;
+  backLabel?: string;
+  /** Start playing on load unless a #f= frame link is present. */
+  autoplay?: boolean;
 }
 
 function isTextInput(t: EventTarget | null): boolean {
@@ -76,7 +35,7 @@ function renderPlayer(log: Log, ctx: PlayerContext): void {
   let showRanges = false;
 
   // Header
-  const header = el('div', { class: 'player-head' }, el('h1', {}, ctx.heading), ctx.matchLink ? el('a', { href: ctx.matchLink }, '← back to match') : null);
+  const header = el('div', { class: 'player-head' }, el('h1', {}, ctx.heading), ctx.matchLink ? el('a', { href: ctx.matchLink }, ctx.backLabel ?? '← back to match') : null);
 
   // Stage
   const stageBox = el('div', { class: 'stage', 'aria-label': 'Replay stage' });
@@ -208,8 +167,11 @@ function renderPlayer(log: Log, ctx: PlayerContext): void {
   const { scene } = mountStage(stageBox, { log, playback: pb, showRanges: () => showRanges });
   stageScene = scene;
 
-  ready = true;
   pb.seek(start ?? 0);
+  // Start auto-play before enabling frame-link writes, so the URL does not
+  // pick up "#f=0" (which would suppress auto-play on reload).
+  if (ctx.autoplay && start === null) pb.play();
+  ready = true;
   sync();
   // A frame link pasted into an already open tab only changes the hash.
   window.addEventListener('hashchange', () => {
@@ -251,7 +213,9 @@ function renderPlayer(log: Log, ctx: PlayerContext): void {
 
 async function roundPage(id: string, n: number): Promise<void> {
   show(el('p', {}, `Loading match ${id}, round ${n}…`));
-  const matchURL = `/view/matches/${encodeURIComponent(id)}`;
+  const params = new URLSearchParams(location.search);
+  const fromPlay = params.get('from') === 'play';
+  const matchURL = fromPlay ? `/play/matches/${encodeURIComponent(id)}` : `/view/matches/${encodeURIComponent(id)}`;
   const [logRes, matchRes] = await Promise.all([
     fetchJSON<unknown>(`/matches/${encodeURIComponent(id)}/rounds/${n}`),
     fetchJSON<MatchView>(`/matches/${encodeURIComponent(id)}`),
@@ -282,7 +246,7 @@ async function roundPage(id: string, n: number): Promise<void> {
       heading += ` · seat ${r.p1}${seat ? ` (${seat.name})` : ''} played p1`;
     }
   }
-  renderPlayer(log, { heading, matchLink: matchURL });
+  renderPlayer(log, { heading, matchLink: matchURL, backLabel: fromPlay ? '← back to the match' : '← back to match', autoplay: params.get('autoplay') === '1' });
 }
 
 // --- live match page ----------------------------------------------------------
@@ -377,6 +341,19 @@ function homePage(): void {
 
 function route(): void {
   const path = location.pathname.replace(/\/+$/, '');
+  const playing = path === '/play' || path.startsWith('/play/');
+  const subtitle = document.querySelector('.subtitle');
+  if (subtitle) subtitle.textContent = playing ? 'play' : 'replay viewer';
+  document.title = playing ? 'Prompt Fighter — Play' : 'Prompt Fighter — Replay viewer';
+  if (path === '/play') {
+    lobbyPage();
+    return;
+  }
+  const pm = /^\/play\/matches\/([^/]+)$/.exec(path);
+  if (pm?.[1]) {
+    playPage(decodeURIComponent(pm[1]));
+    return;
+  }
   let m = /^\/view\/matches\/([^/]+)\/rounds\/(\d+)$/.exec(path);
   if (m?.[1] && m[2]) {
     void roundPage(decodeURIComponent(m[1]), Number(m[2]));

@@ -58,4 +58,16 @@ Implemented by the OpenSpec change `add-replay-viewer`: a browser viewer served 
 
 ## Phase 5: Submission UI
 
-- None yet.
+Implemented by the OpenSpec change `add-submission-ui`: the lobby at `/play` (with `GET /` redirecting to it) and the play page at `/play/matches/{id}`. They have a CodeMirror 6 editor with live validation, the waiting states, and auto-play of each round's replay. They're part of the same embedded web app, so `pf` still ships as one binary. The usage is described in `docs/API.md`, under Playing in the browser.
+
+### Follow-ups
+- **Listing open matches:** the lobby can only open a match by id or invite link. Listing matches waiting for an opponent needs a new endpoint (for example `GET /matches?status=waiting_for_opponent`).
+- **Accounts and auth before public hosting:** seat tokens are bearer secrets in `localStorage` and in MCP model context. Public hosting also needs the Phase 2 follow-ups (rate limits, match cleanup, multi-process locking) and an idle-seat timeout.
+- **Bundle size:** the JS bundle is now about 1.55 MB (Phaser about 1.2 MB, CodeMirror about 340 KB). Lazy-load the editor and the stage with dynamic `import()` if it matters.
+- **Mobile layout:** the editor and panels are designed for desktop widths.
+- **Remaining Phase 4 plan items:**
+  - `/replay?match=…&round=…` URLs
+  - "BLOCKED/THROW/TRADE/KO" callouts
+  - per-line frame and check cost annotations in the script panels
+  - a 0.25×–2× speed range
+  - a Playwright smoke test (the browser checks so far were run by hand with `puppeteer-core`)

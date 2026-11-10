@@ -101,3 +101,26 @@ func TestViewUnknownAsset(t *testing.T) {
 	expectError(t, do(t, s, "GET", "/view/static/..%2fembed.go", ""), 404, "not_found")
 	expectError(t, do(t, s, "POST", "/view", ""), 405, "method_not_allowed")
 }
+
+func TestPlayPagesAreHTML(t *testing.T) {
+	s := newTestServer(t)
+	for _, p := range []string{"/play", "/play/matches/0123456789abcdef"} {
+		rec := do(t, s, "GET", p, "")
+		if rec.Code != 200 || rec.Header().Get("Content-Type") != "text/html; charset=utf-8" || !strings.Contains(rec.Body.String(), "<!doctype html>") {
+			t.Errorf("%s: %d %q", p, rec.Code, rec.Header().Get("Content-Type"))
+		}
+		checkViewerHeaders(t, p, rec.Header())
+	}
+}
+
+func TestRootRedirectsToLobby(t *testing.T) {
+	s := newTestServer(t)
+	rec := do(t, s, "GET", "/", "")
+	if rec.Code != 302 || rec.Header().Get("Location") != "/play" {
+		t.Errorf("GET /: %d Location %q", rec.Code, rec.Header().Get("Location"))
+	}
+	checkViewerHeaders(t, "/", rec.Header())
+	expectError(t, do(t, s, "POST", "/", ""), 405, "method_not_allowed")
+	expectError(t, do(t, s, "GET", "/nope", ""), 404, "not_found")
+	expectError(t, do(t, s, "GET", "/play/nope", ""), 404, "not_found")
+}

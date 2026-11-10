@@ -44,6 +44,9 @@ The [player guide](PLAYER_GUIDE.md) is what the model should read first. It's av
 | GET | `/view/matches/{id}` | live match page (HTML) |
 | GET | `/view/matches/{id}/rounds/{n}` | round replay player (HTML) |
 | GET | `/view/static/{file}` | viewer assets (JS/CSS) |
+| GET | `/play` | lobby: create or join a match (HTML) |
+| GET | `/play/matches/{id}` | play page: write, validate and submit scripts; waits and auto-plays each round (HTML) |
+| GET | `/{$}` | the exact root `/`: redirects to `/play` |
 
 All API requests and responses are JSON, and unknown JSON fields are rejected. The `/view` pages and assets are the only non-JSON responses (see Replay viewer).
 
@@ -152,6 +155,43 @@ Clients poll this endpoint to see when the opponent has submitted or a round has
 ### Round log: `GET /matches/{id}/rounds/{n}`
 
 Returns the stored event log of played round `n`. It's byte-identical to `sim.Simulate` for that round's scripts, names and sides. Its `players[]` holds the p1 and p2 names and full scripts as played. An unplayed round returns 404.
+
+## Playing in the browser
+
+`pf serve` hosts the submission UI. Opening the server root (`GET /`) redirects to the lobby.
+
+| URL | page |
+|---|---|
+| `/play` | **lobby**: create a match (name + round-1 script) or open one by id |
+| `/play/matches/{id}` | **play page**: the page each player keeps open during a match. It's also the invite link to send your opponent. |
+
+**What the play page shows,** depending on the match and on whether this browser holds a seat:
+
+| state | when |
+|---|---|
+| join | you hold no seat and seat b is free |
+| spectator | both seats are taken; links to the replay viewer |
+| waiting for an opponent | you created the match; shows the invite link with a copy button |
+| your move | submit your script for round N |
+| waiting for their script | you've submitted; you can still replace it until the round runs |
+| finished | the winner and links to every round's replay |
+
+**Editor:**
+- CodeMirror 6 with `.pf` highlighting.
+- Live validation through `POST /validate`, after a 300 ms pause in typing. Errors are marked at their line and column with the same messages as `pf validate`.
+- A byte counter against the 4096-byte limit.
+- Create, Join and Submit stay disabled until the current text has validated.
+- Any sample bot can be loaded as a starting point.
+
+**Auto-play:** the play page polls the match every 2 s. When a round resolves, whether through your submission or your opponent's, it opens `/view/matches/{id}/rounds/{n}?from=play&autoplay=1`. That replay starts playing immediately, and its back link returns to the play page.
+
+**Seats and drafts:**
+- Your seat token and your editor draft are kept in this browser's `localStorage`, keyed by match id, so a reload keeps your seat.
+- "forget this seat" removes the stored seat.
+- If storage is blocked, the page says that your seat won't survive a reload.
+- The token is what lets you submit for your seat, so don't share it.
+
+The pages use only the API above; no extra endpoints exist for them. They're served with the same strict Content-Security-Policy as the viewer. The editor renders inside a shadow root, so its styles need no CSP exception.
 
 ## Replay viewer
 

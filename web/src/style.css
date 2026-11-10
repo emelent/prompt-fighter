@@ -51,3 +51,23 @@ ol.feed li.current { background: #3a3220; }
 .drop.over { border-color: var(--accent); }
 .seats, .rounds { padding-left: 1.2rem; }
 .outcome { font-weight: 700; color: var(--accent); }
+.play { max-width: 860px; }
+.card { background: var(--panel); border-radius: 8px; padding: 0.8rem 1rem; margin: 0.8rem 0; }
+.card.waiting { border-left: 4px solid var(--accent); }
+.field { display: block; margin: 0.4rem 0 0.6rem; }
+.field input, .invite { background: #0d1115; color: var(--text); border: 1px solid #2f3a45; border-radius: 6px; padding: 0.35rem 0.5rem; min-width: 16rem; }
+.editor-panel { margin: 0.4rem 0; }
+.editor-bar { display: flex; gap: 0.8rem; align-items: center; margin-bottom: 0.35rem; font-size: 0.85rem; }
+.editor-bar select { background: #0d1115; color: var(--text); border: 1px solid #2f3a45; border-radius: 6px; padding: 0.2rem; }
+.editor-status { color: var(--muted); }
+.editor-status.valid { color: #5ad17a; }
+.editor-status.invalid, .editor-status.error { color: #ff5c5c; }
+.editor-size { color: var(--muted); margin-left: auto; font-variant-numeric: tabular-nums; }
+.editor-size.over { color: #ff5c5c; font-weight: 700; }
+.actions { margin-top: 0.6rem; }
+button.primary { background: var(--accent); color: #1a1405; border: none; border-radius: 6px; padding: 0.45rem 0.9rem; font-weight: 700; cursor: pointer; }
+button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+button.link { background: none; border: none; color: var(--accent); text-decoration: underline; cursor: pointer; padding: 0; font: inherit; }
+.invite-row { display: flex; gap: 0.5rem; }
+.invite { flex: 1; }
+.ok { color: #5ad17a; }

@@ -56,3 +56,11 @@ func (s *Server) handleViewerAsset(w http.ResponseWriter, r *http.Request) *apiE
 	w.Write(b)
 	return nil
 }
+
+// handleRoot sends the exact root to the lobby; other unknown paths keep the
+// JSON 404 from the catch-all.
+func (s *Server) handleRoot(w http.ResponseWriter, r *http.Request) *apiError {
+	viewerHeaders(w)
+	http.Redirect(w, r, "/play", http.StatusFound)
+	return nil
+}

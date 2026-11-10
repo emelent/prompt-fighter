@@ -7,7 +7,7 @@ Defines the HTTP/JSON API served by `pf serve`: health, script validation and si
 ## Requirements
 
 ### Requirement: JSON transport and error envelope
-Every API endpoint (`/healthz`, `/validate`, `/sim` and everything under `/matches`) SHALL accept and return `application/json`. The replay viewer pages and assets under `/view` are the only non-JSON responses (see the replay-viewer capability). Every error response, including a 404 for an unknown route or viewer asset, SHALL have the body `{"error": {"code": <code>, "message": <text>}}`, with one of these codes and statuses:
+Every API endpoint (`/healthz`, `/validate`, `/sim` and everything under `/matches`) SHALL accept and return `application/json`. The only non-JSON responses are the web app's pages and assets: the replay viewer under `/view` (see the replay-viewer capability), the play pages under `/play` (see the play-ui capability), and the `GET /` redirect to `/play`. Every error response, including a 404 for an unknown route or viewer asset, SHALL have the body `{"error": {"code": <code>, "message": <text>}}`, with one of these codes and statuses:
 
 | code | status |
 |---|---|
@@ -42,6 +42,14 @@ An `invalid_script` error SHALL also carry `errors`: a list of `{"player"?, "lin
 #### Scenario: Viewer page is HTML
 - **WHEN** a client sends `GET /view`
 - **THEN** the response is 200 with content type `text/html; charset=utf-8`, not JSON
+
+#### Scenario: Play page is HTML
+- **WHEN** a client sends `GET /play`
+- **THEN** the response is 200 with content type `text/html; charset=utf-8`, not JSON
+
+#### Scenario: Root redirects to the lobby
+- **WHEN** a client sends `GET /`
+- **THEN** the response is a 302 redirect to `/play`, while other unknown paths such as `GET /nope` still return the JSON 404
 
 ### Requirement: Health endpoint
 `GET /healthz` SHALL return 200 with `{"status": "ok", "config_version": <engine default config version>, "format_version": <event log format version>, "store_version": <match store version>}`.
