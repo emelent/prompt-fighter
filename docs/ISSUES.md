@@ -51,7 +51,7 @@ Implemented by the OpenSpec change `add-replay-viewer`: a browser viewer served 
 
 ### Follow-ups (not blocking Phase 5)
 - **CI for the frontend:** run `cd web && npm ci && npm run check` in CI, and fail if `npm run build` changes `web/dist`. Locally, `go test ./web` skips the frontend tests when `node_modules` is missing.
-- **Sprites and animation:** the fighters are geometric placeholders. Sprite sheets can replace the drawing in `src/stage.ts` without touching `buildScene`.
+- ~~**Sprites and animation:**~~ done by `pixel-art-fighters`: code-generated pixel-art fighters, backdrop, sparks and pixel-font HUD.
 - **Frame inspector:** a panel showing the raw `frames[f]` entry and that frame's events, for debugging scripts.
 - **Mobile layout:** the stage scales, but the controls and panels are designed for desktop widths.
 - **Bundle size:** Phaser makes up most of the 1.2 MB JS bundle. Fine for a local viewer, but worth revisiting (for example a custom Phaser build) before public hosting.
@@ -67,7 +67,17 @@ Implemented by the OpenSpec change `add-submission-ui`: the lobby at `/play` (wi
 - **Mobile layout:** the editor and panels are designed for desktop widths.
 - **Remaining Phase 4 plan items:**
   - `/replay?match=…&round=…` URLs
-  - "BLOCKED/THROW/TRADE/KO" callouts
+  - ~~"BLOCKED/THROW/TRADE/KO" callouts~~ done by `pixel-art-fighters` (plus `TECH`)
   - per-line frame and check cost annotations in the script panels
   - a 0.25×–2× speed range
   - a Playwright smoke test (the browser checks so far were run by hand with `puppeteer-core`)
+
+## Pixel-art fighters
+
+Implemented by the OpenSpec change `pixel-art-fighters`: the replay stage is now 16:9 pixel art generated in code (`web/src/fighterart.ts`, `backdrop.ts`, `pixelfont.ts`), with event callouts, a frame countdown and a round intro (`callouts.ts`, `playback.ts`). There are no image files, and the CSP is unchanged.
+
+### Follow-ups
+- **Character select:** both players use the same character, told apart by palette. More characters would need a way to choose (for example a field in the match or the script header).
+- **Sound:** hit, block and KO effects. The game is created with `noAudio` today.
+- **Non-Latin names:** characters outside the 5×7 font draw as boxes on the stage. Full names still show in the script panels.
+- **Custom configs:** the knockdown get-up pose assumes the default 20 knockdown frames, and the round word assumes best of 3. Logs don't carry these values.

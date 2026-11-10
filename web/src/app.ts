@@ -4,6 +4,7 @@ import './style.css';
 import { matchRows, newRoundToOpen, POLL_BACKOFF_MS, POLL_MS } from './match';
 import { Playback } from './playback';
 import { eventLines, frameHash, lastFrame, parseFrameHash, parseLog, SPEEDS, type Speed, validateLog } from './replay';
+import { roundLabel } from './callouts';
 import { buildScene } from './scene';
 import { mountStage } from './stage';
 import type { GameEvent, Log, MatchView } from './types';
@@ -18,6 +19,8 @@ interface PlayerContext {
   backLabel?: string;
   /** Start playing on load unless a #f= frame link is present. */
   autoplay?: boolean;
+  /** The stored round number, for the intro ("ROUND n"); absent for local files. */
+  round?: number;
 }
 
 function isTextInput(t: EventTarget | null): boolean {
@@ -164,7 +167,7 @@ function renderPlayer(log: Log, ctx: PlayerContext): void {
   show(layout);
   buildFeed();
 
-  const { scene } = mountStage(stageBox, { log, playback: pb, showRanges: () => showRanges });
+  const { scene } = mountStage(stageBox, { log, playback: pb, showRanges: () => showRanges, roundLabel: roundLabel(ctx.round ?? null) });
   stageScene = scene;
 
   pb.seek(start ?? 0);
@@ -246,7 +249,7 @@ async function roundPage(id: string, n: number): Promise<void> {
       heading += ` · seat ${r.p1}${seat ? ` (${seat.name})` : ''} played p1`;
     }
   }
-  renderPlayer(log, { heading, matchLink: matchURL, backLabel: fromPlay ? '← back to the match' : '← back to match', autoplay: params.get('autoplay') === '1' });
+  renderPlayer(log, { heading, matchLink: matchURL, backLabel: fromPlay ? '← back to the match' : '← back to match', autoplay: params.get('autoplay') === '1', round: n });
 }
 
 // --- live match page ----------------------------------------------------------

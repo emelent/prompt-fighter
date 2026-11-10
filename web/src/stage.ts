@@ -1,61 +1,63 @@
-// The stage: a Phaser 3 scene that draws buildScene() output for the current
-// frame and drives the playback clock. Only Phaser 3 APIs are used.
+// The stage: a Phaser 3 scene that draws the current frame in pixel art and
+// drives the playback clock. Only Phaser 3 APIs are used. All art is
+// generated in code (src/fighterart.ts, src/backdrop.ts, src/pixelfont.ts)
+// and turned into canvas textures here, so nothing is fetched.
 import * as Phaser from 'phaser';
-import type { Playback } from './playback';
-import { buildScene, MAX_HP, type FighterDraw, type Scene } from './scene';
+import { BACKDROP_GROUND, BACKDROP_H, BACKDROP_W, backdropRGBA } from './backdrop';
+import { calloutsAt, countdownAt, type Callout } from './callouts';
+import { choosePose, colourise, PALETTES, PLAYER_TEXT, poseGrid, SPRITE_H, SPRITE_W, type PaletteName, type PoseName } from './fighterart';
+import { INTRO_FIGHT_MS, type Playback } from './playback';
+import { ADVANCE, fitText, textMask, textWidth } from './pixelfont';
+import { buildScene, MAX_HP, type FighterDraw, type Flash, type Scene } from './scene';
 import type { Log } from './types';
 
 export const GAME_WIDTH = 960;
-export const GAME_HEIGHT = 380;
+export const GAME_HEIGHT = 540;
 
+/** Screen pixels per art pixel. */
+const PX = 3;
 const STAGE_LEFT = 40;
-const STAGE_PX = GAME_WIDTH - 2 * STAGE_LEFT; // pixels for 100 stage units
-const UNIT = STAGE_PX / 100;
-const GROUND_Y = 330;
+const UNIT = (GAME_WIDTH - 2 * STAGE_LEFT) / 100; // pixels per stage unit
+const GROUND_Y = BACKDROP_GROUND * PX;
 const Y_UNIT = 4; // pixels per unit of jump height
-const BODY_W = 4 * UNIT; // fighters are 4 units wide
-const STAND_H = 120;
-const CROUCH_H = 78;
-const DOWN_H = 26;
 
-const LIMB_STYLE = {
-  startup: { color: 0xf6e7a1, width: 4, extent: 0.45 },
-  active: { color: 0xffd84a, width: 10, extent: 1 },
-  recovery: { color: 0x8a7f5a, width: 6, extent: 0.7 },
-} as const;
+const INK = '#120c18';
+const BAR_W = 380;
+const BAR_Y = 24;
+const BAR_H = 27;
 
-const FLASH_COLORS = { hit: 0xffffff, block: 0x6fe3d2, throw: 0xf2b134 } as const;
-
-const TEXT_STYLE: Phaser.Types.GameObjects.Text.TextStyle = { fontFamily: 'system-ui, sans-serif', fontSize: '16px', color: '#e6e9ec' };
+const CALLOUT_COLOURS: Record<Callout['kind'], string> = { block: '#8fe9ff', throw: '#ffcc33', tech: '#ffffff', trade: '#ff9a3d', ko: '#ff4d3d' };
+const SPARKS: Record<Flash['kind'], readonly string[]> = {
+  hit: ['#ffffff', '#ffcc33', '#ff6a3d'],
+  throw: ['#ffffff', '#ffcc33', '#ff6a3d'],
+  block: ['#e8fbff', '#62d6ff', '#62d6ff'],
+};
 
 function sx(x: number): number {
   return STAGE_LEFT + x * UNIT;
 }
 
-function bodyHeight(fd: FighterDraw): number {
-  switch (fd.pose) {
-    case 'crouch':
-    case 'land':
-      return CROUCH_H;
-    case 'down':
-      return DOWN_H;
-  }
-  return STAND_H;
+function hexNum(hex: string): number {
+  return parseInt(hex.slice(1), 16);
 }
 
 export interface StageSource {
   log: Log;
   playback: Playback;
   showRanges: () => boolean;
+  /** The intro's round word ("ROUND 2", "FINAL ROUND"), or null for none. */
+  roundLabel?: string | null;
 }
 
+type Align = 'left' | 'center' | 'right';
+
 export class StageScene extends Phaser.Scene {
-  private g!: Phaser.GameObjects.Graphics;
-  private names: Phaser.GameObjects.Text[] = [];
-  private combos: Phaser.GameObjects.Text[] = [];
-  private frameText!: Phaser.GameObjects.Text;
-  private bannerTitle!: Phaser.GameObjects.Text;
-  private bannerDetail!: Phaser.GameObjects.Text;
+  private shadows!: Phaser.GameObjects.Graphics;
+  private fx!: Phaser.GameObjects.Graphics;
+  private hud!: Phaser.GameObjects.Graphics;
+  private fighters: Phaser.GameObjects.Image[] = [];
+  private glyphs: Phaser.GameObjects.Image[] = [];
+  private glyphsUsed = 0;
   private drawn = -1;
   private dirty = true;
 
@@ -69,14 +71,13 @@ export class StageScene extends Phaser.Scene {
   }
 
   create(): void {
-    this.g = this.add.graphics();
-    for (let i = 0; i < 2; i++) {
-      this.names.push(this.add.text(0, 0, '', TEXT_STYLE));
-      this.combos.push(this.add.text(0, 0, '', { ...TEXT_STYLE, fontSize: '18px', color: '#f2b134', fontStyle: 'bold' }).setOrigin(0.5, 1));
-    }
-    this.frameText = this.add.text(GAME_WIDTH / 2, 40, '', { ...TEXT_STYLE, color: '#8b96a1' }).setOrigin(0.5, 0);
-    this.bannerTitle = this.add.text(GAME_WIDTH / 2, 92, '', { ...TEXT_STYLE, fontSize: '30px', fontStyle: 'bold' }).setOrigin(0.5).setDepth(2);
-    this.bannerDetail = this.add.text(GAME_WIDTH / 2, 126, '', { ...TEXT_STYLE, color: '#c9d1d9' }).setOrigin(0.5).setDepth(2);
+    const bd = backdropRGBA();
+    this.canvasTexture('backdrop', bd.width, bd.height, bd.data);
+    this.add.image(0, 0, 'backdrop').setOrigin(0, 0).setScale(GAME_WIDTH / BACKDROP_W, GAME_HEIGHT / BACKDROP_H).setDepth(0);
+    this.shadows = this.add.graphics().setDepth(1);
+    for (let i = 0; i < 2; i++) this.fighters.push(this.add.image(0, 0, this.poseTexture('p1', 'G')).setOrigin(0.5, 1).setScale(PX));
+    this.fx = this.add.graphics().setDepth(4);
+    this.hud = this.add.graphics().setDepth(5);
     this.src.playback.onChange(() => {
       this.dirty = true;
     });
@@ -95,80 +96,179 @@ export class StageScene extends Phaser.Scene {
     }
   }
 
-  private draw(sc: Scene): void {
-    const g = this.g;
-    g.clear();
-    // Ground and stage edges.
-    g.fillStyle(0x1e262e, 1).fillRect(0, GROUND_Y, GAME_WIDTH, GAME_HEIGHT - GROUND_Y);
-    g.lineStyle(2, 0x3a4652, 1).lineBetween(STAGE_LEFT, GROUND_Y, STAGE_LEFT + STAGE_PX, GROUND_Y);
-    for (let x = 0; x <= 100; x += 10) {
-      g.lineStyle(1, 0x2a333c, 1).lineBetween(sx(x), GROUND_Y, sx(x), GROUND_Y + (x % 50 === 0 ? 14 : 7));
-    }
-    sc.fighters.forEach((fd, i) => this.drawFighter(fd, i, sc.showRanges));
-    for (const fl of sc.flashes) {
-      const target = fl.target === 'p1' ? sc.fighters[0] : sc.fighters[1];
-      const cy = GROUND_Y - fl.y * Y_UNIT - bodyHeight(target) * 0.6;
-      g.fillStyle(FLASH_COLORS[fl.kind], 0.85 * fl.strength).fillCircle(sx(fl.x), cy, 14 + fl.age * 9);
-      g.lineStyle(3, FLASH_COLORS[fl.kind], fl.strength).strokeCircle(sx(fl.x), cy, 22 + fl.age * 12);
-    }
-    this.drawHud(sc);
+  // --- textures ----------------------------------------------------------------
+
+  private canvasTexture(key: string, w: number, h: number, rgba: Uint8ClampedArray): string {
+    if (this.textures.exists(key)) return key;
+    const tex = this.textures.createCanvas(key, w, h);
+    if (!tex) throw new Error(`cannot create texture ${key}`);
+    tex.context.putImageData(new ImageData(new Uint8ClampedArray(rgba), w, h), 0, 0);
+    tex.refresh();
+    return key;
   }
 
-  private drawFighter(fd: FighterDraw, i: number, showRanges: boolean): void {
-    const g = this.g;
-    const cx = sx(fd.x);
-    const foot = GROUND_Y - fd.y * Y_UNIT;
-    const h = bodyHeight(fd);
-    const w = fd.pose === 'down' ? STAND_H * 0.9 : BODY_W;
-    const left = cx - w / 2;
-    const top = foot - h;
-    g.fillStyle(fd.color, fd.alpha).fillRect(left, top, w, h);
-    g.lineStyle(3, fd.outline, fd.alpha).strokeRect(left, top, w, h);
-    if (fd.pose !== 'down') {
-      // Head with a facing "eye".
-      g.fillStyle(fd.color, fd.alpha).fillCircle(cx, top - 12, 12);
-      g.lineStyle(3, fd.outline, fd.alpha).strokeCircle(cx, top - 12, 12);
-      g.fillStyle(0x101418, fd.alpha).fillCircle(cx + fd.facing * 6, top - 14, 3);
-    }
-    if (fd.state === 'block' || fd.state === 'blockstun') {
-      g.lineStyle(5, 0x6fe3d2, fd.alpha).lineBetween(cx + fd.facing * (w / 2 + 6), top + 6, cx + fd.facing * (w / 2 + 6), foot - 6);
-    }
-    if (fd.limb) {
-      const reach = fd.limb.reach * UNIT;
-      const y = fd.limb.height === 'high' ? top + h * 0.25 : fd.limb.height === 'low' ? foot - 10 : top + h * 0.55;
-      const startX = cx + fd.facing * (w / 2);
-      if (showRanges) {
-        g.lineStyle(1, 0xffffff, 0.35).lineBetween(cx, y, cx + fd.facing * reach, y);
+  private poseTexture(pal: PaletteName, pose: PoseName): string {
+    const key = `pose:${pal}:${pose}`;
+    if (this.textures.exists(key)) return key;
+    return this.canvasTexture(key, SPRITE_W, SPRITE_H, colourise(poseGrid(pose), PALETTES[pal]));
+  }
+
+  private glyphTexture(ch: string, colour: string): string {
+    const key = `glyph:${colour}:${ch.codePointAt(0)}`;
+    if (this.textures.exists(key)) return key;
+    const m = textMask(ch);
+    const ink = hexNum(colour);
+    const out = hexNum(INK);
+    const px = new Uint8ClampedArray(m.width * m.height * 4);
+    m.bits.forEach((b, i) => {
+      if (!b) return;
+      const c = b === 1 ? ink : out;
+      px[i * 4] = c >> 16;
+      px[i * 4 + 1] = (c >> 8) & 0xff;
+      px[i * 4 + 2] = c & 0xff;
+      px[i * 4 + 3] = 255;
+    });
+    return this.canvasTexture(key, m.width, m.height, px);
+  }
+
+  /** Draws text in the pixel font; y is the top of the text. Returns its width. */
+  private text(str: string, x: number, y: number, scale: number, colour: string, align: Align = 'left'): number {
+    const chars = [...str];
+    const w = (textWidth(str) + 2) * scale;
+    const left = align === 'left' ? x : align === 'right' ? x - w : x - w / 2;
+    chars.forEach((ch, i) => {
+      if (ch === ' ') return;
+      let img = this.glyphs[this.glyphsUsed];
+      if (!img) {
+        img = this.add.image(0, 0, this.glyphTexture(ch, colour)).setOrigin(0, 0).setDepth(6);
+        this.glyphs.push(img);
       }
-      const st = LIMB_STYLE[fd.limb.phase];
-      const len = Math.max(reach * st.extent - w / 2, 6);
-      g.lineStyle(st.width, st.color, fd.alpha).lineBetween(startX, y, startX + fd.facing * len, y);
+      this.glyphsUsed++;
+      img.setTexture(this.glyphTexture(ch, colour)).setPosition(Math.round(left + i * ADVANCE * scale), Math.round(y)).setScale(scale).setVisible(true);
+    });
+    return w;
+  }
+
+  // --- drawing -------------------------------------------------------------------
+
+  private draw(sc: Scene): void {
+    const pb = this.src.playback;
+    const log = this.src.log;
+    const frame = log.frames[sc.frame]!;
+    this.glyphsUsed = 0;
+    this.shadows.clear();
+    this.fx.clear();
+    this.hud.clear();
+
+    const intro = pb.intro;
+    const winner = sc.banner ? log.result.winner : null;
+    sc.fighters.forEach((fd, i) => {
+      const ff = fd.id === 'p1' ? frame.p1 : frame.p2;
+      const pose = intro ? choosePose({ state: 'idle', anim: 'idle', anim_frame: 1, phase: '' }, sc.frame).pose : choosePose(ff, sc.frame, winner === fd.id).pose;
+      this.drawFighter(fd, i, pose, sc.showRanges && !intro);
+    });
+    // The fighter that is acting draws in front; otherwise p1 does.
+    const acting = (fd: FighterDraw) => fd.state === 'attack' || fd.anim === 'throw';
+    const p2Front = acting(sc.fighters[1]) && !acting(sc.fighters[0]);
+    this.fighters[0]!.setDepth(p2Front ? 2 : 3);
+    this.fighters[1]!.setDepth(p2Front ? 3 : 2);
+
+    for (const fl of sc.flashes) this.drawSpark(fl, sc);
+    this.drawHud(sc);
+    if (intro) {
+      this.drawIntro(intro.elapsedMs);
+    } else {
+      this.drawCallouts(sc);
     }
-    const name = this.names[i]!;
-    name.setText(fd.name).setPosition(cx, foot + 8).setOrigin(0.5, 0).setColor(i === 0 ? '#4fa3ff' : '#ff6b6b');
-    this.combos[i]!.setText(fd.comboLabel ?? '').setPosition(cx, top - 30);
+    for (let i = this.glyphsUsed; i < this.glyphs.length; i++) this.glyphs[i]!.setVisible(false);
+  }
+
+  private feet(fd: FighterDraw): number {
+    return GROUND_Y - fd.y * Y_UNIT;
+  }
+
+  private drawFighter(fd: FighterDraw, i: number, pose: PoseName, showRanges: boolean): void {
+    const cx = sx(fd.x);
+    const foot = this.feet(fd);
+    // Ground shadow, smaller the higher the fighter is.
+    const sw = Math.max(18, 54 - fd.y * 2);
+    this.shadows.fillStyle(0x000000, 0.35).fillRect(Math.round(cx - sw), GROUND_Y - 3, sw * 2, 6);
+    this.fighters[i]!.setTexture(this.poseTexture(fd.id, pose))
+      .setPosition(Math.round(cx), Math.round(foot) + PX) // the bottom art row is the outline under the feet
+      .setFlipX(fd.facing < 0)
+      .setAlpha(fd.alpha);
+    if (showRanges && fd.limb) {
+      const reach = fd.limb.reach * UNIT;
+      const y = fd.limb.height === 'high' ? foot - 135 : fd.limb.height === 'low' ? foot - 12 : foot - 90;
+      const x0 = Math.min(cx, cx + fd.facing * reach);
+      this.fx.fillStyle(0xffcc33, fd.limb.phase === 'active' ? 0.8 : 0.35).fillRect(x0, y - 2, reach, 4);
+    }
+    if (fd.comboLabel) this.text(fd.comboLabel.toUpperCase(), cx, foot - 206, 2, '#ffcc33', 'center');
+  }
+
+  private drawSpark(fl: Flash, sc: Scene): void {
+    const target = fl.target === 'p1' ? sc.fighters[0] : sc.fighters[1];
+    const cx = Math.round(sx(fl.x) + target.facing * 18);
+    const cy = Math.round(GROUND_Y - fl.y * Y_UNIT - 120);
+    const cols = SPARKS[fl.kind];
+    const r = 3 + fl.age * 3; // art pixels
+    this.fx.fillStyle(hexNum(cols[0]!), 1).fillRect(cx - PX, cy - PX, PX * 3, PX * 3);
+    for (let i = 0; i < 8; i++) {
+      const a = (i * Math.PI) / 4 + (fl.kind === 'block' ? Math.PI / 8 : 0);
+      for (let d = r - 3; d <= r; d++) {
+        const c = cols[Math.min(cols.length - 1, Math.floor((d - r + 3) / 2) + (fl.age > 1 ? 1 : 0))]!;
+        this.fx.fillStyle(hexNum(c), Math.max(0.4, fl.strength)).fillRect(Math.round(cx + Math.cos(a) * d * PX), Math.round(cy + Math.sin(a) * d * PX), PX * 2, PX * 2);
+      }
+    }
   }
 
   private drawHud(sc: Scene): void {
-    const g = this.g;
-    const barW = 380;
+    const g = this.hud;
     sc.fighters.forEach((fd, i) => {
-      const x = i === 0 ? 20 : GAME_WIDTH - 20 - barW;
+      const x = i === 0 ? 20 : GAME_WIDTH - 20 - BAR_W;
       const frac = Math.max(0, Math.min(1, fd.hp / MAX_HP));
-      g.fillStyle(0x2a333c, 1).fillRect(x, 16, barW, 18);
-      const fillX = i === 0 ? x + barW * (1 - frac) : x; // bars drain towards the centre
-      g.fillStyle(frac > 0.3 ? 0x5ad17a : 0xff5c5c, 1).fillRect(fillX, 16, barW * frac, 18);
-      g.lineStyle(2, fd.outline, 1).strokeRect(x, 16, barW, 18);
+      const low = frac <= 0.3;
+      g.fillStyle(hexNum(INK), 1).fillRect(x - 3, BAR_Y - 3, BAR_W + 6, BAR_H + 6);
+      g.fillStyle(low ? 0x3a2030 : 0xb03a2e, 1).fillRect(x, BAR_Y, BAR_W, BAR_H);
+      const w = Math.round(BAR_W * frac);
+      const fillX = i === 0 ? x + BAR_W - w : x; // bars drain towards the centre
+      g.fillStyle(low ? 0xff5c5c : 0xffcc33, 1).fillRect(fillX, BAR_Y, w, BAR_H);
+      g.fillStyle(low ? 0xffa0a0 : 0xfff2b0, 1).fillRect(fillX, BAR_Y, w, 6);
+      const name = fitText(fd.name, 28);
+      this.text(name, i === 0 ? 17 : GAME_WIDTH - 17, BAR_Y + BAR_H + 6, 2, PLAYER_TEXT[fd.id], i === 0 ? 'left' : 'right');
     });
-    this.frameText.setText(sc.frameLabel);
+    this.text(countdownAt(this.src.log, sc.frame), GAME_WIDTH / 2, BAR_Y - 6, 4, '#ffffff', 'center');
+    this.text(sc.frameLabel.toUpperCase(), GAME_WIDTH / 2, BAR_Y + 40, 2, '#b9ad95', 'center');
     if (sc.banner) {
-      g.fillStyle(0x000000, 0.7).fillRect(GAME_WIDTH / 2 - 260, 64, 520, 84);
-      this.bannerTitle.setText(sc.banner.title);
-      this.bannerDetail.setText(sc.banner.detail);
-    } else {
-      this.bannerTitle.setText('');
-      this.bannerDetail.setText('');
+      const titleScale = textWidth(sc.banner.title) * 3 <= 600 ? 3 : 2;
+      const w = Math.max(textWidth(sc.banner.title) * titleScale, textWidth(sc.banner.detail) * 2) + 48;
+      g.fillStyle(0x000000, 0.75).fillRect(GAME_WIDTH / 2 - w / 2, 220, w, 80);
+      g.lineStyle(3, hexNum(INK), 1).strokeRect(GAME_WIDTH / 2 - w / 2, 220, w, 80);
+      this.text(sc.banner.title.toUpperCase(), GAME_WIDTH / 2, 234, titleScale, '#ffffff', 'center');
+      this.text(sc.banner.detail.toUpperCase(), GAME_WIDTH / 2, 272, 2, '#b9ad95', 'center');
     }
+  }
+
+  private drawCallouts(sc: Scene): void {
+    for (const c of calloutsAt(this.src.log, sc.frame)) {
+      const colour = CALLOUT_COLOURS[c.kind];
+      if (c.anchor === 'center') {
+        this.text(c.text, GAME_WIDTH / 2, 130, 6, colour, 'center');
+        continue;
+      }
+      const [a, b] = sc.fighters;
+      const x = c.anchor === 'mid' ? (sx(a.x) + sx(b.x)) / 2 : sx((c.anchor === 'p1' ? a : b).x);
+      const foot = c.anchor === 'mid' ? Math.min(this.feet(a), this.feet(b)) : this.feet(c.anchor === 'p1' ? a : b);
+      const y = Math.max(96, foot - 240 - Math.floor(c.age / 3) * PX);
+      this.text(c.text, x, y, 3, colour, 'center');
+    }
+  }
+
+  private drawIntro(elapsedMs: number): void {
+    const label = this.src.roundLabel ?? null;
+    const word = label && elapsedMs < INTRO_FIGHT_MS ? label : 'FIGHT!';
+    const scale = word === 'FIGHT!' ? 7 : 6;
+    this.text(word, GAME_WIDTH / 2, 160, scale, '#ffcc33', 'center');
   }
 }
 
@@ -180,7 +280,8 @@ export function mountStage(parent: HTMLElement, src: StageSource): { game: Phase
     parent,
     width: GAME_WIDTH,
     height: GAME_HEIGHT,
-    backgroundColor: '#14191f',
+    backgroundColor: INK,
+    pixelArt: true,
     banner: false,
     audio: { noAudio: true },
     input: { keyboard: false, mouse: false, touch: false, gamepad: false },

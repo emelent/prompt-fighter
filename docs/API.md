@@ -201,7 +201,7 @@ The pages use only the API above; no extra endpoints exist for them. They're ser
 |---|---|
 | `/view` | home: open a match by id, or open a local log file (file picker or drag-and-drop) from `pf sim --json`, `POST /sim` or a saved round. Local files are read in the browser and never uploaded. |
 | `/view/matches/{id}` | live match page: seats, wins and rounds, polled every 2 s. With "open new rounds automatically" on (the default), it jumps to each new round as it's played. |
-| `/view/matches/{id}/rounds/{n}` | round player: the stage, HP bars, hit, block and throw flashes, combo counters, an event feed (the same lines as `pf sim`; click one to jump to its frame) and both scripts with each fighter's executing line highlighted |
+| `/view/matches/{id}/rounds/{n}` | round player: a pixel-art stage (one gi-wearing fighter design, teal for p1 and violet for p2, animated from each frame's `anim`, `phase` and `anim_frame`), HP bars, hit and block sparks, callouts (`BLOCKED`, `THROW`, `TECH`, `TRADE`, `K.O.`), combo counters, a frame countdown, an event feed (the same lines as `pf sim`; click one to jump to its frame) and both scripts with each fighter's executing line highlighted |
 
 **Frame links:** add `#f=N` to a round URL to open it paused at frame N (for example `/view/matches/{id}/rounds/2#f=412`). While paused, the address bar always holds the current frame, so you can copy it to share that moment.
 
@@ -215,7 +215,11 @@ The pages use only the API above; no extra endpoints exist for them. They're ser
 | Home / End | first / last frame |
 | `[` / `]` | slower / faster (0.25×–4×; 1× = 60 frames per second) |
 
-The "checks" toggle adds sensor reads to the event feed, and "ranges" draws each active attack's full reach.
+**Round intro:** playing from frame 0 (pressing play there, replaying from the end, or `autoplay=1`) first shows `ROUND n` (or `FINAL ROUND` for round 3) and then `FIGHT!`, for about 1.5 s at any speed. Local files show only `FIGHT!`. The intro sits before frame 0, so the scrub bar, panels and feed stay on frame 0. Stepping, seeking or pausing skips it, and `#f=N` links never show it.
+
+**Frame countdown:** the number at the top centre is the frames left in the round, `frame_budget − 1 − f` from the log (599 at frame 0 of a default round, 000 when a round times out).
+
+The "checks" toggle adds sensor reads to the event feed, and "ranges" draws each active attack's full reach. The drawn limbs are illustrative and shorter than the real reach (a punch reaches 8 units, about 70 px), so use "ranges" to see what can connect.
 
 **Security:**
 - Viewer responses carry a strict Content-Security-Policy: same-origin scripts, styles and connections only, no inline scripts, no framing.
