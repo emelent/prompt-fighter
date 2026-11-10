@@ -40,8 +40,12 @@ The [player guide](PLAYER_GUIDE.md) is what the model should read first. It's av
 | POST | `/matches/{id}/scripts` | submit your script for the next round (seat token required) |
 | GET | `/matches/{id}` | match state |
 | GET | `/matches/{id}/rounds/{n}` | event log of played round `n` |
+| GET | `/view` | replay viewer home page (HTML) |
+| GET | `/view/matches/{id}` | live match page (HTML) |
+| GET | `/view/matches/{id}/rounds/{n}` | round replay player (HTML) |
+| GET | `/view/static/{file}` | viewer assets (JS/CSS) |
 
-All requests and responses are JSON. Unknown JSON fields are rejected.
+All API requests and responses are JSON, and unknown JSON fields are rejected. The `/view` pages and assets are the only non-JSON responses (see Replay viewer).
 
 ### `GET /healthz`
 
@@ -148,6 +152,46 @@ Clients poll this endpoint to see when the opponent has submitted or a round has
 ### Round log: `GET /matches/{id}/rounds/{n}`
 
 Returns the stored event log of played round `n`. It's byte-identical to `sim.Simulate` for that round's scripts, names and sides. Its `players[]` holds the p1 and p2 names and full scripts as played. An unplayed round returns 404.
+
+## Replay viewer
+
+`pf serve` also hosts a browser replay viewer, built with Phaser 3 (pinned at 3.90.0), strict TypeScript and Vite, and embedded in the `pf` binary:
+
+| URL | page |
+|---|---|
+| `/view` | home: open a match by id, or open a local log file (file picker or drag-and-drop) from `pf sim --json`, `POST /sim` or a saved round. Local files are read in the browser and never uploaded. |
+| `/view/matches/{id}` | live match page: seats, wins and rounds, polled every 2 s. With "open new rounds automatically" on (the default), it jumps to each new round as it's played. |
+| `/view/matches/{id}/rounds/{n}` | round player: the stage, HP bars, hit, block and throw flashes, combo counters, an event feed (the same lines as `pf sim`; click one to jump to its frame) and both scripts with each fighter's executing line highlighted |
+
+**Frame links:** add `#f=N` to a round URL to open it paused at frame N (for example `/view/matches/{id}/rounds/2#f=412`). While paused, the address bar always holds the current frame, so you can copy it to share that moment.
+
+**Keyboard:**
+
+| key | action |
+|---|---|
+| Space | play/pause |
+| ← / → | 1 frame back / forward |
+| Shift+← / Shift+→ | 10 frames back / forward |
+| Home / End | first / last frame |
+| `[` / `]` | slower / faster (0.25×–4×; 1× = 60 frames per second) |
+
+The "checks" toggle adds sensor reads to the event feed, and "ranges" draws each active attack's full reach.
+
+**Security:**
+- Viewer responses carry a strict Content-Security-Policy: same-origin scripts, styles and connections only, no inline scripts, no framing.
+- They also send `X-Content-Type-Options: nosniff` and `Referrer-Policy: no-referrer`.
+- Script text and names are always shown as text, never as HTML.
+
+**Developing the viewer:** the sources are in `web/src`, and the build is committed in `web/dist`, so building `pf` needs no Node.
+
+```sh
+cd web
+npm ci            # exact versions from package-lock.json
+npm run dev       # Vite dev server; proxies /matches and /healthz to pf serve on :8080
+npm run check     # tsc --noEmit (strict) + Vitest + vite build (refreshes dist/)
+```
+
+`go test ./web` checks that the embedded build is self-consistent. It also runs the frontend tests when `web/node_modules` is installed, and skips them otherwise.
 
 ## Errors
 

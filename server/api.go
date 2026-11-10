@@ -81,6 +81,10 @@ func New(opts Options) (*Server, error) {
 	s.route("/matches/{id}/join", s.handleJoin, http.MethodPost)
 	s.route("/matches/{id}/scripts", s.handleSubmit, http.MethodPost)
 	s.route("/matches/{id}/rounds/{n}", s.handleGetRound, http.MethodGet)
+	s.route("/view", s.handleViewerPage, http.MethodGet)
+	s.route("/view/matches/{id}", s.handleViewerPage, http.MethodGet)
+	s.route("/view/matches/{id}/rounds/{n}", s.handleViewerPage, http.MethodGet)
+	s.route("/view/static/{file}", s.handleViewerAsset, http.MethodGet)
 	s.mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		writeError(w, errNotFound("no such endpoint: "+r.URL.Path))
 	})

@@ -1,0 +1,21 @@
+{
+  "name": "prompt-fighter-viewer",
+  "private": true,
+  "version": "0.4.0",
+  "type": "module",
+  "description": "Prompt Fighter replay viewer (Phaser 3 + TypeScript + Vite), embedded in pf serve under /view.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "test": "tsc --noEmit && vitest run",
+    "check": "tsc --noEmit && vitest run && vite build"
+  },
+  "dependencies": {
+    "phaser": "3.90.0"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2",
+    "vite": "8.3.7",
+    "vitest": "5.1.0"
+  }
+}

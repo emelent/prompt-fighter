@@ -47,7 +47,14 @@ Implemented by the OpenSpec change `add-mcp-server`: `pf mcp` (a stdio MCP serve
 
 ## Phase 4: Replay viewer
 
-- None yet.
+Implemented by the OpenSpec change `add-replay-viewer`: a browser viewer served by `pf serve` under `/view` (home and local files, a live match page, a round player with frame links). It's built with Phaser 3.90.0, strict TypeScript and Vite, with the build committed in `web/dist` and embedded in `pf`. The usage is described in `docs/API.md`, under Replay viewer.
+
+### Follow-ups (not blocking Phase 5)
+- **CI for the frontend:** run `cd web && npm ci && npm run check` in CI, and fail if `npm run build` changes `web/dist`. Locally, `go test ./web` skips the frontend tests when `node_modules` is missing.
+- **Sprites and animation:** the fighters are geometric placeholders. Sprite sheets can replace the drawing in `src/stage.ts` without touching `buildScene`.
+- **Frame inspector:** a panel showing the raw `frames[f]` entry and that frame's events, for debugging scripts.
+- **Mobile layout:** the stage scales, but the controls and panels are designed for desktop widths.
+- **Bundle size:** Phaser makes up most of the 1.2 MB JS bundle. Fine for a local viewer, but worth revisiting (for example a custom Phaser build) before public hosting.
 
 ## Phase 5: Submission UI
 
