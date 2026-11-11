@@ -19,8 +19,25 @@ export interface Score {
   b: { name: string; wins: number } | null;
 }
 
+export interface SetupInfo {
+  /** Names of the players who have joined, seat a first. */
+  joined: string[];
+  /** The one game link both players use: /play/matches/{id} on this server. */
+  gameLink: string;
+  /** This server's origin, for the pf mcp --server setup. */
+  origin: string;
+  /** Claude Code commands that install the pf plugin (one per line). */
+  pluginInstall: string;
+  /** The plugin command that joins this match. */
+  joinCommand: string;
+}
+
+/** Where the pf plugin's marketplace lives (this repository). */
+export const PLUGIN_MARKETPLACE = 'emelent/prompt-fighter';
+
 export type WaitingState =
   | { kind: 'not_found' }
+  | { kind: 'setup'; setup: SetupInfo; score: Score }
   | { kind: 'waiting'; round: number; score: Score; seats: SeatStatus[]; waitingFor: string[]; rounds: RoundView[] }
   | { kind: 'finished'; winner: string | null; score: Score; rounds: RoundView[] };
 
@@ -30,9 +47,28 @@ function score(v: MatchView): Score {
   return { a: { name: a?.name ?? 'seat a', wins: a?.wins ?? 0 }, b: b ? { name: b.name, wins: b.wins } : null };
 }
 
-/** What the waiting screen shows for a match (null: the match does not exist). */
-export function waitingState(v: MatchView | null): WaitingState {
+/** How players join a match: the game link and LLM instructions for this server. */
+export function setupInfo(v: MatchView, origin: string): SetupInfo {
+  const gameLink = `${origin}/play/matches/${encodeURIComponent(v.match_id)}`;
+  const joined = [v.seats.a?.name, v.seats.b?.name].filter((n): n is string => !!n);
+  return {
+    joined,
+    gameLink,
+    origin,
+    pluginInstall: `/plugin marketplace add ${PLUGIN_MARKETPLACE}\n/plugin install pf@prompt-fighter`,
+    joinCommand: `/pf:join ${gameLink}`,
+  };
+}
+
+/**
+ * What the waiting screen shows for a match (null: the match does not exist).
+ * origin is this server's origin (location.origin), used for the game link.
+ */
+export function waitingState(v: MatchView | null, origin = ''): WaitingState {
   if (!v) return { kind: 'not_found' };
+  if (v.status === 'waiting_for_players' || v.status === 'waiting_for_opponent') {
+    return { kind: 'setup', setup: setupInfo(v, origin), score: score(v) };
+  }
   if (v.status === 'finished') {
     const w = v.winner === null ? null : (v.winner === 'a' ? v.seats.a : v.seats.b)?.name ?? `seat ${v.winner}`;
     return { kind: 'finished', winner: w, score: score(v), rounds: v.rounds };

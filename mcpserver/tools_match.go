@@ -24,26 +24,26 @@ type CreateIn struct {
 
 // JoinIn is the input of join_match.
 type JoinIn struct {
-	MatchID string `json:"match_id" jsonschema:"the 16-character match id shared by the match creator"`
+	MatchID string `json:"match_id" jsonschema:"the 16-character match id, or the game link (http://host:port/play/matches/<id>) you were given"`
 	Name    string `json:"name" jsonschema:"your fighter name (1-40 bytes)"`
-	Script  string `json:"script" jsonschema:"your .pf script for round 1"`
+	Script  string `json:"script,omitempty" jsonschema:"optional round-1 script; leave it out to join now and submit round 1 later with submit_script"`
 }
 
 // SubmitIn is the input of submit_script.
 type SubmitIn struct {
-	MatchID string `json:"match_id"`
+	MatchID string `json:"match_id" jsonschema:"the match id or game link"`
 	Token   string `json:"token" jsonschema:"your seat token from create_match or join_match"`
 	Script  string `json:"script" jsonschema:"your .pf script for the next round (resubmit the same script to keep it)"`
 }
 
 // MatchIn identifies a match.
 type MatchIn struct {
-	MatchID string `json:"match_id"`
+	MatchID string `json:"match_id" jsonschema:"the match id or game link"`
 }
 
 // ReplayIn is the input of get_round_replay.
 type ReplayIn struct {
-	MatchID       string `json:"match_id"`
+	MatchID       string `json:"match_id" jsonschema:"the match id or game link"`
 	Round         int    `json:"round" jsonschema:"round number, starting at 1"`
 	IncludeChecks bool   `json:"include_checks,omitempty" jsonschema:"also list every sensor read (verbose)"`
 }
@@ -119,6 +119,8 @@ func matchText(v server.View, mySeat string) string {
 
 func nextHint(v server.View, mySeat string) string {
 	switch v.Status {
+	case server.StatusPlayers:
+		return fmt.Sprintf("this hosted match is waiting for players: whoever calls join_match with match_id %s (or its game link) takes the first free seat.", v.MatchID)
 	case server.StatusWaiting:
 		return fmt.Sprintf("share match_id %s with your opponent; they call join_match with it. You can still replace your round-1 script with submit_script.", v.MatchID)
 	case server.StatusFinished:
@@ -167,9 +169,38 @@ type seatResp struct {
 
 func (h *handler) seatResult(r seatResp) (*mcp.CallToolResult, SeatOut, error) {
 	out := SeatOut(r)
-	text := fmt.Sprintf("You are seat %s in match %s.\nYour seat token (shown only once; keep it and pass it to submit_script): %s\n\n%s",
-		r.Seat, r.MatchID, r.Token, matchText(r.Match, r.Seat))
+	mine := r.Match.Seats.A
+	if r.Seat == "b" {
+		mine = r.Match.Seats.B
+	}
+	note := ""
+	if mine != nil && !mine.Submitted && len(r.Match.Rounds) == 0 {
+		note = "Nothing submitted yet: submit your round-1 script with submit_script when you're ready.\n"
+	}
+	text := fmt.Sprintf("You are seat %s in match %s.\nYour seat token (shown only once; keep it and pass it to submit_script): %s\n%s\n%s",
+		r.Seat, r.MatchID, r.Token, note, matchText(r.Match, r.Seat))
 	return textResult(text), out, nil
+}
+
+// matchRef resolves a match_id argument (an id or a game link). A game link
+// is served by the pf serve at its own origin, so one pf mcp works with any
+// host; a bare id uses the configured server (if any).
+func (h *handler) matchRef(ref string) (string, *apiClient, error) {
+	id, origin, err := parseMatchRef(ref)
+	if err != nil {
+		return "", nil, err
+	}
+	if origin == "" {
+		return id, h.api, nil // nil api: do() reports the missing server
+	}
+	if h.api != nil {
+		if a, aerr := url.Parse(origin); aerr == nil {
+			if b, berr := url.Parse(h.api.base); berr == nil && sameOrigin(a, b) {
+				return id, h.api, nil
+			}
+		}
+	}
+	return id, &apiClient{base: origin, http: h.opts.HTTPClient}, nil
 }
 
 func (h *handler) createMatch(ctx context.Context, _ *mcp.CallToolRequest, in CreateIn) (*mcp.CallToolResult, SeatOut, error) {
@@ -181,8 +212,16 @@ func (h *handler) createMatch(ctx context.Context, _ *mcp.CallToolRequest, in Cr
 }
 
 func (h *handler) joinMatch(ctx context.Context, _ *mcp.CallToolRequest, in JoinIn) (*mcp.CallToolResult, SeatOut, error) {
+	id, api, err := h.matchRef(in.MatchID)
+	if err != nil {
+		return nil, SeatOut{}, err
+	}
+	body := map[string]string{"name": in.Name}
+	if in.Script != "" {
+		body["script"] = in.Script
+	}
 	var r seatResp
-	if err := h.api.doJSON(ctx, "POST", matchPath(in.MatchID, "/join"), "", map[string]string{"name": in.Name, "script": in.Script}, &r); err != nil {
+	if err := api.doJSON(ctx, "POST", matchPath(id, "/join"), "", body, &r); err != nil {
 		return nil, SeatOut{}, err
 	}
 	return h.seatResult(r)
@@ -192,8 +231,12 @@ func (h *handler) submitScript(ctx context.Context, _ *mcp.CallToolRequest, in S
 	if in.Token == "" {
 		return nil, MatchOut{}, fmt.Errorf("token is required: use the seat token returned by create_match or join_match")
 	}
+	id, api, err := h.matchRef(in.MatchID)
+	if err != nil {
+		return nil, MatchOut{}, err
+	}
 	var r MatchOut
-	if err := h.api.doJSON(ctx, "POST", matchPath(in.MatchID, "/scripts"), in.Token, map[string]string{"script": in.Script}, &r); err != nil {
+	if err := api.doJSON(ctx, "POST", matchPath(id, "/scripts"), in.Token, map[string]string{"script": in.Script}, &r); err != nil {
 		return nil, MatchOut{}, err
 	}
 	// The API does not say which seat the token belongs to; infer it from
@@ -206,22 +249,31 @@ func (h *handler) submitScript(ctx context.Context, _ *mcp.CallToolRequest, in S
 }
 
 func (h *handler) getMatch(ctx context.Context, _ *mcp.CallToolRequest, in MatchIn) (*mcp.CallToolResult, MatchOut, error) {
+	id, api, err := h.matchRef(in.MatchID)
+	if err != nil {
+		return nil, MatchOut{}, err
+	}
 	var r MatchOut
-	if err := h.api.doJSON(ctx, "GET", matchPath(in.MatchID), "", nil, &r.Match); err != nil {
+	if err := api.doJSON(ctx, "GET", matchPath(id), "", nil, &r.Match); err != nil {
 		return nil, MatchOut{}, err
 	}
 	return textResult(matchText(r.Match, "")), r, nil
 }
 
 func (h *handler) roundReplay(ctx context.Context, _ *mcp.CallToolRequest, in ReplayIn) (*mcp.CallToolResult, ReplayOut, error) {
+	id, api, err := h.matchRef(in.MatchID)
+	if err != nil {
+		return nil, ReplayOut{}, err
+	}
+	in.MatchID = id
 	var v server.View
-	if err := h.api.doJSON(ctx, "GET", matchPath(in.MatchID), "", nil, &v); err != nil {
+	if err := api.doJSON(ctx, "GET", matchPath(in.MatchID), "", nil, &v); err != nil {
 		return nil, ReplayOut{}, err
 	}
 	if in.Round < 1 || in.Round > len(v.Rounds) {
 		return nil, ReplayOut{}, fmt.Errorf("round %d has not been played; match %s has %d played round(s)", in.Round, in.MatchID, len(v.Rounds))
 	}
-	data, err := h.api.do(ctx, "GET", matchPath(in.MatchID, "/rounds/", strconv.Itoa(in.Round)), "", nil)
+	data, err := api.do(ctx, "GET", matchPath(in.MatchID, "/rounds/", strconv.Itoa(in.Round)), "", nil)
 	if err != nil {
 		return nil, ReplayOut{}, err
 	}
@@ -254,8 +306,11 @@ func (h *handler) registerMatchTools(s *mcp.Server) {
 	mcp.AddTool(s, &mcp.Tool{
 		Name:  "join_match",
 		Title: "Join a match",
-		Description: "Join an existing match (by match_id) as seat b with your round-1 script. Round 1 is played immediately. " +
-			"Returns your secret seat token: it is shown only once, keep it and pass it to submit_script.",
+		Description: "Join an existing match with your fighter name. match_id may be the 16-character match id or the game link you were given " +
+			"(e.g. http://host:8080/play/matches/<id>); with a link, this talks to the pf serve server in the link. " +
+			"You take the first free seat: seat a in a hosted match nobody has joined yet, otherwise seat b. " +
+			"script is optional: leave it out to only take your seat and submit round 1 later with submit_script (each round runs once both seats have submitted). " +
+			"Returns which seat you got and your secret seat token: it is shown only once, keep it and pass it to submit_script.",
 		Annotations: mutating("Join a match"),
 	}, h.joinMatch)
 	mcp.AddTool(s, &mcp.Tool{

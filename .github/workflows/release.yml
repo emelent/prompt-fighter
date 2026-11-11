@@ -1,64 +1,124 @@
 name: Release
 
-# Push a tag like v0.5.0 to publish pf binaries (server, CLI and MCP server in
-# one) for every platform an MCP client might run on.
+# Every push to main that passes the tests is released: the next version comes
+# from conventional commits since the last v* tag (tools/nextversion), and this
+# run tags it, builds the archives and publishes the release. Tags pushed with
+# the workflow token start no other workflows, so it all happens here. Pushing
+# a v* tag by hand builds and publishes that version.
 on:
   push:
+    branches: [main]
     tags: ['v*']
 
 permissions:
   contents: write
 
+concurrency:
+  group: release
+  cancel-in-progress: false
+
 jobs:
-  build:
-    name: Build ${{ matrix.goos }}/${{ matrix.goarch }}
+  test:
+    name: Test
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - { goos: linux, goarch: amd64 }
-          - { goos: linux, goarch: arm64 }
-          - { goos: darwin, goarch: amd64 }
-          - { goos: darwin, goarch: arm64 }
-          - { goos: windows, goarch: amd64 }
-          - { goos: windows, goarch: arm64 }
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-go@v6
         with:
           go-version-file: go.mod
-      - name: Build
-        env:
-          GOOS: ${{ matrix.goos }}
-          GOARCH: ${{ matrix.goarch }}
-          CGO_ENABLED: '0'
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: make test
+
+  version:
+    name: Next version
+    needs: test
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.next.outputs.version }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+      - id: next
         run: |
-          name=pf-${GITHUB_REF_NAME}-${GOOS}-${GOARCH}
-          ext=$([ "$GOOS" = windows ] && echo .exe || true)
-          mkdir -p "dist/$name"
-          go build -trimpath -ldflags='-s -w' -o "dist/$name/pf$ext" ./cmd/pf
-          cp README.md "dist/$name/"
-          cd dist
-          if [ "$GOOS" = windows ]; then zip -qr "$name.zip" "$name"; else tar -czf "$name.tar.gz" "$name"; fi
+          if [ "$GITHUB_REF_TYPE" = tag ]; then
+            v="$GITHUB_REF_NAME"
+          else
+            v=$(go run ./tools/nextversion)
+          fi
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+          echo "Next version: ${v:-none (no new commits)}"
+
+  web:
+    name: Build web app
+    needs: version
+    if: needs.version.outputs.version != ''
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: make web
       - uses: actions/upload-artifact@v4
         with:
-          name: pf-${{ matrix.goos }}-${{ matrix.goarch }}
+          name: web-dist
+          path: web/dist
+
+  build:
+    name: Build ${{ matrix.platform }}
+    needs: [version, web]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform: [linux/amd64, linux/arm64, darwin/amd64, darwin/arm64, windows/amd64, windows/arm64]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+      - uses: actions/download-artifact@v4
+        with:
+          name: web-dist
+          path: web/dist
+      # web/dist is already built: call the release recipe without its web prerequisite.
+      - name: Build archive
+        run: make -o web release VERSION=${{ needs.version.outputs.version }} PLATFORMS=${{ matrix.platform }}
+      - id: name
+        run: echo "name=$(echo '${{ matrix.platform }}' | tr / -)" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pf-${{ steps.name.outputs.name }}
           path: |
             dist/*.tar.gz
             dist/*.zip
 
-  release:
-    name: Publish release
-    needs: build
+  publish:
+    name: Publish ${{ needs.version.outputs.version }}
+    needs: [version, build]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
         with:
+          pattern: pf-*
           path: dist
           merge-multiple: true
       - name: Checksums
-        run: cd dist && sha256sum * > SHA256SUMS
+        run: cd dist && sha256sum pf-* > SHA256SUMS
+      # Creating the release creates the tag on the tested commit.
       - uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ needs.version.outputs.version }}
+          target_commitish: ${{ github.sha }}
           files: dist/*
           generate_release_notes: true

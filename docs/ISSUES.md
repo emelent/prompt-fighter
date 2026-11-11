@@ -47,10 +47,10 @@ Implemented by the OpenSpec change `add-mcp-server`: `pf mcp` (a stdio MCP serve
 
 ## Phase 4: Replay viewer
 
-Implemented by the OpenSpec change `add-replay-viewer`: a browser viewer served by `pf serve` under `/view` (home and local files, a live match page, a round player with frame links). It's built with Phaser 3.90.0, strict TypeScript and Vite, with the build committed in `web/dist` and embedded in `pf`. The usage is described in `docs/API.md`, under Replay viewer.
+Implemented by the OpenSpec change `add-replay-viewer`: a browser viewer served by `pf serve` under `/view` (home and local files, a live match page, a round player with frame links). It's built with Phaser 3.90.0, strict TypeScript and Vite, with the build in `web/dist` (generated, not committed) embedded in `pf`. The usage is described in `docs/API.md`, under Replay viewer.
 
 ### Follow-ups (not blocking Phase 5)
-- ~~**CI for the frontend:**~~ done in `.github/workflows/ci.yml`: it runs the web tests through `go test ./web` and fails if `npm run build` changes `web/dist`. Locally, `go test ./web` still skips the frontend tests when `node_modules` is missing.
+- ~~**CI for the frontend:**~~ done: `make test` (used by CI) builds `web/dist` and runs the web tests through `go test ./web`. `web/dist` is a build output and is not committed. Locally, `go test ./web` still skips the frontend tests when `node_modules` is missing.
 - ~~**Sprites and animation:**~~ done by `pixel-art-fighters`: code-generated pixel-art fighters, backdrop, sparks and pixel-font HUD.
 - **Frame inspector:** a panel showing the raw `frames[f]` entry and that frame's events, for debugging scripts.
 - **Mobile layout:** the stage scales, but the controls and panels are designed for desktop widths.
@@ -105,3 +105,33 @@ Implemented by the OpenSpec change `add-spectator-mode`:
 - **Spectator count:** players can't see that anyone is watching. That needs server-side presence, such as counting watch-page polls.
 - **Sound on every page:** browsers require a click per page before audio plays, and each round is a new page, so a spectator clicks once per round. Keeping one page alive across rounds (swapping the stage instead of navigating) would remove that.
 - **Menu music beyond the lobby:** the waiting screen is silent. It could reuse the menu track.
+
+## Hosted matches
+
+Implemented by the OpenSpec change `hosted-matches`:
+- The cover screen at `/play` (cover art; Create match / Join match).
+- Hosted matches: `POST /matches` with `{}`, status `waiting_for_players`. The creator only watches.
+- Joining takes the first free seat.
+- MCP tools accept game links.
+- A setup view on the waiting screen shows the game link, the MCP command and an LLM prompt.
+
+### Follow-ups
+- **No "create and play" in the web UI:** a web player who wants to play their own hosted match opens the game link in a second step. A "Create and join" shortcut could do both.
+- **Anyone with the link can take a seat:** fine for trusted local use. Per-seat links or a host-approved join would be needed for public hosting.
+- **Host controls:** the host can't remove a player who joined by mistake, or restart a match.
+- **Joining needs the round-1 script:** a player can't take a seat first and write the script afterwards. Separating "join" from "submit round 1" would let both players prepare without racing.
+
+## Per-round LLM play and releases
+
+Implemented by the OpenSpec change `per-round-llm-play`:
+- The root `Makefile`, and the web build in every Go build. This fixed the GitHub builds, which failed because `web/dist` is not committed.
+- `pf version`.
+- Automatic semver releases from conventional commits (`tools/nextversion`, `.github/workflows/release.yml`).
+- Joining with only a name, with every round waiting for both submissions.
+- MCP tools that follow the game link's server.
+- The `pf` Claude Code plugin with `/pf:join` and `/pf:submit`.
+
+### Follow-ups
+- **No binary for LLM players:** the plugin needs `pf` on the PATH. Serving MCP over HTTP from `pf serve` (`claude mcp add --transport http …/mcp`) or bundling platform binaries in the plugin would remove that.
+- **Every push to main releases:** docs-only commits release a patch too. Path filters or `chore:`/`docs:` skips could reduce noise.
+- **Plugin commands are prompts:** a model could still deviate (for example, edit `fighter.pf` during `/pf:submit`). A dedicated MCP tool that submits a file from disk would make "submit unchanged" mechanical.

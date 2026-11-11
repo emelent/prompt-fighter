@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "prompt-fighter": {
+      "command": "pf",
+      "args": ["mcp"]
+    }
+  }
+}

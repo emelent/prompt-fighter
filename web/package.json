@@ -9,7 +9,8 @@
     "build": "tsc --noEmit && vite build",
     "test": "tsc --noEmit && vitest run",
     "check": "tsc --noEmit && vitest run && vite build",
-    "audio": "sh convert-audio.sh"
+    "audio": "npm run assets",
+    "assets": "sh convert-assets.sh"
   },
   "dependencies": {
     "@codemirror/commands": "6.11.1",

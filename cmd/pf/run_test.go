@@ -161,3 +161,12 @@ func TestSelfplay(t *testing.T) {
 		t.Errorf("selfplay output not deterministic")
 	}
 }
+
+func TestVersion(t *testing.T) {
+	for _, arg := range []string{"version", "--version", "-v"} {
+		code, out, _ := call(arg)
+		if code != 0 || out != "dev\n" {
+			t.Errorf("pf %s: %d %q, want 0 \"dev\"", arg, code, out)
+		}
+	}
+}

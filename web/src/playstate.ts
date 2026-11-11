@@ -25,17 +25,19 @@ export function otherSeat(s: Seat): Seat {
   return s === 'a' ? 'b' : 'a';
 }
 
+/** Whether a visitor can still take a seat (seat a, then seat b). */
+export function hasFreeSeat(view: MatchView): boolean {
+  return view.seats.a === null || view.seats.b === null;
+}
+
 export function playState(view: MatchView | null, seat: StoredSeat | null): PlayState {
   if (!view) return { kind: 'notFound' };
   if (view.status === 'finished') return { kind: 'finished', view, seat };
-  if (!seat) {
-    return view.seats.b === null ? { kind: 'join', view } : { kind: 'spectator', view };
-  }
+  const visitor = (): PlayState => (hasFreeSeat(view) ? { kind: 'join', view } : { kind: 'spectator', view });
+  if (!seat) return visitor();
   const mine = seatView(view, seat.seat);
-  if (!mine) {
-    // A stored seat this match does not know about (e.g. data reset): treat as a visitor.
-    return view.seats.b === null ? { kind: 'join', view } : { kind: 'spectator', view };
-  }
-  if (view.status === 'waiting_for_opponent') return { kind: 'waitingOpponent', view, seat };
+  // A stored seat this match does not know about (e.g. data reset): treat as a visitor.
+  if (!mine) return visitor();
+  if (seatView(view, otherSeat(seat.seat)) === null) return { kind: 'waitingOpponent', view, seat };
   return mine.submitted ? { kind: 'waitingTheirs', view, seat, round: view.next_round } : { kind: 'yourMove', view, seat, round: view.next_round };
 }

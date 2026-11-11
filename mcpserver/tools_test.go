@@ -11,7 +11,7 @@ import (
 	"promptfighter/sim"
 )
 
-var allTools = []string{"create_match", "get_match", "get_player_guide", "get_round_replay", "join_match", "list_sample_bots", "simulate_round", "submit_script", "validate_script"}
+var allTools = ToolNames()
 
 func TestToolsCatalogue(t *testing.T) {
 	cs := connect(t, Options{ServerURL: DefaultServerURL})

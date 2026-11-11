@@ -18,6 +18,53 @@ function roundLinks(id: string, rounds: RoundView[], view: MatchView): HTMLEleme
   );
 }
 
+/** A read-only field with a Copy button; textarea for longer text. */
+function copyField(label: string, value: string, long = false): HTMLElement {
+  const field = long
+    ? el('textarea', { readonly: 'readonly', rows: '2', 'aria-label': label, class: 'copy-text' }, value)
+    : el('input', { type: 'text', readonly: 'readonly', value, 'aria-label': label, class: 'copy-text' });
+  const copy = el('button', { type: 'button', class: 'copy-btn' }, 'Copy');
+  copy.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(value);
+      copy.textContent = 'Copied ✓';
+    } catch {
+      field.select();
+    }
+  });
+  return el('div', { class: 'copy-row' }, el('span', { class: 'copy-label' }, label), field, copy);
+}
+
+function setupView(st: Extract<WaitingState, { kind: 'setup' }>): HTMLElement[] {
+  const { setup } = st;
+  return [
+    el(
+      'section',
+      { class: 'card waiting' },
+      el('h2', {}, `Waiting for players (${setup.joined.length}/2 joined)`),
+      setup.joined.length ? el('ul', { class: 'watch-seats' }, ...setup.joined.map((n, i) => el('li', { class: 'submitted' }, `Player ${i + 1}: ${n} ✓`))) : el('p', { class: 'hint' }, 'Nobody has joined yet.'),
+      el('p', {}, 'Send this game link to both players. The first to join is player 1, the second player 2. Round 1 starts as soon as both have joined.'),
+      copyField('Game link', setup.gameLink),
+    ),
+    el(
+      'section',
+      { class: 'card' },
+      el('h2', {}, 'Playing with an LLM'),
+      el('p', { class: 'hint' }, 'Players can join in the browser from the game link, or play with Claude Code through the pf plugin (it needs the pf binary on their PATH, from the GitHub releases). Install the plugin once:'),
+      copyField('Install the plugin', setup.pluginInstall, true),
+      el('p', { class: 'hint' }, 'Then join this match. This only takes a seat; nothing is submitted yet:'),
+      copyField('Join command', setup.joinCommand),
+      el(
+        'p',
+        { class: 'hint' },
+        'Each round: ask the LLM to study the last replay and change fighter.pf, then run ',
+        el('code', {}, '/pf:submit'),
+        ' to send it. The round runs once both players have submitted.',
+      ),
+    ),
+  ];
+}
+
 function scoreLine(s: Extract<WaitingState, { kind: 'waiting' | 'finished' }>['score']): HTMLElement {
   return el(
     'p',
@@ -39,8 +86,14 @@ export function watchPage(id: string): void {
   show(el('div', { class: 'watch' }, el('h1', {}, `Watching match ${id}`), status, body));
 
   const render = (view: MatchView) => {
-    const s = waitingState(view);
+    const s = waitingState(view, location.origin);
     if (s.kind === 'not_found') return;
+    if (s.kind === 'setup') {
+      openedWith ??= 0; // players are still joining: round 1 is new to this page
+      status.replaceChildren();
+      body.replaceChildren(...setupView(s));
+      return;
+    }
     openedWith ??= lastPlayed(view);
     const next = nextToWatch(view, after, openedWith);
     if (next !== null && counting !== next) {

@@ -87,19 +87,29 @@ type seatResp struct {
 	Match   View   `json:"match"`
 }
 
+// hostedResp is the response to creating a hosted match: no seat, no token.
+type hostedResp struct {
+	MatchID string `json:"match_id"`
+	Match   View   `json:"match"`
+}
+
 func (s *Server) handleCreateMatch(w http.ResponseWriter, r *http.Request) *apiError {
 	var req seatReq
 	if e := s.decode(w, r, &req); e != nil {
 		return e
 	}
-	if e := s.check(req, "a"); e != nil {
-		return e
+	// Neither name nor script: a hosted match, set up by a host who only watches.
+	hosted := req.Name == "" && req.Script == nil
+	if !hosted && (req.Name == "" || req.Script == nil) {
+		return errBadRequest("send both name and script to take seat a, or neither to host a match")
 	}
-	token, hash, err := newToken()
-	if err != nil {
-		return errInternal(err)
+	if !hosted {
+		if e := s.check(req, "a"); e != nil {
+			return e
+		}
 	}
 	var id string
+	var err error
 	for {
 		if id, err = newMatchID(); err != nil {
 			return errInternal(err)
@@ -110,6 +120,18 @@ func (s *Server) handleCreateMatch(w http.ResponseWriter, r *http.Request) *apiE
 	}
 	unlock := s.lockMatch(id)
 	defer unlock()
+	if hosted {
+		m := newHostedMatch(id, s.cfg.Version)
+		if err := s.store.save(m); err != nil {
+			return errInternal(err)
+		}
+		writeJSON(w, http.StatusCreated, hostedResp{MatchID: id, Match: m.view()})
+		return nil
+	}
+	token, hash, err := newToken()
+	if err != nil {
+		return errInternal(err)
+	}
 	m := newMatch(id, s.cfg.Version, req.Name, *req.Script, hash)
 	if err := s.store.save(m); err != nil {
 		return errInternal(err)
@@ -130,17 +152,24 @@ func (s *Server) handleJoin(w http.ResponseWriter, r *http.Request) *apiError {
 	if e != nil {
 		return e
 	}
-	if m.B != nil {
+	seat := m.freeSeat()
+	if seat == "" {
 		return errConflict(errSeatTaken.Error())
 	}
-	if e := s.check(req, "b"); e != nil {
+	// The script is optional on join: without one the seat starts with
+	// nothing submitted.
+	if req.Script == nil {
+		if len(req.Name) < 1 || len(req.Name) > maxNameBytes {
+			return errBadRequest("name must be 1 to %d bytes", maxNameBytes)
+		}
+	} else if e := s.check(req, seat); e != nil {
 		return e
 	}
 	token, hash, err := newToken()
 	if err != nil {
 		return errInternal(err)
 	}
-	if err := m.join(req.Name, *req.Script, hash); err != nil {
+	if seat, err = m.join(req.Name, req.Script, hash); err != nil {
 		return errConflict(err.Error())
 	}
 	if e := s.playIfReady(r.Context(), m); e != nil {
@@ -149,7 +178,7 @@ func (s *Server) handleJoin(w http.ResponseWriter, r *http.Request) *apiError {
 	if err := s.store.save(m); err != nil {
 		return errInternal(err)
 	}
-	writeJSON(w, http.StatusCreated, seatResp{MatchID: id, Seat: "b", Token: token, Match: m.view()})
+	writeJSON(w, http.StatusCreated, seatResp{MatchID: id, Seat: seat, Token: token, Match: m.view()})
 	return nil
 }
 

@@ -4,10 +4,11 @@ import { createEditor, MAX_SCRIPT_BYTES, type EditorStatus, type ScriptEditor } 
 import { newRoundToOpen, POLL_BACKOFF_MS, POLL_MS } from './match';
 import { otherSeat, playState, seatView, type PlayState, type StoredSeat } from './playstate';
 import { SAMPLES, sample } from './samples';
-import { browserSeatStore, LOBBY_DRAFT, type SeatStore } from './seats';
+import { browserSeatStore, type SeatStore } from './seats';
 import type { Log, MatchView, Seat } from './types';
 import { loadSimpleSettings, matchIdFrom, saveSimpleSettings } from './spectate';
 import menuMusicUrl from './audio/menu.mp3';
+import coverUrl from './images/cover.jpg';
 
 interface SeatResponse {
   match_id: string;
@@ -133,64 +134,85 @@ export function stopMenuMusic(): void {
 
 export function lobbyPage(): void {
   const store = browserSeatStore();
-  const name = el('input', { type: 'text', 'aria-label': 'Fighter name', placeholder: 'your fighter name', maxlength: '40', autocomplete: 'nickname' });
-  const create = el('button', { type: 'button', class: 'primary' }, 'Create match');
-  const createErr = el('div', { 'aria-live': 'polite' });
-  let editorValid = false;
-  const refresh = () => {
-    create.disabled = !(editorValid && nameOK(name.value));
-  };
-  const { node: panel, editor } = editorPanel(store, LOBBY_DRAFT, store.draft(LOBBY_DRAFT) ?? '', () => {
-    editorValid = editor.isValid();
-    refresh();
-  });
-  name.addEventListener('input', refresh);
+  const err = el('div', { class: 'cover-err', 'aria-live': 'polite' });
+  const actions = el('div', { class: 'cover-actions' });
+
+  // Create match: a hosted match. The creator only watches; players join from the game link.
+  const create = el('button', { type: 'button', class: 'primary big' }, 'Create match');
   create.addEventListener('click', async () => {
-    if (!editor.isValid() || !nameOK(name.value)) return;
     create.disabled = true;
-    const res = await postJSON<SeatResponse>('/matches', { name: name.value.trim(), script: editor.text() });
+    err.replaceChildren();
+    const res = await postJSON<{ match_id: string }>('/matches', {});
     if (!res.ok) {
-      createErr.replaceChildren(apiErrorBox('Could not create the match', res.error));
-      refresh();
+      err.replaceChildren(apiErrorBox('Could not create the match', res.error));
+      create.disabled = false;
       return;
     }
-    store.setSeat(res.data.match_id, { seat: res.data.seat, token: res.data.token, name: name.value.trim() });
-    store.setDraft(res.data.match_id, editor.text());
-    location.assign(`/play/matches/${encodeURIComponent(res.data.match_id)}`);
+    location.assign(`/watch/matches/${encodeURIComponent(res.data.match_id)}`);
   });
 
-  const idInput = el('input', { type: 'text', 'aria-label': 'Match id', placeholder: '16-character match id', autocomplete: 'off', spellcheck: 'false' });
-  const open = el('form', { class: 'open-match' }, idInput, el('button', { type: 'submit' }, 'Open match'));
-  open.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const id = idInput.value.trim();
-    if (id) location.assign(`/play/matches/${encodeURIComponent(id)}`);
+  // Join match: an id or link, then join as a player (if a seat is free) or watch.
+  const joinBtn = el('button', { type: 'button', class: 'big' }, 'Join match');
+  const showChoices = () => actions.replaceChildren(create, joinBtn);
+  joinBtn.addEventListener('click', () => {
+    err.replaceChildren();
+    const input = el('input', { type: 'text', 'aria-label': 'Match id or game link', placeholder: 'game link or match id', autocomplete: 'off', spellcheck: 'false' });
+    const next = el('button', { type: 'submit', class: 'primary' }, 'Continue');
+    const back = el('button', { type: 'button' }, 'Back');
+    back.addEventListener('click', () => {
+      err.replaceChildren();
+      showChoices();
+    });
+    const result = el('div', { class: 'join-result', 'aria-live': 'polite' });
+    const form = el('form', { class: 'join-form' }, el('label', { class: 'field' }, 'Game link or match id ', input), el('div', { class: 'actions' }, next, back));
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      result.replaceChildren();
+      const id = matchIdFrom(input.value);
+      if (!id) {
+        result.replaceChildren(el('p', { class: 'notice' }, 'That is not a game link or match id (a match id is 16 characters, 0-9 and a-f).'));
+        return;
+      }
+      const r = await fetchJSON<MatchView>(`/matches/${id}`);
+      if (!r.ok) {
+        result.replaceChildren(el('p', { class: 'notice' }, r.status === 404 ? `There is no match ${id} on this server.` : `Could not load the match: ${r.message}`));
+        return;
+      }
+      const v = r.data;
+      const seatText = (n: 'a' | 'b') => (seatView(v, n) ? `${seatView(v, n)!.name} (seat ${n})` : `seat ${n} is free`);
+      const free = !seatView(v, 'a') || !seatView(v, 'b');
+      const mine = store.seat(id);
+      const play = el('a', { class: 'button primary', href: `/play/matches/${id}` }, mine ? 'Back to my seat' : 'Join as a player');
+      const watch = el('a', { class: 'button', href: `/watch/matches/${id}` }, 'Watch');
+      result.replaceChildren(
+        el('p', {}, `Match ${id}: ${seatText('a')} · ${seatText('b')}`),
+        v.status === 'finished' ? el('p', { class: 'hint' }, 'This match is over; you can watch its rounds.') : !free && !mine ? el('p', { class: 'hint' }, 'Both seats are taken; you can watch.') : el('span'),
+        el('div', { class: 'actions' }, free || mine ? play : el('span'), watch),
+      );
+    });
+    actions.replaceChildren(form, result);
+    input.focus();
   });
-
-  const watchInput = el('input', { type: 'text', 'aria-label': 'Match id or link to watch', placeholder: 'match id or link', autocomplete: 'off', spellcheck: 'false' });
-  const watchErr = el('p', { class: 'notice', 'aria-live': 'polite' });
-  const watch = el('form', { class: 'open-match' }, watchInput, el('button', { type: 'submit' }, 'Watch'));
-  watch.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const wid = matchIdFrom(watchInput.value);
-    if (wid) location.assign(`/watch/matches/${wid}`);
-    else watchErr.textContent = 'That is not a match id or a match link (a match id is 16 characters, 0-9 and a-f).';
-  });
+  showChoices();
 
   show(
     el(
       'div',
-      { class: 'play' },
-      el('div', { class: 'lobby-head' }, el('h1', {}, 'Play Prompt Fighter'), menuMusic()),
-      el('p', { class: 'hint' }, 'Write your fighter’s script, create a match, and send the invite link to your opponent. Best of 3: you may revise your script before every round.'),
-      persistenceNotice(store),
-      el('section', { class: 'card' }, el('h2', {}, 'Create a match'), el('label', { class: 'field' }, 'Name ', name), panel, el('div', { class: 'actions' }, create), createErr),
-      el('section', { class: 'card' }, el('h2', {}, 'Join a match'), el('p', { class: 'hint' }, 'Open an invite link, or paste its match id:'), open),
-      el('section', { class: 'card' }, el('h2', {}, 'Watch a match'), el('p', { class: 'hint' }, 'Paste a match id or any link to the match to watch it as a spectator:'), watch, watchErr),
-      el('p', { class: 'hint' }, 'Rules and language: see the player guide. Replays of any match: ', el('a', { href: '/view' }, 'replay viewer'), '.'),
+      { class: 'cover' },
+      el('img', { class: 'cover-art', src: coverUrl, alt: 'Prompt Fighter: two martial artists clash on a rooftop at sunset', width: '800', height: '1192' }),
+      el(
+        'div',
+        { class: 'cover-side' },
+        el('h1', {}, 'Prompt Fighter'),
+        el('p', { class: 'hint' }, 'Write your fighter’s brain, or let an LLM write it, and fight a best-of-3. Create a match to host it, then send the game link to two players.'),
+        persistenceNotice(store),
+        actions,
+        err,
+        menuMusic(),
+        el('p', { class: 'hint' }, 'Rules and language: see the player guide. Replays of any match: ', el('a', { href: '/view' }, 'replay viewer'), '.'),
+      ),
     ),
   );
-  editor.view.dispatch({}); // trigger the first validation pass
 }
 
 // --- play page -----------------------------------------------------------------
@@ -212,8 +234,8 @@ export function playPage(id: string): void {
   const feedback = el('div', { 'aria-live': 'polite' });
   const refresh = () => {
     const s = currentState();
-    const needName = s.kind === 'join';
-    actionBtn.disabled = busy || !editorValid || (needName && !nameOK(nameInput.value));
+    // Joining only takes a seat (a name); scripts are submitted afterwards.
+    actionBtn.disabled = busy || (s.kind === 'join' ? !nameOK(nameInput.value) : !editorValid);
   };
   const { node: editorNode, editor } = editorPanel(store, id, store.draft(id) ?? '', () => {
     editorValid = editor.isValid();
@@ -259,14 +281,14 @@ export function playPage(id: string): void {
 
   async function act(kind: 'join' | 'submit'): Promise<void> {
     const s = currentState();
-    if (!editor.isValid()) return;
+    if (kind === 'submit' && !editor.isValid()) return;
     busy = true;
     refresh();
     feedback.replaceChildren();
     const before = view;
     if (kind === 'join') {
       const nm = nameInput.value.trim();
-      const res = await postJSON<SeatResponse>(`/matches/${enc}/join`, { name: nm, script: editor.text() });
+      const res = await postJSON<SeatResponse>(`/matches/${enc}/join`, { name: nm });
       busy = false;
       if (!res.ok) {
         feedback.replaceChildren(apiErrorBox('Could not join', res.error));
@@ -335,7 +357,7 @@ export function playPage(id: string): void {
       case 'join':
         actionBtn.textContent = 'Join match';
         body.replaceChildren(
-          el('section', { class: 'card' }, el('h2', {}, 'Join this match'), el('p', { class: 'hint' }, `Seat b is free. Pick a name and write your round-1 script; round 1 starts as soon as you join.`), el('label', { class: 'field' }, 'Name ', nameInput), editorNode, el('div', { class: 'actions' }, actionBtn), feedback),
+          el('section', { class: 'card' }, el('h2', {}, 'Join this match'), el('p', { class: 'hint' }, `A seat is free. Pick a name to take it; you write and submit your round-1 script next. Each round runs once both players have submitted.`), el('label', { class: 'field' }, 'Name ', nameInput), el('div', { class: 'actions' }, actionBtn), feedback),
         );
         break;
       case 'spectator':
@@ -352,10 +374,11 @@ export function playPage(id: string): void {
             inviteInput.select();
           }
         });
-        actionBtn.textContent = 'Replace round-1 script';
+        const submitted = seatView(v, s.seat.seat)?.submitted ?? false;
+        actionBtn.textContent = submitted ? 'Replace round-1 script' : 'Submit for round 1';
         body.replaceChildren(
-          el('section', { class: 'card waiting' }, el('h2', {}, 'Waiting for an opponent to join'), el('p', {}, 'Send them this link. Round 1 starts as soon as they join.'), el('div', { class: 'invite-row' }, inviteInput, copy)),
-          el('section', { class: 'card' }, el('h2', {}, 'Your round-1 script'), el('p', { class: 'hint' }, 'You can still change it until your opponent joins.'), editorNode, el('div', { class: 'actions' }, actionBtn), feedback),
+          el('section', { class: 'card waiting' }, el('h2', {}, 'Waiting for an opponent to join'), el('p', {}, 'Send them this link. Round 1 runs once you have both joined and submitted.'), el('div', { class: 'invite-row' }, inviteInput, copy)),
+          el('section', { class: 'card' }, el('h2', {}, 'Your round-1 script'), el('p', { class: 'hint' }, submitted ? 'Submitted. You can still replace it until round 1 runs.' : 'Write your round-1 script and submit it; you can replace it until round 1 runs.'), editorNode, el('div', { class: 'actions' }, actionBtn), feedback),
         );
         break;
       }

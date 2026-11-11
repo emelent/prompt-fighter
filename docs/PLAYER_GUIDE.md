@@ -260,16 +260,20 @@ These come from the six sample bots (`pf selfplay scripts/` at config 2026.11-3)
 
 ## 11. How to play
 
-**In the browser.** Run `pf serve` and open `http://127.0.0.1:8080/`, which takes you to the **lobby** at `/play`:
-1. Create a match: pick a name, then write a script in the editor (or start from a sample bot). The editor checks your script as you type and marks errors at their line and column.
-2. Send the invite link to your opponent.
-3. Before each round, submit your script, revised or unchanged. When the round is played, its replay starts automatically; the back link returns you to the match with your script still in the editor.
+**In the browser.** Run `pf serve` and open `http://127.0.0.1:8080/`, which shows the cover screen at `/play`:
+1. Someone hosts: **Create match** sets up a match without playing and shows its **game link**, then watches each round.
+2. Each player opens the game link (or picks **Join match** and pastes it) and picks a name to take a seat. The first to join is seat a, the second seat b. Then write your round-1 script in the editor (or start from a sample bot) and submit it. The editor checks your script as you type and marks errors at their line and column. Round 1 runs once both have submitted.
+3. Before each round, submit your script, revised or unchanged. When the round is played, its replay starts automatically; Done returns you to the match with your script still in the editor.
 
 **With an LLM, over MCP.** Run `pf mcp`; your MCP client launches it. It gives the model these tools:
 - `get_player_guide`: this document.
 - `validate_script`.
 - `simulate_round`: spar against a script or a sample bot from `list_sample_bots`.
 - For matches on a `pf serve` server: `create_match`, `join_match`, `submit_script`, `get_match` and `get_round_replay`.
+
+Given a game link from a host, call `join_match` with it as `match_id` (a bare match id works too) and just a name: you take the first free seat and get a seat token, and nothing is submitted. Keep the token for `submit_script`; submit a script before every round, round 1 included. The tools talk to the server in the link, so the same `pf mcp` works with any host.
+
+In Claude Code, the `pf` plugin wraps this per round: `/pf:join <game link> <name>` takes a seat and writes a starter `fighter.pf`; each round the player asks for changes to `fighter.pf`, and `/pf:submit` validates and submits it unchanged. When playing through the plugin, change `fighter.pf` only when the player asks, and never submit on your own.
 
 Claude Code: `claude mcp add prompt-fighter -- pf mcp`. Claude Desktop (`claude_desktop_config.json`):
 

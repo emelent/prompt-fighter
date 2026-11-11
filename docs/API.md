@@ -26,6 +26,8 @@ Claude Desktop (`claude_desktop_config.json`):
 { "mcpServers": { "prompt-fighter": { "command": "pf", "args": ["mcp"] } } }
 ```
 
+Every match tool's `match_id` can be the bare id or a **game link** (`http://host:port/play/matches/<id>`), so you can hand a model the link from a host's waiting screen. With a link, the tool talks to the `pf serve` server in the link, so one `pf mcp` works with any host (a bare id uses `--server`). `join_match` takes the first free seat and says which one you got; its `script` is optional, and without one you submit round 1 later with `submit_script`.
+
 The [player guide](PLAYER_GUIDE.md) is what the model should read first. It's available as the `get_player_guide` tool and the `promptfighter://docs/player-guide` resource.
 
 ## Endpoints
@@ -94,7 +96,7 @@ A match is a best-of-3 between two **seats**, `a` and `b`. Before each round bot
 - **Winning:** the first seat to win **2 rounds** wins the match. Drawn rounds count for nobody.
 - **Round cap:** at most **5 rounds**. After round 5, the seat with more wins takes the match, or the match is drawn (`winner: null`) if they're level.
 - **Keeping or replacing a script:** resubmitting the same script keeps it. You can resubmit as often as you like before the round runs; the latest submission counts.
-- **Statuses:** `waiting_for_opponent` → `awaiting_scripts` → `finished`.
+- **Statuses:** `waiting_for_players` (hosted match, nobody joined yet) → `waiting_for_opponent` → `awaiting_scripts` → `finished`.
 
 **Visibility:**
 - Match state and played-round logs need no token. Anyone with the match id can read them, so replays can be shared.
@@ -112,9 +114,21 @@ curl -s localhost:8080/matches -d '{"name": "alice", "script": "loop { kick }"}'
 ```
 **Keep the `token`: it is returned only once.** Names are 1–40 bytes, and the script must be valid, or the response is 422. Your create script is your round-1 submission.
 
+**Hosting a match without playing:** post an empty object. Both seats stay free, and players take them by joining:
+
+```sh
+curl -s localhost:8080/matches -d '{}'
+```
+```json
+{"match_id":"5c1f0e2a9b7d4e63",
+ "match":{"match_id":"5c1f0e2a9b7d4e63","status":"waiting_for_players","config_version":"2026.11-3","next_round":1,
+          "seats":{"a":null,"b":null},"rounds":[],"winner":null}}
+```
+There is no seat or token in the response: the host only watches (for example on `/watch/matches/{id}`). Sending only one of `name` and `script` is a 400.
+
 ### Join: `POST /matches/{id}/join`
 
-Same body as create. It returns 201 with `"seat":"b"` and your token. Round 1 runs right away, and the returned match includes it:
+`{"name"}` with an optional `"script"`. You take the **first free seat**: seat `a` in a hosted match nobody has joined yet, otherwise seat `b`. The response is 201 with that `seat` and your token. Without a script you join with nothing submitted, and submit round 1 like any other round. A script given here counts as your round-1 submission. Every round, round 1 included, runs as soon as both seats have submitted, so a join that brings the second round-1 script runs round 1 right away:
 
 ```json
 {"match_id":"b8fc4050df5bfab2","seat":"b","token":"94098b550a8d72679c12e28299bda923",
@@ -124,7 +138,7 @@ Same body as create. It returns 201 with `"seat":"b"` and your token. Round 1 ru
                      "config_version":"2026.11-3","log":"/matches/b8fc4050df5bfab2/rounds/1"}],
           "winner":null}}
 ```
-Joining a match whose seat `b` is already taken returns 409.
+Joining a match whose seats are both taken returns 409.
 
 ### Submit: `POST /matches/{id}/scripts`
 
@@ -246,7 +260,7 @@ The "checks" toggle adds sensor reads to the event feed, and "ranges" draws each
 - They also send `X-Content-Type-Options: nosniff` and `Referrer-Policy: no-referrer`.
 - Script text and names are always shown as text, never as HTML.
 
-**Developing the viewer:** the sources are in `web/src`, and the build is committed in `web/dist`, so building `pf` needs no Node.
+**Developing the viewer:** the sources are in `web/src`. The build (`web/dist`) is not committed: `make` (or `npm run build` in `web/`) builds it before `pf` is compiled, because `pf` embeds it.
 
 ```sh
 cd web

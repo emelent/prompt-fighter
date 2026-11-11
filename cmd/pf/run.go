@@ -20,7 +20,8 @@ const usage = `usage:
   pf sim <a.pf> <b.pf> [--json] [--frames N] [-v]
   pf selfplay <dir>
   pf serve [--addr HOST:PORT] [--data DIR]
-  pf mcp [--server URL]`
+  pf mcp [--server URL]
+  pf version`
 
 func run(args []string, stdout, stderr io.Writer) int {
 	if len(args) == 0 {
@@ -38,6 +39,9 @@ func run(args []string, stdout, stderr io.Writer) int {
 		return cmdServeSignals(args[1:], stdout, stderr)
 	case "mcp":
 		return cmdMcp(args[1:], stdout, stderr)
+	case "version", "--version", "-v":
+		fmt.Fprintln(stdout, version)
+		return 0
 	case "-h", "--help", "help":
 		fmt.Fprintln(stdout, usage)
 		return 0

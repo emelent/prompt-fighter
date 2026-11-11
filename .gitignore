@@ -1,0 +1,10 @@
+# Build outputs (make)
+bin/
+dist/
+/pf
+/pf.exe
+
+# Local pf serve data (the default --data directory)
+data/
+
+.DS_Store

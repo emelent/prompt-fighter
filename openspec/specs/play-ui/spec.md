@@ -21,31 +21,43 @@ Defines the browser pages players use to play Prompt Fighter without `curl` or a
 - **WHEN** a browser requests `/play/matches/0123456789abcdef`
 - **THEN** the response is 200 HTML, and the page itself reports a missing match
 
-### Requirement: Lobby
-The lobby SHALL let a player create a match by entering a fighter name (1–40 bytes) and a round-1 script in the script editor, optionally starting from one of the bundled sample bots. After `POST /matches` succeeds, it SHALL store the seat and token and open the play page. It SHALL also let a player open a match by id, which goes to that match's play page.
+### Requirement: Cover screen
+The first screen (`/play`) SHALL show the Prompt Fighter cover art and two choices, **Create match** and **Join match**, along with the menu music's sound toggle.
+- **Create match** SHALL create a hosted match (`POST /matches` with an empty object) and open its spectator waiting screen, `/watch/matches/{id}`. The creator takes no seat.
+- **Join match** SHALL ask for a match id or any link containing one, then load the match and offer **Join as a player**, which opens `/play/matches/{id}`, when a seat is free, and **Watch**, which opens `/watch/matches/{id}`. It reports a clear error for input that is not a match id or link, and for a match that does not exist.
 
-#### Scenario: Create a match
-- **WHEN** a player enters the name `alice`, picks the sample bot `rushdown` as a starting script, and selects "Create match"
-- **THEN** the match is created with seat a, and the browser shows `/play/matches/{id}` in the "waiting for opponent" state, with an invite link
+The cover art SHALL be served from the same origin like the other viewer assets, with a text alternative.
 
-#### Scenario: Invalid script blocks creation
-- **WHEN** the script in the lobby editor contains `kik`
-- **THEN** "Create match" is disabled and the editor marks the error at its line and column
+#### Scenario: Host a match from the first screen
+- **WHEN** a visitor opens `/play` and selects "Create match"
+- **THEN** a hosted match is created and the browser shows `/watch/matches/{id}`, waiting for players, with the game link
+
+#### Scenario: Join from a link
+- **WHEN** a visitor selects "Join match", pastes `http://host:8080/play/matches/0123456789abcdef` for a match with a free seat, and selects "Join as a player"
+- **THEN** the browser opens `/play/matches/0123456789abcdef` in the join state
+
+#### Scenario: Watch from the first screen
+- **WHEN** a visitor selects "Join match", enters a match id, and selects "Watch"
+- **THEN** the browser opens `/watch/matches/{id}`
+
+#### Scenario: Full match
+- **WHEN** the entered match has both seats taken
+- **THEN** only "Watch" is offered, with a note that both seats are taken
 
 ### Requirement: Play page states
 The play page SHALL load `GET /matches/{id}` and show exactly one state:
 
 | state | when | what the page offers |
 |---|---|---|
-| **join** | this browser holds no seat and seat b is free | a name field and an editor; joining calls `POST /matches/{id}/join` and stores the seat |
-| **spectator** | this browser holds no seat and both seats are taken | a link to the match in the replay viewer |
-| **waiting for opponent** | this browser holds seat a and seat b is empty | the invite link (`/play/matches/{id}`) with a copy button; the editor stays available to replace the round-1 script |
+| **join** | this browser holds no seat and a seat is free | a name field; joining calls `POST /matches/{id}/join` with the name only and stores the seat it was given (a or b) |
+| **spectator** | this browser holds no seat and both seats are taken | a link to watch the match at `/watch/matches/{id}` |
+| **waiting for opponent** | this browser holds a seat and the other seat is empty | the invite link (`/play/matches/{id}`) with a copy button, and the editor with a "Submit for round 1" button (or to replace a round-1 script already submitted) |
 | **your move** | the match is awaiting scripts and this seat has not submitted for the next round | the editor, prefilled with this seat's draft (or last submitted script), and a "Submit for round N" button |
 | **waiting for their script** | this seat has submitted and the opponent has not | a waiting message naming the round; the editor stays available, and resubmitting replaces the pending script |
 | **finished** | the match is finished | the winner and wins per seat, and links to every round's replay |
 | **not found** | the match does not exist | a not-found message with a link back to the lobby |
 
-The page SHALL also show both seats' names and wins, and a list of played rounds with links to their replays.
+The page SHALL also show both seats' names and wins, a list of played rounds with links to their replays, and to seated players a shareable watch link (`/watch/matches/{id}`) with a copy button.
 
 #### Scenario: Opponent opens the invite link
 - **WHEN** a second browser with no stored seat opens the invite link of a match waiting for an opponent
@@ -57,7 +69,19 @@ The page SHALL also show both seats' names and wins, and a list of played rounds
 
 #### Scenario: Third visitor
 - **WHEN** a browser with no stored seat opens the play page of a match whose seats are both taken
-- **THEN** it shows the spectator state with a link to `/view/matches/{id}`
+- **THEN** it shows the spectator state with a link to `/watch/matches/{id}`
+
+#### Scenario: Share the watch link
+- **WHEN** a seated player opens their play page
+- **THEN** it shows the watch link `/watch/matches/{id}` with a copy button
+
+#### Scenario: First player to open the game link
+- **WHEN** a browser with no stored seat opens the game link of a hosted match with both seats empty and joins
+- **THEN** it is given seat a and shows the "waiting for opponent" state
+
+#### Scenario: Join with a name, then write round 1
+- **WHEN** a visitor joins with the name `alice` from the game link
+- **THEN** the page shows the editor with "Submit for round 1", and round 1 runs once both seats have submitted
 
 ### Requirement: Script editor
 The editor SHALL be CodeMirror 6, with line numbers, undo history and `.pf` syntax highlighting. Highlighting distinguishes comments, numbers and counts, control keywords, actions, sensors and handler names. The editor SHALL validate the script through `POST /validate`, at most once per 300 ms pause in typing and whenever the script changes. It SHALL mark each error at its line and column with the validator's message. It SHALL show a status line: "valid", or the number of errors, or "checking…". It SHALL show the script's size against the 4096-byte limit. The submit, create and join actions SHALL be disabled until the current text has validated successfully. The editor SHALL work under the viewer's Content-Security-Policy, without loosening it.
@@ -105,3 +129,14 @@ The lobby and the editor SHALL offer the bundled sample bots (`scripts/*.pf`, em
 #### Scenario: Load a sample
 - **WHEN** a player picks `turtle` from the sample list on an empty editor
 - **THEN** the editor contains exactly `scripts/turtle.pf`, and it validates as valid
+
+### Requirement: Menu music
+The lobby SHALL play the menu music track on a loop, starting at the first click or key press on the page (browsers block audio until then) and stopping when the visitor leaves the lobby. A labelled **sound** toggle on the lobby SHALL turn the music off and on. It SHALL share the sound preference with the simple round player, so turning sound off in one place turns it off in both. The music SHALL be served from the same origin like the other viewer assets.
+
+#### Scenario: Music in the lobby
+- **WHEN** a visitor opens `/play` with sound on and clicks anywhere on the page
+- **THEN** the menu music starts and loops until they leave the lobby
+
+#### Scenario: Sound off
+- **WHEN** the visitor turns the lobby's sound toggle off
+- **THEN** the music stops, and it stays off on the next visit and in simple replays

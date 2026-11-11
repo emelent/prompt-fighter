@@ -45,6 +45,17 @@ describe('playState', () => {
   it('a stored seat the match does not know is treated as a visitor', () => {
     expect(playState(waiting, B).kind).toBe('join');
   });
+  describe('hosted matches', () => {
+    const hosted = view({ status: 'waiting_for_players', next_round: 1, seats: { a: null, b: null } });
+    const onlyB = view({ status: 'waiting_for_opponent', next_round: 1, seats: { a: null, b: { name: 'bob', wins: 0, submitted: true } } });
+    it('a visitor can join a hosted match with no players', () => expect(playState(hosted, null).kind).toBe('join'));
+    it('the first player waits for an opponent', () => expect(playState(waiting, A).kind).toBe('waitingOpponent'));
+    it('whichever seat is held waits while the other is empty', () => {
+      expect(playState(onlyB, B).kind).toBe('waitingOpponent');
+      expect(playState(onlyB, null).kind).toBe('join');
+    });
+    it('a full hosted match is for spectators only', () => expect(playState(view({}), null).kind).toBe('spectator'));
+  });
 });
 
 class MapStorage implements StorageLike {

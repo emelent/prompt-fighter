@@ -13,7 +13,7 @@ func strp(s string) *string { return &s }
 func readyMatch(t *testing.T) *Match {
 	t.Helper()
 	m := newMatch("0123456789abcdef", "v", "alice", "A1", hashToken("ta"))
-	if err := m.join("bob", "B1", hashToken("tb")); err != nil {
+	if _, err := m.join("bob", strp("B1"), hashToken("tb")); err != nil {
 		t.Fatal(err)
 	}
 	return m
@@ -39,10 +39,10 @@ func TestMatchCreateAndJoin(t *testing.T) {
 	if m.Status != StatusWaiting || m.B != nil || m.readyToPlay() {
 		t.Fatalf("new match %+v", m)
 	}
-	if err := m.join("bob", "B1", hashToken("tb")); err != nil || m.Status != StatusAwaiting || !m.readyToPlay() {
+	if _, err := m.join("bob", strp("B1"), hashToken("tb")); err != nil || m.Status != StatusAwaiting || !m.readyToPlay() {
 		t.Fatalf("after join: %v %+v", err, m)
 	}
-	if err := m.join("carol", "C", hashToken("tc")); err != errSeatTaken {
+	if _, err := m.join("carol", strp("C"), hashToken("tc")); err != errSeatTaken {
 		t.Errorf("second join: %v, want errSeatTaken", err)
 	}
 }
@@ -118,7 +118,7 @@ func TestMatchRoundCapMoreWins(t *testing.T) {
 func TestMatchReplaceBeforeRound(t *testing.T) {
 	m := newMatch("0123456789abcdef", "v", "alice", "A1", hashToken("ta"))
 	m.submit("a", "Y") // while waiting for an opponent
-	m.join("bob", "B1", hashToken("tb"))
+	m.join("bob", strp("B1"), hashToken("tb"))
 	if *m.A.Pending != "Y" {
 		t.Errorf("pending %q, want Y", *m.A.Pending)
 	}

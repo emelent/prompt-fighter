@@ -97,7 +97,7 @@ export interface RoundView {
 
 export interface MatchView {
   match_id: string;
-  status: 'waiting_for_opponent' | 'awaiting_scripts' | 'finished';
+  status: 'waiting_for_players' | 'waiting_for_opponent' | 'awaiting_scripts' | 'finished';
   config_version: string;
   next_round: number;
   seats: { a: SeatView | null; b: SeatView | null };

@@ -28,6 +28,7 @@ export interface MatchRows {
 }
 
 const STATUS_TEXT: Record<MatchView['status'], string> = {
+  waiting_for_players: 'waiting for players to join',
   waiting_for_opponent: 'waiting for an opponent to join',
   awaiting_scripts: 'waiting for scripts',
   finished: 'finished',

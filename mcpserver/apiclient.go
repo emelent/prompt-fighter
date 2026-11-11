@@ -14,7 +14,7 @@ import (
 	"promptfighter/server"
 )
 
-var errMatchToolsDisabled = errors.New(`match tools are disabled: pf mcp was started without a pf serve URL. Start a server with "pf serve" and restart pf mcp with --server http://HOST:PORT`)
+var errMatchToolsDisabled = errors.New(`no pf serve server for this call: pf mcp was started without one. Pass the game link (http://HOST:PORT/play/matches/<id>) as match_id instead of the bare id, or restart pf mcp with --server http://HOST:PORT`)
 
 // apiClient talks to the pf serve HTTP API (docs/API.md).
 type apiClient struct {

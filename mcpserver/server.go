@@ -172,3 +172,9 @@ func scriptErrorText(label string, errs []dsl.Error) string {
 	}
 	return b.String()
 }
+
+// ToolNames lists every tool the server exposes, sorted (kept in step with
+// registration by TestToolCatalogue).
+func ToolNames() []string {
+	return []string{"create_match", "get_match", "get_player_guide", "get_round_replay", "join_match", "list_sample_bots", "simulate_round", "submit_script", "validate_script"}
+}

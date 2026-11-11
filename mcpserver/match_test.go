@@ -107,7 +107,7 @@ func TestMatchToolsDisabled(t *testing.T) {
 		if name == "create_match" {
 			args = map[string]any{"name": "a", "script": "kick"}
 		}
-		expectToolError(t, callTool(t, cs, name, args), "match tools are disabled", "--server")
+		expectToolError(t, callTool(t, cs, name, args), "no pf serve server for this call", "--server")
 	}
 }
 

@@ -11,6 +11,7 @@ import (
 
 // Match statuses.
 const (
+	StatusPlayers  = "waiting_for_players" // hosted match: no seat taken yet
 	StatusWaiting  = "waiting_for_opponent"
 	StatusAwaiting = "awaiting_scripts"
 	StatusFinished = "finished"
@@ -22,7 +23,7 @@ const (
 )
 
 var (
-	errSeatTaken     = errors.New("seat b is already taken")
+	errSeatTaken     = errors.New("both seats are already taken")
 	errMatchFinished = errors.New("the match is finished")
 )
 
@@ -75,6 +76,29 @@ func newMatch(id, configVersion, name, script, tokenHash string) *Match {
 	}
 }
 
+// newHostedMatch creates a match set up by a host who only watches: both
+// seats are free, and players take them by joining.
+func newHostedMatch(id, configVersion string) *Match {
+	return &Match{
+		StoreVersion:  storeVersion,
+		ID:            id,
+		ConfigVersion: configVersion,
+		Status:        StatusPlayers,
+		Rounds:        []Round{},
+	}
+}
+
+// freeSeat returns the seat the next joiner takes ("a" before "b"), or "".
+func (m *Match) freeSeat() string {
+	switch {
+	case m.A == nil:
+		return "a"
+	case m.B == nil:
+		return "b"
+	}
+	return ""
+}
+
 func (m *Match) seat(id string) *Seat {
 	if id == "a" {
 		return m.A
@@ -82,15 +106,27 @@ func (m *Match) seat(id string) *Seat {
 	return m.B
 }
 
-func (m *Match) join(name, script, tokenHash string) error {
-	if m.B != nil {
-		return errSeatTaken
+// join puts a player in the first free seat and returns it. Filling seat a of
+// a hosted match leaves it waiting for an opponent; filling the last seat
+// makes it ready for round 1.
+//
+// script may be nil: the seat then starts with nothing submitted, and the
+// player submits round 1 like any other round.
+func (m *Match) join(name string, script *string, tokenHash string) (string, error) {
+	st := &Seat{Name: name, TokenHash: tokenHash, Pending: script}
+	switch m.freeSeat() {
+	case "a":
+		m.A = st
+		m.Status = StatusWaiting
+		return "a", nil
+	case "b":
+		m.B = st
+		if m.Status == StatusWaiting {
+			m.Status = StatusAwaiting
+		}
+		return "b", nil
 	}
-	m.B = &Seat{Name: name, TokenHash: tokenHash, Pending: &script}
-	if m.Status == StatusWaiting {
-		m.Status = StatusAwaiting
-	}
-	return nil
+	return "", errSeatTaken
 }
 
 // seatFor returns the seat id whose token hashes to hash, or "".
