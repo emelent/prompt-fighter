@@ -26,10 +26,16 @@ export interface SetupInfo {
   gameLink: string;
   /** This server's origin, for the pf mcp --server setup. */
   origin: string;
-  /** Claude Code commands that install the pf plugin (one per line). */
-  pluginInstall: string;
+  /** Claude Code command that adds the plugin's marketplace (run first, on its own). */
+  marketplaceCommand: string;
+  /** Claude Code command that installs the pf plugin (run second). */
+  installCommand: string;
   /** The plugin command that joins this match. */
   joinCommand: string;
+  /** The plugin command that writes the next round's script (roundN.pf). */
+  scriptCommand: string;
+  /** The plugin command that submits the next round's script. */
+  submitCommand: string;
 }
 
 /** Where the pf plugin's marketplace lives (this repository). */
@@ -55,8 +61,11 @@ export function setupInfo(v: MatchView, origin: string): SetupInfo {
     joined,
     gameLink,
     origin,
-    pluginInstall: `/plugin marketplace add ${PLUGIN_MARKETPLACE}\n/plugin install pf@prompt-fighter`,
+    marketplaceCommand: `/plugin marketplace add ${PLUGIN_MARKETPLACE}`,
+    installCommand: '/plugin install pf@prompt-fighter',
     joinCommand: `/pf:join ${gameLink}`,
+    scriptCommand: '/pf:script <how you want to fight>',
+    submitCommand: '/pf:submit',
   };
 }
 

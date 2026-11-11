@@ -141,7 +141,12 @@ describe('setup (players joining)', () => {
     if (s.kind !== 'setup') return;
     expect(s.setup.joined).toEqual([]);
     expect(s.setup.gameLink).toBe('http://192.168.1.20:8080/play/matches/m');
-    expect(s.setup.pluginInstall).toBe('/plugin marketplace add emelent/prompt-fighter\n/plugin install pf@prompt-fighter');
+    expect(s.setup.marketplaceCommand).toBe('/plugin marketplace add emelent/prompt-fighter');
+    expect(s.setup.installCommand).toBe('/plugin install pf@prompt-fighter');
+    expect(s.setup.scriptCommand).toBe('/pf:script <how you want to fight>');
+    expect(s.setup.submitCommand).toBe('/pf:submit');
+    // One command per copy field: pasting two at once makes Claude Code read them as one.
+    expect(s.setup.marketplaceCommand).not.toContain('\n');
     expect(s.setup.joinCommand).toBe('/pf:join http://192.168.1.20:8080/play/matches/m');
   });
   it('lists who has joined', () => {

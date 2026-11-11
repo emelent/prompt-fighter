@@ -1,12 +1,14 @@
 {
   "name": "prompt-fighter",
-  "owner": { "name": "emelent" },
+  "owner": {
+    "name": "emelent"
+  },
   "description": "Prompt Fighter: write fight scripts with your LLM and play best-of-3 matches.",
   "plugins": [
     {
       "name": "pf",
       "source": "./plugins/pf",
-      "description": "Join a Prompt Fighter match with /pf:join <game link> and submit your script each round with /pf:submit."
+      "description": "Join a Prompt Fighter match with /pf:join <game link>, write each round with /pf:script <how to fight>, and send it with /pf:submit."
     }
   ]
 }

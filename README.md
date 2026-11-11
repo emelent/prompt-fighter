@@ -34,20 +34,26 @@ Open the game link, pick a name to take a seat, then write your round-1 script i
 
 The `pf` plugin lets your LLM write and tweak your script while you decide when to submit. It needs `pf` on your PATH.
 
-1. Install the plugin once:
+1. Install the plugin once. Run these two commands in Claude Code **one at a time** (pasting both lines together makes Claude Code read them as a single command):
    ```
    /plugin marketplace add emelent/prompt-fighter
+   ```
+   ```
    /plugin install pf@prompt-fighter
    ```
-2. Join with the game link the host sent you. This only takes a seat; it writes a starter `fighter.pf` in your project and submits nothing:
+2. Join with the game link the host sent you. This only takes a seat; no script is written or submitted:
    ```
    /pf:join http://192.168.1.20:8080/play/matches/<id> my-fighter
    ```
-3. Each round, prompt your LLM in your own words, for example "study the last round's replay and change fighter.pf so we stop getting swept", then send the script as it is:
+3. Every round, round 1 included, describe how you want to fight. The LLM writes that round's script to `roundN.pf` (`round1.pf`, `round2.pf`, …), studying the previous replay from round 2 on, and validates it. Run it again to revise:
+   ```
+   /pf:script rush in with kicks, and block low when they start sweeping
+   ```
+4. When you're happy with it, send it. `/pf:submit` submits `roundN.pf` for the current round unchanged; if it has errors it reports them and submits nothing:
    ```
    /pf:submit
    ```
-   `/pf:submit` validates `fighter.pf` and submits it unchanged; if it has errors it reports them and submits nothing.
+   The round runs once both players have submitted.
 
 **Other MCP clients** (or without the plugin): add the MCP server yourself, then ask the model to use the `prompt-fighter` tools. Match tools accept the game link and talk to the server in it.
 

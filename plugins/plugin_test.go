@@ -64,7 +64,7 @@ func TestCommandsReferenceRealTools(t *testing.T) {
 	for _, n := range mcpserver.ToolNames() {
 		known[n] = true
 	}
-	for _, cmd := range []string{"join", "submit"} {
+	for _, cmd := range []string{"join", "script", "submit"} {
 		b, err := os.ReadFile(filepath.Join("pf", "commands", cmd+".md"))
 		if err != nil {
 			t.Fatal(err)
@@ -90,3 +90,17 @@ func TestCommandsReferenceRealTools(t *testing.T) {
 		}
 	}
 }
+
+// Only /pf:submit may submit: join and script must not even be allowed to.
+func TestOnlySubmitSubmits(t *testing.T) {
+	for _, cmd := range []string{"join", "script"} {
+		b, err := os.ReadFile(filepath.Join("pf", "commands", cmd+".md"))
+		if err != nil {
+			t.Fatal(err)
+		}
+		if strings.Contains(string(b), "mcp__plugin_pf_prompt-fighter__submit_script") {
+			t.Errorf("%s.md allows submit_script", cmd)
+		}
+	}
+}
+

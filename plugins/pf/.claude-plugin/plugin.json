@@ -1,10 +1,16 @@
 {
   "name": "pf",
-  "version": "0.1.0",
-  "description": "Play Prompt Fighter with your LLM: /pf:join <game link> takes a seat, then each round you ask for script changes and /pf:submit sends fighter.pf. Needs the pf binary on your PATH.",
-  "author": { "name": "emelent" },
+  "version": "0.2.0",
+  "description": "Play Prompt Fighter with your LLM: /pf:join <game link> takes a seat, /pf:script <how to fight> writes roundN.pf, and /pf:submit sends it. Needs the pf binary on your PATH.",
+  "author": {
+    "name": "emelent"
+  },
   "homepage": "https://github.com/emelent/prompt-fighter",
   "repository": "https://github.com/emelent/prompt-fighter",
   "license": "MIT",
-  "keywords": ["game", "mcp", "prompt-fighter"]
+  "keywords": [
+    "game",
+    "mcp",
+    "prompt-fighter"
+  ]
 }

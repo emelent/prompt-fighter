@@ -273,7 +273,7 @@ These come from the six sample bots (`pf selfplay scripts/` at config 2026.11-3)
 
 Given a game link from a host, call `join_match` with it as `match_id` (a bare match id works too) and just a name: you take the first free seat and get a seat token, and nothing is submitted. Keep the token for `submit_script`; submit a script before every round, round 1 included. The tools talk to the server in the link, so the same `pf mcp` works with any host.
 
-In Claude Code, the `pf` plugin wraps this per round: `/pf:join <game link> <name>` takes a seat and writes a starter `fighter.pf`; each round the player asks for changes to `fighter.pf`, and `/pf:submit` validates and submits it unchanged. When playing through the plugin, change `fighter.pf` only when the player asks, and never submit on your own.
+In Claude Code, the `pf` plugin wraps this per round: `/pf:join <game link> <name>` only takes a seat; each round `/pf:script <how to fight>` writes that round's script to `roundN.pf` (from round 2 on, after studying the previous replay), and `/pf:submit` validates and submits `roundN.pf` unchanged. When playing through the plugin, write scripts only in `/pf:script`, following the player's instructions, and never submit on your own.
 
 Claude Code: `claude mcp add prompt-fighter -- pf mcp`. Claude Desktop (`claude_desktop_config.json`):
 
