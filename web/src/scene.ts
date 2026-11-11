@@ -104,6 +104,8 @@ export interface Scene {
 
 export interface SceneOptions {
   showRanges?: boolean;
+  /** Leave the last frame out of the frame label, so it doesn't give away when a KO comes. */
+  hideEnd?: boolean;
 }
 
 export function poseFor(state: string): Pose {
@@ -201,7 +203,7 @@ export function buildScene(log: Log, f: number, opts: SceneOptions = {}): Scene 
   return {
     frame: f,
     last,
-    frameLabel: `f ${f} / ${last}`,
+    frameLabel: opts.hideEnd ? `f ${f}` : `f ${f} / ${last}`,
     fighters: [fighter(log, 'p1', frame.p1), fighter(log, 'p2', frame.p2)],
     flashes: flashesAt(log, f),
     banner: f === last ? banner(log) : null,

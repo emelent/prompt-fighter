@@ -5,16 +5,17 @@ import { alertBox, el, fetchJSON, show } from './dom';
 import { POLL_BACKOFF_MS, POLL_MS } from './match';
 import { menuMusic } from './menumusic';
 import { COUNTDOWN_SECONDS, Countdown, lastPlayed, nextToWatch, parseAfter, waitingState, type WaitingState } from './spectate';
+import { isSeen, seenRounds, UNSEEN_MATCH_TEXT, UNSEEN_TEXT } from './seen';
 import type { MatchView, RoundView } from './types';
 
-function roundLinks(id: string, rounds: RoundView[], view: MatchView): HTMLElement {
+function roundLinks(id: string, rounds: RoundView[], view: MatchView, seen: Set<number>): HTMLElement {
   if (rounds.length === 0) return el('p', { class: 'hint' }, 'No rounds played yet.');
   const name = (seat: 'a' | 'b') => (seat === 'a' ? view.seats.a?.name : view.seats.b?.name) ?? `seat ${seat}`;
   return el(
     'ol',
     { class: 'watch-rounds' },
     ...rounds.map((r) =>
-      el('li', {}, el('a', { href: `/watch/matches/${encodeURIComponent(id)}/rounds/${r.n}` }, `Round ${r.n}`), ` — ${r.winner ? `${name(r.winner)} won` : 'draw'} by ${r.reason}`),
+      el('li', {}, el('a', { href: `/watch/matches/${encodeURIComponent(id)}/rounds/${r.n}` }, `Round ${r.n}`), ` — ${isSeen(r, seen) ? `${r.winner ? `${name(r.winner)} won` : 'draw'} by ${r.reason}` : UNSEEN_TEXT}`),
     ),
   );
 }
@@ -87,7 +88,8 @@ export function watchPage(id: string): void {
   show(el('div', { class: 'watch' }, el('div', { class: 'lobby-head' }, el('h1', {}, `Watching match ${id}`), menuMusic()), status, body));
 
   const render = (view: MatchView) => {
-    const s = waitingState(view, location.origin);
+    const seen = seenRounds(id);
+    const s = waitingState(view, location.origin, seen);
     if (s.kind === 'not_found') return;
     if (s.kind === 'setup') {
       openedWith ??= 0; // players are still joining: round 1 is new to this page
@@ -109,10 +111,10 @@ export function watchPage(id: string): void {
     if (s.kind === 'finished') {
       if (next === null) {
         status.replaceChildren(
-          el('section', { class: 'card' }, el('h2', {}, 'Match over'), el('p', { class: 'watch-result' }, s.winner ? `${s.winner} wins the match` : 'The match is a draw')),
+          el('section', { class: 'card' }, el('h2', {}, 'Match over'), el('p', { class: 'watch-result' }, !s.revealed ? UNSEEN_MATCH_TEXT : s.winner ? `${s.winner} wins the match` : 'The match is a draw')),
         );
       }
-      body.replaceChildren(scoreLine(s.score), el('h2', {}, 'Rounds'), roundLinks(id, s.rounds, view));
+      body.replaceChildren(scoreLine(s.score), el('h2', {}, 'Rounds'), roundLinks(id, s.rounds, view, seen));
       return;
     }
     if (next === null) {
@@ -126,7 +128,7 @@ export function watchPage(id: string): void {
         ...s.seats.map((x) => el('li', { class: x.submitted ? 'submitted' : 'pending' }, `${x.name}: `, x.submitted ? `✓ submitted for round ${s.round}` : `still writing the round ${s.round} script`)),
       ),
       el('h2', {}, 'Rounds'),
-      roundLinks(id, s.rounds, view),
+      roundLinks(id, s.rounds, view, seen),
     );
   };
 

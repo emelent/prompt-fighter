@@ -2,6 +2,7 @@
 // watch next, the button at the end of a replay, the countdown between rounds,
 // and the simple round player's remembered settings.
 import { SPEEDS, type Speed } from './replay';
+import { allSeen, visibleWins } from './seen';
 import type { MatchView, RoundView, Seat } from './types';
 
 /** Seconds counted down before the next round opens. */
@@ -45,12 +46,13 @@ export type WaitingState =
   | { kind: 'not_found' }
   | { kind: 'setup'; setup: SetupInfo; score: Score }
   | { kind: 'waiting'; round: number; score: Score; seats: SeatStatus[]; waitingFor: string[]; rounds: RoundView[] }
-  | { kind: 'finished'; winner: string | null; score: Score; rounds: RoundView[] };
+  | { kind: 'finished'; winner: string | null; /** every round watched, so the winner may show */ revealed: boolean; score: Score; rounds: RoundView[] };
 
-function score(v: MatchView): Score {
+function score(v: MatchView, seen: Set<number>): Score {
   const a = v.seats.a;
   const b = v.seats.b;
-  return { a: { name: a?.name ?? 'seat a', wins: a?.wins ?? 0 }, b: b ? { name: b.name, wins: b.wins } : null };
+  const wins = visibleWins(v, seen);
+  return { a: { name: a?.name ?? 'seat a', wins: wins.a }, b: b ? { name: b.name, wins: wins.b } : null };
 }
 
 /** How players join a match: the game link and LLM instructions for this server. */
@@ -73,14 +75,16 @@ export function setupInfo(v: MatchView, origin: string): SetupInfo {
  * What the waiting screen shows for a match (null: the match does not exist).
  * origin is this server's origin (location.origin), used for the game link.
  */
-export function waitingState(v: MatchView | null, origin = ''): WaitingState {
+export function waitingState(v: MatchView | null, origin = '', seenRounds?: Set<number>): WaitingState {
   if (!v) return { kind: 'not_found' };
+  // Rounds not watched yet keep their results (and the score) hidden.
+  const seen = seenRounds ?? new Set(v.rounds.map((r) => r.n));
   if (v.status === 'waiting_for_players' || v.status === 'waiting_for_opponent') {
-    return { kind: 'setup', setup: setupInfo(v, origin), score: score(v) };
+    return { kind: 'setup', setup: setupInfo(v, origin), score: score(v, seen) };
   }
   if (v.status === 'finished') {
     const w = v.winner === null ? null : (v.winner === 'a' ? v.seats.a : v.seats.b)?.name ?? `seat ${v.winner}`;
-    return { kind: 'finished', winner: w, score: score(v), rounds: v.rounds };
+    return { kind: 'finished', winner: w, revealed: allSeen(v, seen), score: score(v, seen), rounds: v.rounds };
   }
   const seats: SeatStatus[] = [];
   const waitingFor: string[] = [];
@@ -93,7 +97,7 @@ export function waitingState(v: MatchView | null, origin = ''): WaitingState {
     seats.push({ seat, name: s.name, wins: s.wins, submitted: s.submitted });
     if (!s.submitted) waitingFor.push(s.name);
   }
-  return { kind: 'waiting', round: v.next_round, score: score(v), seats, waitingFor, rounds: v.rounds };
+  return { kind: 'waiting', round: v.next_round, score: score(v, seen), seats, waitingFor, rounds: v.rounds };
 }
 
 /** The highest round number already played (0 before round 1). */

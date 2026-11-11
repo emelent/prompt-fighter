@@ -1,4 +1,5 @@
 // The lobby (/play) and the play page (/play/matches/{id}).
+import { allSeen, isSeen, seenRounds, UNSEEN_MATCH_TEXT, UNSEEN_TEXT, visibleWins } from './seen';
 import { alertBox, el, fetchJSON, postJSON, show, type APIErrorBody } from './dom';
 import { createEditor, MAX_SCRIPT_BYTES, type EditorStatus, type ScriptEditor } from './editor';
 import { newRoundToOpen, POLL_BACKOFF_MS, POLL_MS } from './match';
@@ -281,7 +282,8 @@ export function playPage(id: string): void {
     const you = mine?.seat === seat ? ' (you)' : '';
     if (!sv) return el('li', {}, `seat ${seat}: not joined yet`);
     const sub = v.status === 'finished' ? '' : sv.submitted ? ' · next script submitted' : ' · next script not submitted';
-    return el('li', {}, `seat ${seat} — `, el('strong', {}, sv.name), `${you}: ${sv.wins} win${sv.wins === 1 ? '' : 's'}${sub}`);
+    const wins = visibleWins(v, seenRounds(id))[seat];
+    return el('li', {}, `seat ${seat} — `, el('strong', {}, sv.name), `${you}: ${wins} win${wins === 1 ? '' : 's'}${sub}`);
   }
 
   function render(): void {
@@ -304,7 +306,8 @@ export function playPage(id: string): void {
       v.rounds.length
         ? el('section', { class: 'card' }, el('h2', {}, 'Rounds'), el('ol', { class: 'rounds' }, ...v.rounds.map((r) => {
             const winner = r.winner ? `seat ${r.winner} (${seatView(v, r.winner)?.name ?? ''}) won` : 'draw';
-            return el('li', {}, el('a', { href: replayURL(id, r.n, false) }, `Round ${r.n}`), ` — seat ${r.p1} was p1; ${winner} by ${r.reason} at f${r.end_frame}`);
+            const result = isSeen(r, seenRounds(id)) ? `${winner} by ${r.reason} at f${r.end_frame}` : UNSEEN_TEXT;
+            return el('li', {}, el('a', { href: replayURL(id, r.n, false) }, `Round ${r.n}`), ` — seat ${r.p1} was p1; ${result}`);
           })))
         : el('span'),
     );
@@ -354,7 +357,7 @@ export function playPage(id: string): void {
         break;
       }
       case 'finished': {
-        const outcome = v.winner ? `${seatView(v, v.winner)?.name ?? `seat ${v.winner}`} (seat ${v.winner}) won the match` : 'The match was a draw';
+        const outcome = !allSeen(v, seenRounds(id)) ? UNSEEN_MATCH_TEXT : v.winner ? `${seatView(v, v.winner)?.name ?? `seat ${v.winner}`} (seat ${v.winner}) won the match` : 'The match was a draw';
         body.replaceChildren(el('section', { class: 'card' }, el('h2', {}, 'Match finished'), el('p', { class: 'outcome' }, outcome), el('p', {}, el('a', { href: '/play' }, 'Play another match'))));
         break;
       }

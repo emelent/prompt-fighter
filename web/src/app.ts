@@ -1,6 +1,7 @@
 // Viewer entry point: routes by location.pathname and wires the DOM.
 // All player-supplied text is inserted with textContent only (see el()).
 import './style.css';
+import { markSeen, seenRounds } from './seen';
 import { matchRows, newRoundToOpen, POLL_BACKOFF_MS, POLL_MS } from './match';
 import { Playback } from './playback';
 import { eventLines, frameHash, lastFrame, parseFrameHash, parseLog, SPEEDS, type Speed, validateLog } from './replay';
@@ -31,6 +32,8 @@ interface PlayerContext {
   mode?: 'full' | 'simple' | 'spectator';
   /** The match, for the spectator's end-of-replay button. */
   match?: MatchView;
+  /** The stored match id: its rounds stay spoiler-free until watched to the end. */
+  matchId?: string;
 }
 
 /** One part of the simple player that the settings menu can show or hide. */
@@ -88,6 +91,11 @@ function renderPlayer(log: Log, ctx: PlayerContext): void {
   const settings = simple ? loadSimpleSettings() : null;
   let showChecks = false;
   let showRanges = false;
+  // Until this browser has watched the round to its last frame, nothing gives
+  // the result away: the feed shows only events so far, and the frame counters
+  // and scrub bar don't show where the round ends.
+  let unseen = ctx.matchId !== undefined && ctx.round !== undefined && !seenRounds(ctx.matchId).has(ctx.round);
+  const scrubMax = () => (unseen ? Math.max(last, log.frame_budget - 1) : last);
 
   // Header
   const header = el('div', { class: 'player-head' }, el('h1', {}, ctx.heading), ctx.matchLink ? el('a', { href: ctx.matchLink }, ctx.backLabel ?? '← back to match') : null);
@@ -110,8 +118,8 @@ function renderPlayer(log: Log, ctx: PlayerContext): void {
     return b;
   };
   const playBtn = btn('▶', 'Play', () => pb.toggle());
-  const scrub = el('input', { type: 'range', min: '0', max: String(last), value: '0', step: '1', 'aria-label': 'Frame' });
-  scrub.addEventListener('input', () => pb.seek(Number(scrub.value)));
+  const scrub = el('input', { type: 'range', min: '0', max: String(scrubMax()), value: '0', step: '1', 'aria-label': 'Frame' });
+  scrub.addEventListener('input', () => pb.seek(Math.min(last, Number(scrub.value))));
   const speed = el('select', { 'aria-label': 'Playback speed' }, ...SPEEDS.map((s) => el('option', { value: String(s) }, `${s}×`)));
   speed.value = '1';
   speed.addEventListener('change', () => pb.setSpeed(Number(speed.value) as Speed));
@@ -256,8 +264,14 @@ function renderPlayer(log: Log, ctx: PlayerContext): void {
     const f = pb.frame;
     playBtn.textContent = pb.playing ? '⏸' : '▶';
     playBtn.setAttribute('aria-label', pb.playing ? 'Pause' : 'Play');
+    if (unseen && f === last && pb.intro === null) {
+      unseen = false;
+      markSeen(ctx.matchId!, ctx.round!);
+      scrub.max = String(last);
+      stageScene?.invalidate();
+    }
     scrub.value = String(f);
-    frameOut.textContent = `f ${f} / ${last}`;
+    frameOut.textContent = unseen ? `f ${f}` : `f ${f} / ${last}`;
     if (Number(speed.value) !== pb.speed) speed.value = String(pb.speed);
     if (settings && pb.speed !== settings.playbackSpeed) {
       settings.playbackSpeed = pb.speed;
@@ -278,6 +292,7 @@ function renderPlayer(log: Log, ctx: PlayerContext): void {
     for (const { e, li } of feedItems) {
       const past = e.frame <= f;
       li.classList.toggle('past', past);
+      li.hidden = unseen && !past;
       if (past) current = li;
     }
     if (current !== lastCurrent) {
@@ -385,7 +400,7 @@ function renderPlayer(log: Log, ctx: PlayerContext): void {
   applyParts();
   buildFeed();
 
-  const { scene } = mountStage(stageBox, { log, playback: pb, showRanges: () => showRanges, roundLabel: roundLabel(ctx.round ?? null), soundOn });
+  const { scene } = mountStage(stageBox, { log, playback: pb, showRanges: () => showRanges, roundLabel: roundLabel(ctx.round ?? null), soundOn, hideEnd: () => unseen });
   stageScene = scene;
 
   pb.seek(start ?? 0);
@@ -478,6 +493,7 @@ async function roundPage(id: string, n: number, watching = false): Promise<void>
     backLabel: watching ? '← waiting screen' : fromPlay ? '← back to the match' : '← back to match',
     autoplay: params.get('autoplay') === '1',
     round: n,
+    matchId: id,
     mode: watching ? 'spectator' : fromPlay ? 'simple' : 'full',
     ...(matchRes.ok ? { match: matchRes.data } : {}),
   });
@@ -506,7 +522,7 @@ function matchPage(id: string): void {
     }
     notice.textContent = '';
     const v = res.data;
-    const rows = matchRows(v);
+    const rows = matchRows(v, seenRounds(id));
     const parts: HTMLElement[] = [
       el('p', { class: 'status' }, `Status: ${rows.status}`),
       el('ul', { class: 'seats' }, ...rows.seats.map((s) => el('li', {}, s.text))),

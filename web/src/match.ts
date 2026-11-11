@@ -1,4 +1,5 @@
 // Pure helpers for the live match page (GET /matches/{id}).
+import { allSeen, isSeen, UNSEEN_MATCH_TEXT, UNSEEN_TEXT, visibleWins } from './seen';
 import type { MatchView, Seat, SeatView } from './types';
 
 export const POLL_MS = 2000;
@@ -39,33 +40,39 @@ function seatName(v: MatchView, seat: Seat): string {
   return s ? `seat ${seat} (${s.name})` : `seat ${seat}`;
 }
 
-function seatRow(seat: Seat, s: SeatView | null, finished: boolean): SeatRow {
+function seatRow(seat: Seat, s: SeatView | null, finished: boolean, wins: number): SeatRow {
   if (!s) {
     return { seat, name: '', wins: 0, submitted: false, text: `seat ${seat}: not joined yet` };
   }
   const sub = finished ? '' : s.submitted ? ', next script submitted' : ', next script not submitted';
-  return { seat, name: s.name, wins: s.wins, submitted: s.submitted, text: `seat ${seat} — ${s.name}: ${s.wins} win${s.wins === 1 ? '' : 's'}${sub}` };
+  return { seat, name: s.name, wins, submitted: s.submitted, text: `seat ${seat} — ${s.name}: ${wins} win${wins === 1 ? '' : 's'}${sub}` };
 }
 
-/** Text rows describing a match, with links to each played round's player. */
-export function matchRows(v: MatchView): MatchRows {
+/**
+ * Text rows describing a match, with links to each played round's player.
+ * seen holds the rounds already watched (default: all); the results of the
+ * others, and the wins and match result they would give away, are hidden.
+ */
+export function matchRows(v: MatchView, seen: Set<number> = new Set(v.rounds.map((r) => r.n))): MatchRows {
   const finished = v.status === 'finished';
+  const wins = visibleWins(v, seen);
   const rounds = v.rounds.map((r) => {
     const result = r.winner ? `${seatName(v, r.winner)} won` : 'draw';
+    const detail = isSeen(r, seen) ? `${result} by ${r.reason} at f${r.end_frame} (hp a ${r.hp.a}, b ${r.hp.b})` : UNSEEN_TEXT;
     return {
       n: r.n,
-      text: `Round ${r.n}: ${seatName(v, r.p1)} was p1 — ${result} by ${r.reason} at f${r.end_frame} (hp a ${r.hp.a}, b ${r.hp.b})`,
+      text: `Round ${r.n}: ${seatName(v, r.p1)} was p1 — ${detail}`,
       href: `/view/matches/${encodeURIComponent(v.match_id)}/rounds/${r.n}`,
     };
   });
   let outcome: string | null = null;
   if (finished) {
-    outcome = v.winner ? `${seatName(v, v.winner)} won the match` : 'the match was a draw';
+    outcome = !allSeen(v, seen) ? UNSEEN_MATCH_TEXT : v.winner ? `${seatName(v, v.winner)} won the match` : 'the match was a draw';
   }
   return {
     title: `Match ${v.match_id}`,
     status: finished ? STATUS_TEXT.finished : `${STATUS_TEXT[v.status]} (next: round ${v.next_round})`,
-    seats: [seatRow('a', v.seats.a, finished), seatRow('b', v.seats.b, finished)],
+    seats: [seatRow('a', v.seats.a, finished, wins.a), seatRow('b', v.seats.b, finished, wins.b)],
     rounds,
     outcome,
     finished,

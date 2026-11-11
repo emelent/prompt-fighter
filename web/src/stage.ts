@@ -78,6 +78,8 @@ export interface StageSource {
   roundLabel?: string | null;
   /** Whether sound effects and music are on (default on). */
   soundOn?: () => boolean;
+  /** Whether to keep the round's length hidden (an unwatched round). */
+  hideEnd?: () => boolean;
 }
 
 type Align = 'left' | 'center' | 'right';
@@ -140,7 +142,7 @@ export class StageScene extends Phaser.Scene {
     const f = this.src.playback.frame;
     this.updateSound(f);
     if (f !== this.drawn || this.dirty) {
-      this.draw(buildScene(this.src.log, f, { showRanges: this.src.showRanges() }));
+      this.draw(buildScene(this.src.log, f, { showRanges: this.src.showRanges(), hideEnd: this.src.hideEnd?.() ?? false }));
       this.drawn = f;
       this.dirty = false;
     }

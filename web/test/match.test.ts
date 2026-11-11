@@ -37,7 +37,8 @@ describe('matchRows', () => {
     expect(won.finished).toBe(true);
     expect(won.outcome).toBe('seat b (bob) won the match');
     expect(won.rounds[1]!.text).toContain('Round 2: seat b (bob) was p1 — seat b (bob) won');
-    expect(won.seats[0]!.text).toBe('seat a — alice: 1 win');
+    expect(won.seats[0]!.text).toBe('seat a — alice: 0 wins');
+    expect(won.seats[1]!.text).toBe('seat b — bob: 2 wins');
     const draw = matchRows({ ...base, status: 'finished', winner: null });
     expect(draw.outcome).toBe('the match was a draw');
   });
