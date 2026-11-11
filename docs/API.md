@@ -9,7 +9,7 @@ pf serve --addr 0.0.0.0:9000 --data /var/lib/pf
 
 The server logs one line on start, and SIGINT or SIGTERM shuts it down gracefully (exit 0). A bad address or an unusable data directory exits with code 2.
 
-Engine rules, frame data and the event log format are described in [`RULES.md`](RULES.md). Versions in this document: config `2026.11-3`, log format `1`, store `1`.
+Engine rules, frame data and the event log format are described in [`RULES.md`](RULES.md). Versions in this document: config `2026.11-4`, log format `1`, store `1`.
 
 ## Playing with an LLM (MCP)
 
@@ -57,7 +57,7 @@ All API requests and responses are JSON, and unknown JSON fields are rejected. T
 ### `GET /healthz`
 
 ```json
-{"config_version":"2026.11-3","format_version":"1","status":"ok","store_version":1}
+{"config_version":"2026.11-4","format_version":"1","status":"ok","store_version":1}
 ```
 
 ### `POST /validate`
@@ -82,7 +82,7 @@ Request:
  "frames": 300}
 ```
 - `name` is optional. It defaults to `p1` or `p2` and is at most 40 bytes.
-- `frames` is optional. It defaults to 600 and must be from 1 to 600.
+- `frames` is optional. It defaults to the server's round length (1200 frames unless `pf serve --frames N` changed it) and must be from 1 to that length.
 
 The response (200) is the round's event log, **byte for byte what `sim.Simulate` and `pf sim --json` produce**. Its format is described in [`RULES.md`](RULES.md) §7. If either script is invalid, the response is 422 `invalid_script` and each error says which `player` it belongs to.
 
@@ -109,7 +109,7 @@ curl -s localhost:8080/matches -d '{"name": "alice", "script": "loop { kick }"}'
 ```
 ```json
 {"match_id":"b8fc4050df5bfab2","seat":"a","token":"db0bbc0b901149a158f2fa29e390cd42",
- "match":{"match_id":"b8fc4050df5bfab2","status":"waiting_for_opponent","config_version":"2026.11-3","next_round":1,
+ "match":{"match_id":"b8fc4050df5bfab2","status":"waiting_for_opponent","config_version":"2026.11-4","next_round":1,
           "seats":{"a":{"name":"alice","wins":0,"submitted":true},"b":null},"rounds":[],"winner":null}}
 ```
 **Keep the `token`: it is returned only once.** Names are 1–40 bytes, and the script must be valid, or the response is 422. Your create script is your round-1 submission.
@@ -121,7 +121,7 @@ curl -s localhost:8080/matches -d '{}'
 ```
 ```json
 {"match_id":"5c1f0e2a9b7d4e63",
- "match":{"match_id":"5c1f0e2a9b7d4e63","status":"waiting_for_players","config_version":"2026.11-3","next_round":1,
+ "match":{"match_id":"5c1f0e2a9b7d4e63","status":"waiting_for_players","config_version":"2026.11-4","next_round":1,
           "seats":{"a":null,"b":null},"rounds":[],"winner":null}}
 ```
 There is no seat or token in the response: the host only watches (for example on `/watch/matches/{id}`). Sending only one of `name` and `script` is a 400.
@@ -132,10 +132,10 @@ There is no seat or token in the response: the host only watches (for example on
 
 ```json
 {"match_id":"b8fc4050df5bfab2","seat":"b","token":"94098b550a8d72679c12e28299bda923",
- "match":{"match_id":"b8fc4050df5bfab2","status":"awaiting_scripts","config_version":"2026.11-3","next_round":2,
+ "match":{"match_id":"b8fc4050df5bfab2","status":"awaiting_scripts","config_version":"2026.11-4","next_round":2,
           "seats":{"a":{"name":"alice","wins":0,"submitted":false},"b":{"name":"bob","wins":0,"submitted":false}},
-          "rounds":[{"n":1,"p1":"a","winner":null,"reason":"timeout","end_frame":599,"hp":{"a":100,"b":100},
-                     "config_version":"2026.11-3","log":"/matches/b8fc4050df5bfab2/rounds/1"}],
+          "rounds":[{"n":1,"p1":"a","winner":null,"reason":"timeout","end_frame":1199,"hp":{"a":200,"b":200},
+                     "config_version":"2026.11-4","log":"/matches/b8fc4050df5bfab2/rounds/1"}],
           "winner":null}}
 ```
 Joining a match whose seats are both taken returns 409.
@@ -246,10 +246,11 @@ The `/view` pages below keep the full controls.
 | Shift+← / Shift+→ | 10 frames back / forward |
 | Home / End | first / last frame |
 | `[` / `]` | slower / faster (0.25×–4×; 1× = 60 frames per second) |
+| `F` | full screen stage (also the ⛶ button on the stage; Esc leaves it) |
 
 **Round intro:** playing from frame 0 (pressing play there, replaying from the end, or `autoplay=1`) first shows `ROUND n` (or `FINAL ROUND` for round 3) and then `FIGHT!`, for about 1.5 s at any speed. Local files show only `FIGHT!`. The intro sits before frame 0, so the scrub bar, panels and feed stay on frame 0. Stepping, seeking or pausing skips it, and `#f=N` links never show it.
 
-**Frame countdown:** the number at the top centre is the frames left in the round, `frame_budget − 1 − f` from the log (599 at frame 0 of a default round, 000 when a round times out).
+**Frame countdown:** the number at the top centre is the frames left in the round, `frame_budget − 1 − f` from the log (1199 at frame 0 of a default round, 0000 when a round times out).
 
 **Sound:** hits, misses, blocks (guard breaks included) and jumps play sound effects as playback advances (playing or stepping forward; scrubbing and jumping are silent), with background music: each page picks one `fight_music_*` track at random, starts it when the round first plays, and keeps it looping through pauses and after the round ends. Punch-type attacks (`punch`, `dive_punch`, `low_jab`) and kick-type attacks (`kick`, `sweep`, `jump_kick`) have their own hit and miss sounds, and a successful throw uses the kick hit. Browsers start audio only after the first click or key press on the page. The "sound" toggle turns it off and is remembered in the browser. The sources are the files in `audio/`. The viewer uses MP3 copies in `web/src/audio/`, made by `npm run audio` in `web/` (needs ffmpeg); a new `fight_music_N` file joins the rotation after `npm run audio && npm run build`.
 

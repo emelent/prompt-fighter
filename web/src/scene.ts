@@ -5,7 +5,13 @@ import type { FighterFrame, Log, PlayerID } from './types';
 import { lastFrame } from './replay';
 
 export const STAGE_WIDTH = 100;
-export const MAX_HP = 100;
+/** Starting HP for logs from before `max_hp` was recorded (always 100 then). */
+export const LEGACY_MAX_HP = 100;
+
+/** Each fighter's starting HP: the full length of an HP bar. */
+export function maxHP(log: Log): number {
+  return log.max_hp && log.max_hp > 0 ? log.max_hp : LEGACY_MAX_HP;
+}
 /** Frames a hit/block/throw flash stays visible after its event frame. */
 export const FLASH_FRAMES = 3;
 
@@ -92,6 +98,8 @@ export interface Scene {
   flashes: Flash[];
   banner: Banner | null;
   showRanges: boolean;
+  /** HP a full bar stands for. */
+  maxHp: number;
 }
 
 export interface SceneOptions {
@@ -198,5 +206,6 @@ export function buildScene(log: Log, f: number, opts: SceneOptions = {}): Scene 
     flashes: flashesAt(log, f),
     banner: f === last ? banner(log) : null,
     showRanges: opts.showRanges ?? false,
+    maxHp: maxHP(log),
   };
 }

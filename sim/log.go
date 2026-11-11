@@ -14,6 +14,7 @@ type Log struct {
 	FormatVersion string    `json:"format_version"`
 	ConfigVersion string    `json:"config_version"`
 	FrameBudget   int       `json:"frame_budget"`
+	MaxHP         int       `json:"max_hp"` // starting HP of each fighter
 	Players       [2]Player `json:"players"`
 	Result        Result    `json:"result"`
 	Frames        []Frame   `json:"frames"`

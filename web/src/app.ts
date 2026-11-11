@@ -64,6 +64,14 @@ function saveSoundPref(on: boolean): void {
   }
 }
 
+/** Scrolls box (not the page) the least amount that shows item. */
+function scrollWithin(box: HTMLElement, item: HTMLElement): void {
+  const b = box.getBoundingClientRect();
+  const r = item.getBoundingClientRect();
+  if (r.top < b.top) box.scrollTop -= b.top - r.top;
+  else if (r.bottom > b.bottom) box.scrollTop += r.bottom - b.bottom;
+}
+
 function isTextInput(t: EventTarget | null): boolean {
   if (!(t instanceof HTMLElement)) return false;
   if (t instanceof HTMLTextAreaElement || t instanceof HTMLSelectElement) return true;
@@ -86,6 +94,14 @@ function renderPlayer(log: Log, ctx: PlayerContext): void {
 
   // Stage
   const stageBox = el('div', { class: 'stage', 'aria-label': 'Replay stage' });
+  // Full screen shows just the stage; Esc (or the button again) leaves it.
+  const toggleFullscreen = () => {
+    if (document.fullscreenElement) void document.exitFullscreen();
+    else void stageBox.requestFullscreen?.().catch(() => undefined);
+  };
+  const fsBtn = el('button', { type: 'button', class: 'stage-fs', 'aria-label': 'Full screen (F)', title: 'Full screen (F)' }, '⛶');
+  fsBtn.addEventListener('click', toggleFullscreen);
+  stageBox.append(fsBtn);
 
   // Controls
   const btn = (label: string, aria: string, onClick: () => void) => {
@@ -267,7 +283,9 @@ function renderPlayer(log: Log, ctx: PlayerContext): void {
     if (current !== lastCurrent) {
       lastCurrent?.classList.remove('current');
       current?.classList.add('current');
-      current?.scrollIntoView({ block: 'nearest' });
+      // Scroll only the feed box: scrollIntoView would also scroll the page
+      // and pull the stage out of view.
+      if (current) scrollWithin(feedList, current);
       lastCurrent = current;
     }
     if (!pb.playing && ready) {
@@ -278,7 +296,7 @@ function renderPlayer(log: Log, ctx: PlayerContext): void {
   pb.onChange(sync);
 
   const feedPanel = el('section', { class: 'panel events', 'aria-label': 'Event feed' }, el('h2', {}, 'Events'), feedList);
-  const keysHint = el('p', { class: 'hint' }, 'Keys: Space play/pause · ←/→ 1 frame · Shift+←/→ 10 frames · Home/End · [ ] speed');
+  const keysHint = el('p', { class: 'hint' }, 'Keys: Space play/pause · ←/→ 1 frame · Shift+←/→ 10 frames · Home/End · [ ] speed · F full screen');
   const endBar = el('div', { class: 'end-bar', role: 'status', 'aria-live': 'polite', hidden: 'hidden' });
   // The hint keeps its space when it fades out, so the first click (which
   // unlocks audio and hides it) does not shift the controls under the pointer.
@@ -406,6 +424,10 @@ function renderPlayer(log: Log, ctx: PlayerContext): void {
         break;
       case ']':
         pb.faster();
+        break;
+      case 'f':
+      case 'F':
+        toggleFullscreen();
         break;
       default:
         return;

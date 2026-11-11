@@ -17,7 +17,7 @@ func TestHealth(t *testing.T) {
 	if rec.Code != 200 || b["status"] != "ok" || b["config_version"] != sim.DefaultConfig().Version || b["format_version"] != sim.FormatVersion || b["store_version"] != float64(1) {
 		t.Errorf("%d %v", rec.Code, b)
 	}
-	if b["config_version"] != "2026.11-3" || b["format_version"] != "1" {
+	if b["config_version"] != "2026.11-4" || b["format_version"] != "1" {
 		t.Errorf("versions %v", b)
 	}
 }
@@ -83,10 +83,22 @@ func TestSimCustomFrames(t *testing.T) {
 func TestSimFramesOutOfRange(t *testing.T) {
 	s := newTestServer(t)
 	expectError(t, do(t, s, "POST", "/sim", simBody("kick", "kick", `, "frames": 0`)), 400, "bad_request")
-	expectError(t, do(t, s, "POST", "/sim", simBody("kick", "kick", `, "frames": 601`)), 400, "bad_request")
-	if rec := do(t, s, "POST", "/sim", simBody("kick", "kick", `, "frames": 600`)); rec.Code != 200 {
-		t.Errorf("frames 600 should be allowed: %d", rec.Code)
+	expectError(t, do(t, s, "POST", "/sim", simBody("kick", "kick", `, "frames": 1201`)), 400, "bad_request")
+	if rec := do(t, s, "POST", "/sim", simBody("kick", "kick", `, "frames": 1200`)); rec.Code != 200 {
+		t.Errorf("frames 1200 should be allowed: %d", rec.Code)
 	}
+}
+
+// pf serve --frames/--hp: every simulation uses the server's round settings,
+// and a practice round can't be longer than a match round.
+func TestServerRoundOverrides(t *testing.T) {
+	s := newTestServer(t, func(o *Options) { o.FrameBudget, o.MaxHP = 300, 50 })
+	rec := do(t, s, "POST", "/sim", simBody("wait 1", "wait 1", ""))
+	var l sim.Log
+	if err := json.Unmarshal(rec.Body.Bytes(), &l); err != nil || rec.Code != 200 || l.FrameBudget != 300 || l.MaxHP != 50 || l.Frames[0].P1.HP != 50 {
+		t.Errorf("%d budget %d max_hp %d", rec.Code, l.FrameBudget, l.MaxHP)
+	}
+	expectError(t, do(t, s, "POST", "/sim", simBody("kick", "kick", `, "frames": 301`)), 400, "bad_request")
 }
 
 func TestSimInvalidScript(t *testing.T) {

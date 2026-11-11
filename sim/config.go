@@ -154,7 +154,7 @@ type Config struct {
 
 // DefaultVersion is the version string of DefaultConfig. Bump it whenever a
 // default value changes (TestConfigHashPinned enforces this).
-const DefaultVersion = "2026.11-3"
+const DefaultVersion = "2026.11-4"
 
 // DefaultConfig returns the build-spec defaults plus the gap-fill values
 // documented in docs/RULES.md.
@@ -164,8 +164,8 @@ func DefaultConfig() Config {
 		StageWidth:  100,
 		StartX:      [2]int{30, 70},
 		HalfWidth:   2,
-		MaxHP:       100,
-		FrameBudget: 600,
+		MaxHP:       200,
+		FrameBudget: 1200,
 
 		JumpRise:      10,
 		JumpFall:      10,

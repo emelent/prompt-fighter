@@ -71,7 +71,7 @@ type SimulateIn struct {
 	Side           string  `json:"side,omitempty" jsonschema:"which side you play: p1 (default, starts at x=30) or p2 (starts at x=70)"`
 	Name           string  `json:"name,omitempty" jsonschema:"your fighter's name (default: you)"`
 	OpponentName   string  `json:"opponent_name,omitempty" jsonschema:"opponent's name (default: the bot name or opponent)"`
-	Frames         int     `json:"frames,omitempty" jsonschema:"round length in frames, 1-600 (default 600)"`
+	Frames         int     `json:"frames,omitempty" jsonschema:"round length in frames, 1-1200 (default 1200, a full round)"`
 	IncludeChecks  bool    `json:"include_checks,omitempty" jsonschema:"also list every sensor read in the events (verbose)"`
 }
 
@@ -96,8 +96,8 @@ func (h *handler) simulateRound(ctx context.Context, _ *mcp.CallToolRequest, in 
 	}
 	frames := h.cfg.FrameBudget
 	if in.Frames != 0 {
-		if in.Frames < 1 || in.Frames > 600 {
-			return nil, zero, fmt.Errorf("frames must be between 1 and 600 (got %d)", in.Frames)
+		if in.Frames < 1 || in.Frames > h.cfg.FrameBudget {
+			return nil, zero, fmt.Errorf("frames must be between 1 and %d (got %d)", h.cfg.FrameBudget, in.Frames)
 		}
 		frames = in.Frames
 	}

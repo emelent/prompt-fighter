@@ -21,15 +21,22 @@ h2 { font-size: 0.95rem; margin: 0 0 0.4rem; }
 .alert { background: #3a1f22; border: 1px solid #a33a3a; padding: 0.6rem 0.8rem; border-radius: 6px; margin: 0.5rem 0; }
 .hint, .notice { color: var(--muted); font-size: 0.85rem; }
 .player-head { display: flex; gap: 1rem; align-items: baseline; flex-wrap: wrap; }
-.stage { width: 100%; max-width: 1100px; margin: 0 auto; background: #14191f; border-radius: 8px; overflow: hidden; }
+/* The stage fills the page width, as large as fits at 16:9 with the header
+   and the controls row still on screen (never below 480px wide). */
+.player { --stage-w: min(100%, max(480px, calc((100svh - 10.5rem) * 16 / 9))); --row-w: max(var(--stage-w), min(100%, 1100px)); }
+.stage { position: relative; width: var(--stage-w); aspect-ratio: 16 / 9; margin: 0 auto; background: #14191f; border-radius: 8px; overflow: hidden; }
 .stage canvas { display: block; }
-.controls { display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap; margin: 0.6rem auto; max-width: 1100px; }
+.stage:fullscreen { width: 100vw; height: 100vh; aspect-ratio: auto; border-radius: 0; background: #000; }
+.stage-fs { position: absolute; top: 0.4rem; right: 0.4rem; z-index: 1; background: rgba(16, 20, 24, 0.6); color: var(--text); border: 1px solid #2f3a45; border-radius: 6px; padding: 0.15rem 0.45rem; cursor: pointer; font-size: 1rem; opacity: 0.55; }
+.stage:hover .stage-fs, .stage-fs:focus-visible { opacity: 1; }
+.stage-fs:focus-visible { outline: 2px solid var(--accent); }
+.controls { display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap; margin: 0.6rem auto; max-width: var(--stage-w); }
 .controls button { background: var(--panel); color: var(--text); border: 1px solid #2f3a45; border-radius: 6px; padding: 0.3rem 0.6rem; cursor: pointer; min-width: 2.4rem; }
 .controls button:focus-visible, .feed li:focus-visible { outline: 2px solid var(--accent); }
 .controls input[type=range] { flex: 1 1 220px; }
 .controls select { background: var(--panel); color: var(--text); border: 1px solid #2f3a45; border-radius: 6px; }
 .frame-out { font-variant-numeric: tabular-nums; min-width: 7rem; color: var(--muted); }
-.panels { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.8rem; max-width: 1100px; margin: 0 auto; }
+.panels { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.8rem; max-width: var(--row-w); margin: 0 auto; }
 @media (max-width: 900px) { .panels { grid-template-columns: 1fr; } }
 .panel { background: var(--panel); border-radius: 8px; padding: 0.6rem; min-width: 0; }
 .panel.p1 h2 { color: var(--p1); }
@@ -84,7 +91,7 @@ button.link { background: none; border: none; color: var(--accent); text-decorat
 .settings-pop { position: absolute; right: 0; bottom: calc(100% + 6px); z-index: 10; display: grid; gap: 0.35rem; min-width: 14rem; padding: 0.6rem 0.8rem; background: var(--panel); border: 1px solid #2f3a45; border-radius: 8px; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4); }
 .settings-pop label { display: flex; gap: 0.4rem; align-items: center; white-space: nowrap; }
 .panels.simple { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
-.end-bar { display: flex; gap: 1rem; align-items: center; justify-content: center; max-width: 1100px; margin: 0.6rem auto 0; }
+.end-bar { display: flex; gap: 1rem; align-items: center; justify-content: center; max-width: var(--stage-w); margin: 0.6rem auto 0; }
 .end-btn { background: var(--accent); color: #101418; border: 0; border-radius: 6px; padding: 0.5rem 1.4rem; font-weight: 700; font-size: 1rem; cursor: pointer; }
 .end-btn:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
 .countdown { color: var(--accent); font-variant-numeric: tabular-nums; }

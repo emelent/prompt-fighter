@@ -11,7 +11,7 @@ All tunables SHALL live in a single config value with a version string. That cov
 
 #### Scenario: Defaults match the build spec
 - **WHEN** the default config is loaded
-- **THEN** punch is 3/2/5 frames (startup/active/recovery) with high height, 5 damage and range 8; kick is 6/3/9, high, 9 damage, range 12; sweep is 8/3/14, low, 8 damage, range 12, causing knockdown; throw is 5/1/18, 12 damage, range 5; hitstun is 13 frames; hit pushback is 2 units; HP is 100; the frame budget is 600; and the stage width is 100
+- **THEN** punch is 3/2/5 frames (startup/active/recovery) with high height, 5 damage and range 8; kick is 6/3/9, high, 9 damage, range 12; sweep is 8/3/14, low, 8 damage, range 12, causing knockdown; throw is 5/1/18, 12 damage, range 5; hitstun is 13 frames; hit pushback is 2 units; HP is 200; the frame budget is 1200; and the stage width is 100
 
 #### Scenario: Overlay defaults
 - **WHEN** the default config is loaded
@@ -23,7 +23,7 @@ All tunables SHALL live in a single config value with a version string. That cov
 
 #### Scenario: Anti-passivity defaults
 - **WHEN** the default config is loaded
-- **THEN** its version is `2026.11-3`; a guard breaks on the 4th block in a row, the streak lapses after 60 frames, and guard-break stun lasts 20 frames; the passivity limit is 120 frames, the boost starts at 110% and grows 10 points every 30 frames up to 150%; attacks go stale from the 6th repeat, losing 15% of their range per repeat down to 40%; and combos grow by 15 percentage points per hit
+- **THEN** its version is `2026.11-4`; a guard breaks on the 4th block in a row, the streak lapses after 60 frames, and guard-break stun lasts 20 frames; the passivity limit is 120 frames, the boost starts at 110% and grows 10 points every 30 frames up to 150%; attacks go stale from the 6th repeat, losing 15% of their range per repeat down to 40%; and combos grow by 15 percentage points per hit
 
 ### Requirement: Stage, geometry and facing
 The stage SHALL span x = 0 to 100 units. Player 1 SHALL start at x=30 and player 2 at x=70, both at y=0 with full HP. Each fighter SHALL have a half-width of 2 units, so fighter centers stay within [2, 98] and are never closer than 4 units apart. Range checks SHALL compare the center-to-center distance against the attack's range. Grounded fighters SHALL always face each other. Fighters SHALL NOT pass through or over each other.

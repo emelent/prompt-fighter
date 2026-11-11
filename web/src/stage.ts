@@ -8,7 +8,7 @@ import { calloutsAt, countdownAt, type Callout } from './callouts';
 import { choosePose, colourise, PALETTES, PLAYER_TEXT, poseGrid, SPRITE_H, SPRITE_W, type PaletteName, type PoseName } from './fighterart';
 import { INTRO_FIGHT_MS, type Playback } from './playback';
 import { ADVANCE, fitText, textMask, textWidth } from './pixelfont';
-import { buildScene, MAX_HP, type FighterDraw, type Flash, type Scene } from './scene';
+import { buildScene, type FighterDraw, type Flash, type Scene } from './scene';
 import { pickTrack, SOUND_KEYS, soundsBetween, type SoundKey } from './sounds';
 import blockUrl from './audio/block.mp3';
 import jumpUrl from './audio/jump.mp3';
@@ -295,7 +295,7 @@ export class StageScene extends Phaser.Scene {
     const g = this.hud;
     sc.fighters.forEach((fd, i) => {
       const x = i === 0 ? 20 : GAME_WIDTH - 20 - BAR_W;
-      const frac = Math.max(0, Math.min(1, fd.hp / MAX_HP));
+      const frac = Math.max(0, Math.min(1, fd.hp / sc.maxHp));
       const low = frac <= 0.3;
       g.fillStyle(hexNum(INK), 1).fillRect(x - 3, BAR_Y - 3, BAR_W + 6, BAR_H + 6);
       g.fillStyle(low ? 0x3a2030 : 0xb03a2e, 1).fillRect(x, BAR_Y, BAR_W, BAR_H);
@@ -357,7 +357,7 @@ export function mountStage(parent: HTMLElement, src: StageSource): { game: Phase
     pixelArt: true,
     banner: false,
     input: { keyboard: false, mouse: false, touch: false, gamepad: false },
-    scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_HORIZONTALLY },
+    scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
     scene,
   });
   document.documentElement.dataset.phaser = Phaser.VERSION;

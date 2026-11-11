@@ -11,12 +11,13 @@ The log SHALL be a single JSON object containing:
 - `format_version`: starting at `"1"`, bumped on any breaking schema change.
 - `config_version`
 - `frame_budget`
+- `max_hp`: each fighter's starting HP
 - `players`: an array of exactly 2 objects with `id` (`"p1"`, `"p2"`), `name` (the script name supplied by the caller) and `script` (the full source text).
 - `result`: an object with `winner` (`"p1"`, `"p2"` or `null`), `reason` (`ko`, `double_ko` or `timeout`), `end_frame` (index of the last simulated frame) and `hp` (final HP for each player).
 
 #### Scenario: Header contents
 - **WHEN** `turtle.pf` (p1) and `rushdown.pf` (p2) are simulated with the default config
-- **THEN** the log's `players[0].script` equals the exact contents of `turtle.pf`, `config_version` equals the default config version, and `frame_budget` is 600
+- **THEN** the log's `players[0].script` equals the exact contents of `turtle.pf`, `config_version` equals the default config version, `frame_budget` is 1200 and `max_hp` is 200
 
 #### Scenario: Custom frame budget recorded
 - **WHEN** a round is simulated with a frame budget of 300
@@ -36,8 +37,8 @@ The log SHALL be a single JSON object containing:
 - `script_line`: the 1-based source line of the statement the interpreter is executing, or 0 when not executing (stunned, or script ended)
 
 #### Scenario: Frame count on timeout
-- **WHEN** a round runs to the 600-frame timeout
-- **THEN** `frames` has exactly 600 entries with `f` from 0 to 599
+- **WHEN** a round runs to the 1200-frame timeout
+- **THEN** `frames` has exactly 1200 entries with `f` from 0 to 1199
 
 #### Scenario: Line highlighting data
 - **WHEN** p1 is on the second frame of a sensor read on line 4 of its script

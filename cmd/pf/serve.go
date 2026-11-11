@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"promptfighter/server"
+	"promptfighter/sim"
 )
 
 const (
@@ -21,7 +22,10 @@ const (
 	defaultDataDir = "./data"
 )
 
-type serveFlags struct{ addr, data string }
+type serveFlags struct {
+	addr, data  string
+	frames, hp int
+}
 
 func parseServeFlags(args []string, stderr io.Writer) (serveFlags, error) {
 	fs := flag.NewFlagSet("serve", flag.ContinueOnError)
@@ -29,11 +33,20 @@ func parseServeFlags(args []string, stderr io.Writer) (serveFlags, error) {
 	var f serveFlags
 	fs.StringVar(&f.addr, "addr", defaultAddr, "listen address HOST:PORT")
 	fs.StringVar(&f.data, "data", defaultDataDir, "data directory for stored matches")
+	dc := sim.DefaultConfig()
+	fs.IntVar(&f.frames, "frames", dc.FrameBudget, "frames per match round (>= 1)")
+	fs.IntVar(&f.hp, "hp", dc.MaxHP, "starting HP of each fighter (>= 1)")
 	if err := fs.Parse(args); err != nil {
 		return f, err
 	}
 	if fs.NArg() > 0 {
 		return f, fmt.Errorf("unexpected arguments: %v", fs.Args())
+	}
+	if f.frames < 1 {
+		return f, fmt.Errorf("--frames must be >= 1, got %d", f.frames)
+	}
+	if f.hp < 1 {
+		return f, fmt.Errorf("--hp must be >= 1, got %d", f.hp)
 	}
 	return f, nil
 }
@@ -49,10 +62,10 @@ func cmdServeSignals(args []string, stdout, stderr io.Writer) int {
 func cmdServe(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 	f, err := parseServeFlags(args, stderr)
 	if err != nil {
-		fmt.Fprintf(stderr, "pf serve: %v\nusage: pf serve [--addr HOST:PORT] [--data DIR]\n", err)
+		fmt.Fprintf(stderr, "pf serve: %v\nusage: pf serve [--addr HOST:PORT] [--data DIR] [--frames N] [--hp N]\n", err)
 		return 2
 	}
-	h, err := server.New(server.Options{DataDir: f.data})
+	h, err := server.New(server.Options{DataDir: f.data, FrameBudget: f.frames, MaxHP: f.hp})
 	if err != nil {
 		fmt.Fprintf(stderr, "pf serve: %v\n", err)
 		return 2
@@ -69,7 +82,7 @@ func cmdServe(ctx context.Context, args []string, stdout, stderr io.Writer) int 
 		WriteTimeout:      30 * time.Second,
 		IdleTimeout:       60 * time.Second,
 	}
-	fmt.Fprintf(stderr, "pf serve: listening on http://%s (data %s)\n", ln.Addr(), f.data)
+	fmt.Fprintf(stderr, "pf serve: listening on http://%s (data %s, %d frames, %d HP)\n", ln.Addr(), f.data, f.frames, f.hp)
 	errc := make(chan error, 1)
 	go func() { errc <- srv.Serve(ln) }()
 	select {

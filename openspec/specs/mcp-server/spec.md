@@ -72,7 +72,7 @@ The server SHALL bundle the repository's sample bots (`scripts/*.pf`). `list_sam
 - Exactly one of `opponent_script` or `opponent_bot`.
 - Optional `side`: `p1` (the default) or `p2`, for the caller.
 - Optional `name` and `opponent_name`.
-- Optional `frames`: 1–600, default 600.
+- Optional `frames`: 1 to the config frame budget (1200), default the full budget.
 - Optional `include_checks`: default false.
 
 It SHALL return a replay summary (see "Replay summaries") identifying which side the caller played. It needs no `pf serve` server.

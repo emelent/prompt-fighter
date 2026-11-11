@@ -26,7 +26,7 @@ func TestConfigBuildSpecFrameData(t *testing.T) {
 			}
 		})
 	}
-	if c.MaxHP != 100 || c.FrameBudget != 600 || c.StageWidth != 100 || c.StartX != [2]int{30, 70} {
+	if c.MaxHP != 200 || c.FrameBudget != 1200 || c.StageWidth != 100 || c.StartX != [2]int{30, 70} {
 		t.Errorf("stage/round defaults wrong: %+v", c)
 	}
 	if c.JumpRise != 10 || c.JumpFall != 10 || c.JumpLanding != 2 || c.JumpSpeedX != 1 {
@@ -41,7 +41,7 @@ func TestConfigBuildSpecFrameData(t *testing.T) {
 	if c.ComboGrowthPct != 15 || c.ComboKnockdownHits != 5 || c.SensorCost != 2 {
 		t.Errorf("combo/sensor defaults wrong")
 	}
-	if c.Version != "2026.11-3" || c.GuardBreakBlocks != 4 || c.GuardStreakWindow != 60 || c.GuardBreakStun != 20 {
+	if c.Version != "2026.11-4" || c.GuardBreakBlocks != 4 || c.GuardStreakWindow != 60 || c.GuardBreakStun != 20 {
 		t.Errorf("guard break defaults wrong")
 	}
 	if c.PassiveLimit != 120 || c.PassiveBoostStartPct != 110 || c.PassiveBoostStepPct != 10 || c.PassiveBoostStepFrames != 30 || c.PassiveBoostMaxPct != 150 {
@@ -114,8 +114,8 @@ func TestConfigVocabulary(t *testing.T) {
 // When you change a default: bump DefaultVersion and update both constants.
 func TestConfigHashPinned(t *testing.T) {
 	const (
-		pinnedVersion = "2026.11-3"
-		pinnedHash    = "6985dff35180a834f97f23d8211adbe17e10ae75901aa9e54b691e6fb8151bcf"
+		pinnedVersion = "2026.11-4"
+		pinnedHash    = "3264f44e55575f49b7946f4a15b9f0ce5345ad056e2a4b0d06cfe55b2440a008"
 	)
 	c := DefaultConfig()
 	got := fmt.Sprintf("%x", sha256.Sum256(encode(c, false)))

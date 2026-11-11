@@ -27,7 +27,7 @@ It SHALL state the config version it describes.
 
 #### Scenario: Guide states its version
 - **WHEN** the guide is read
-- **THEN** it names config version `2026.11-3`
+- **THEN** it names config version `2026.11-4`
 
 ### Requirement: Guide stays in sync with the engine
 An automated test SHALL fail when any of these are missing from the guide:

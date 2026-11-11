@@ -39,7 +39,7 @@ func TestSummaryStats(t *testing.T) {
 	if s.Players[0] != (PlayerRef{"p1", "alice"}) || s.Players[1] != (PlayerRef{"p2", "bob"}) {
 		t.Errorf("players %+v", s.Players)
 	}
-	if s.Result.Reason != "timeout" || s.Result.HP != [2]int{100, 79} || *s.Result.Winner != "p1" {
+	if s.Result.Reason != "timeout" || s.Result.HP != [2]int{200, 179} || *s.Result.Winner != "p1" {
 		t.Errorf("result %+v", s.Result)
 	}
 	if strings.Join(s.Events, "\n") != strings.Join(l.EventLines(false), "\n") || s.EventsTruncated || s.EventsTotal != len(s.Events) {

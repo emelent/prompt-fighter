@@ -72,7 +72,7 @@ An `invalid_script` error SHALL also carry `errors`: a list of `{"player"?, "lin
 ### Requirement: Sim endpoint
 `POST /sim` with `{"p1": {"name"?, "script"}, "p2": {"name"?, "script"}, "frames"?}` SHALL run one round under the default config, with p1 and p2 as given, and return 200 with exactly the bytes of the engine's compact event log JSON for those inputs:
 - `name` is optional, defaults to `p1`/`p2`, and is at most 40 bytes.
-- `frames` is optional, defaults to the config frame budget, and MUST be from 1 to 600.
+- `frames` is optional, defaults to the server's frame budget, and MUST be from 1 to that budget.
 - If either script is invalid, the response SHALL be 422 `invalid_script`, with each error tagged `player` `p1` or `p2`.
 
 #### Scenario: Log equals the engine output

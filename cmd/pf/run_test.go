@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"testing"
 
@@ -52,6 +53,8 @@ func writeScripts(t *testing.T, files map[string]string) string {
 	return dir
 }
 
+var eventLine = regexp.MustCompile(`^\[f \d{3,}\] p[12] `)
+
 func TestSimText(t *testing.T) {
 	dir := writeScripts(t, map[string]string{"a.pf": "loop { move_forward x2 kick }", "b.pf": "loop { if distance < 13 { high_block hold 8 } }"})
 	code, out, _ := call("sim", filepath.Join(dir, "a.pf"), filepath.Join(dir, "b.pf"))
@@ -63,7 +66,8 @@ func TestSimText(t *testing.T) {
 		t.Errorf("missing block line:\n%s", out)
 	}
 	for _, ln := range lines[:len(lines)-1] {
-		if !strings.HasPrefix(ln, "[f ") || len(ln) < 8 || ln[6] != ']' {
+		// Frames are padded to at least 3 digits; rounds past frame 999 use 4.
+		if !eventLine.MatchString(ln) {
 			t.Errorf("bad event line %q", ln)
 		}
 		if strings.Contains(ln, " checks ") {
@@ -107,6 +111,18 @@ func TestSimFrames(t *testing.T) {
 	}
 	if code, _, _ := call("sim", filepath.Join(dir, "a.pf"), filepath.Join(dir, "b.pf"), "--frames", "0"); code != 2 {
 		t.Errorf("--frames 0 should be a usage error, got %d", code)
+	}
+}
+
+func TestSimHP(t *testing.T) {
+	dir := writeScripts(t, map[string]string{"a.pf": "wait 1", "b.pf": "wait 1"})
+	code, out, _ := call("sim", filepath.Join(dir, "a.pf"), filepath.Join(dir, "b.pf"), "--hp", "50", "--json")
+	var l sim.Log
+	if code != 0 || json.Unmarshal([]byte(out), &l) != nil || l.MaxHP != 50 || l.Result.HP != [2]int{50, 50} {
+		t.Errorf("code %d max_hp %d result hp %v", code, l.MaxHP, l.Result.HP)
+	}
+	if code, _, _ := call("sim", filepath.Join(dir, "a.pf"), filepath.Join(dir, "b.pf"), "--hp", "0"); code != 2 {
+		t.Errorf("--hp 0 should be a usage error, got %d", code)
 	}
 }
 

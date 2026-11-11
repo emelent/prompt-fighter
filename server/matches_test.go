@@ -88,7 +88,7 @@ func TestMatchesCreate(t *testing.T) {
 	if !regexp.MustCompile(`^[0-9a-f]{16}$`).MatchString(id) || !regexp.MustCompile(`^[0-9a-f]{32}$`).MatchString(token) {
 		t.Errorf("id %q token %q", id, token)
 	}
-	if v.Status != StatusWaiting || v.Seats.B != nil || v.Seats.A.Name != "alice" || !v.Seats.A.Submitted || v.NextRound != 1 || v.ConfigVersion != "2026.11-3" {
+	if v.Status != StatusWaiting || v.Seats.B != nil || v.Seats.A.Name != "alice" || !v.Seats.A.Submitted || v.NextRound != 1 || v.ConfigVersion != "2026.11-4" {
 		t.Errorf("view %+v", v)
 	}
 }

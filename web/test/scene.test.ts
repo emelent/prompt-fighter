@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildScene, FLASH_FRAMES, poseFor } from '../src/scene';
+import { buildScene, FLASH_FRAMES, LEGACY_MAX_HP, maxHP, poseFor } from '../src/scene';
 import type { FighterFrame, Log } from '../src/types';
 import { goldenLogs } from './fixtures';
 
@@ -89,5 +89,18 @@ describe('buildScene', () => {
 
   it('rejects frames outside the log', () => {
     expect(() => buildScene(goldenLogs.jumper_vs_lazy!, 100000)).toThrow(RangeError);
+  });
+});
+
+describe('maxHP', () => {
+  it('takes the HP bar length from the log, and 100 for logs without max_hp', () => {
+    const l = goldenLogs['rushdown_vs_turtle']!;
+    expect(l.max_hp).toBe(200);
+    expect(maxHP(l)).toBe(200);
+    expect(buildScene(l, 0).maxHp).toBe(200);
+    expect(buildScene(l, 0).fighters[0].hp).toBe(200);
+    const { max_hp: _, ...old } = l;
+    expect(maxHP(old as Log)).toBe(LEGACY_MAX_HP);
+    expect(maxHP({ ...l, max_hp: 50 })).toBe(50);
   });
 });

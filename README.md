@@ -18,6 +18,7 @@ bin/pf version
 ```sh
 pf serve                       # http://127.0.0.1:8080, matches stored in ./data
 pf serve --addr 0.0.0.0:8080   # let others on your network join
+pf serve --frames 1800 --hp 300  # longer rounds (defaults: 1200 frames, 200 HP)
 ```
 
 Open http://127.0.0.1:8080/ for the cover screen. **Create match** hosts a match without playing: you get a waiting screen with the **game link**. Send it to two players. Each round runs once both have submitted a script; the waiting screen counts down and plays it, and **Done** returns to it for the next round.

@@ -38,6 +38,22 @@ func TestServeDefaults(t *testing.T) {
 	}
 }
 
+func TestServeRoundFlags(t *testing.T) {
+	f, err := parseServeFlags(nil, io.Discard)
+	if err != nil || f.frames != 1200 || f.hp != 200 {
+		t.Errorf("defaults %+v %v", f, err)
+	}
+	f, err = parseServeFlags([]string{"--frames", "1800", "--hp", "300"}, io.Discard)
+	if err != nil || f.frames != 1800 || f.hp != 300 {
+		t.Errorf("overrides %+v %v", f, err)
+	}
+	for _, bad := range [][]string{{"--frames", "0"}, {"--hp", "0"}, {"--hp", "-5"}} {
+		if _, err := parseServeFlags(bad, io.Discard); err == nil {
+			t.Errorf("%v should be rejected", bad)
+		}
+	}
+}
+
 func TestServeBadAddr(t *testing.T) {
 	var stderr bytes.Buffer
 	code := cmdServe(context.Background(), []string{"--addr", "nonsense", "--data", t.TempDir()}, io.Discard, &stderr)

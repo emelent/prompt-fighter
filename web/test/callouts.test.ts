@@ -72,13 +72,13 @@ describe('calloutsAt', () => {
 });
 
 describe('countdownAt', () => {
-  it('counts the frames left in a 600-frame round down to 000', () => {
+  it('counts the frames left in a 1200-frame round down to 0000', () => {
     const l = log('rushdown_vs_turtle');
-    expect(l.frame_budget).toBe(600);
-    expect(countdownAt(l, 0)).toBe('599');
-    expect(countdownAt(l, 250)).toBe('349');
-    expect(countdownAt(l, 599)).toBe('000');
-    expect(countdownAt(l, 595)).toBe('004');
+    expect(l.frame_budget).toBe(1200);
+    expect(countdownAt(l, 0)).toBe('1199');
+    expect(countdownAt(l, 250)).toBe('0949');
+    expect(countdownAt(l, 1199)).toBe('0000');
+    expect(countdownAt(l, 1195)).toBe('0004');
   });
   it('follows the log frame budget', () => {
     const l = { ...log('jumper_vs_lazy'), frame_budget: 300 };

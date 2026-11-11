@@ -1,11 +1,11 @@
 # Prompt Fighter — Player Guide
 
-You don't press buttons in Prompt Fighter. You write your fighter's brain as a small script in the **`.pf` language**, usually with the help of an LLM, and the engine plays it frame by frame against an opponent's script. This guide teaches everything a script author needs. It describes engine config **`2026.11-3`**. The full engine reference is [`RULES.md`](RULES.md).
+You don't press buttons in Prompt Fighter. You write your fighter's brain as a small script in the **`.pf` language**, usually with the help of an LLM, and the engine plays it frame by frame against an opponent's script. This guide teaches everything a script author needs. It describes engine config **`2026.11-4`**. The full engine reference is [`RULES.md`](RULES.md).
 
 ## 1. The round
 
 - **Stage and fighters:** the stage runs from x = 0 to 100. p1 starts at x = 30 facing right, and p2 at x = 70 facing left. Fighters always face each other, can't pass through each other, and are never closer than 4 units.
-- **HP and length:** each fighter has 100 HP. A round lasts **600 frames**.
+- **HP and length:** each fighter has 200 HP. A round lasts **1200 frames** (20 seconds at 60 fps). A server started with `pf serve --hp N --frames N` can change both.
 - **Winning:** a round ends on a **KO** (HP reaches 0) or at **timeout**, where the higher HP wins and equal HP is a draw. A simultaneous KO is a draw.
 - **Determinism:** there is no randomness. The same two scripts always produce the same round, and swapping sides mirrors it exactly.
 
@@ -238,7 +238,7 @@ kik          → 1:1: unknown action "kik" — did you mean "kick"?
 
 ## 10. Strategy notes
 
-These come from the six sample bots (`pf selfplay scripts/` at config 2026.11-3). Every bot beats at least one other and loses to at least one other:
+These come from the six sample bots (`pf selfplay scripts/` at config 2026.11-4). Every bot beats at least one other and loses to at least one other:
 
 | bot | idea | beats | loses to |
 |---|---|---|---|

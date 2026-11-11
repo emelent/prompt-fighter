@@ -17,7 +17,7 @@ import (
 
 const usage = `usage:
   pf validate <file>...
-  pf sim <a.pf> <b.pf> [--json] [--frames N] [-v]
+  pf sim <a.pf> <b.pf> [--json] [--frames N] [--hp N] [-v]
   pf selfplay <dir>
   pf serve [--addr HOST:PORT] [--data DIR]
   pf mcp [--server URL]
@@ -90,6 +90,7 @@ func cmdSim(args []string, stdout, stderr io.Writer) int {
 	verbose := fs.Bool("v", false, "include check events in the text log")
 	cfg := sim.DefaultConfig()
 	nframes := fs.Int("frames", cfg.FrameBudget, "frame budget (>= 1)")
+	hp := fs.Int("hp", cfg.MaxHP, "starting HP of each fighter (>= 1)")
 	// Allow flags before and after the two file arguments.
 	var files []string
 	rest := args
@@ -104,14 +105,18 @@ func cmdSim(args []string, stdout, stderr io.Writer) int {
 		rest = fs.Args()[1:]
 	}
 	if len(files) != 2 {
-		fmt.Fprintln(stderr, "usage: pf sim <a.pf> <b.pf> [--json] [--frames N] [-v]")
+		fmt.Fprintln(stderr, "usage: pf sim <a.pf> <b.pf> [--json] [--frames N] [--hp N] [-v]")
 		return 2
 	}
 	if *nframes < 1 {
 		fmt.Fprintf(stderr, "pf: --frames must be >= 1, got %d\n", *nframes)
 		return 2
 	}
-	cfg.FrameBudget = *nframes
+	if *hp < 1 {
+		fmt.Fprintf(stderr, "pf: --hp must be >= 1, got %d\n", *hp)
+		return 2
+	}
+	cfg.FrameBudget, cfg.MaxHP = *nframes, *hp
 	var ents [2]sim.Entrant
 	for i, path := range files {
 		src, err := os.ReadFile(path)

@@ -137,7 +137,7 @@ func TestLocalSimulateErrors(t *testing.T) {
 	expectToolError(t, callTool(t, cs, "simulate_round", map[string]any{"script": "punch\n\n    kik", "opponent_bot": "lazy"}), `3:5: unknown action "kik" — did you mean "kick"?`, "your script")
 	expectToolError(t, callTool(t, cs, "simulate_round", map[string]any{"script": "kick", "opponent_script": "kik"}), "the opponent script")
 	expectToolError(t, callTool(t, cs, "simulate_round", map[string]any{"script": "kick", "opponent_bot": "lazy", "side": "left"}), "side must be p1 or p2")
-	expectToolError(t, callTool(t, cs, "simulate_round", map[string]any{"script": "kick", "opponent_bot": "lazy", "frames": 601}), "frames must be between 1 and 600")
+	expectToolError(t, callTool(t, cs, "simulate_round", map[string]any{"script": "kick", "opponent_bot": "lazy", "frames": 1201}), "frames must be between 1 and 1200")
 }
 
 func TestLocalPlayerGuide(t *testing.T) {

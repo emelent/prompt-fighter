@@ -22,11 +22,11 @@ Defines the `pf` command-line tool used to validate scripts, simulate a round be
 - **THEN** it prints an error to stderr and exits 2
 
 ### Requirement: pf sim
-`pf sim <a.pf> <b.pf> [--json] [--frames N] [-v]` SHALL simulate a round with `a` as p1 and `b` as p2. By default it SHALL print a human-readable text log to stdout: one line per event (excluding `check` events unless `-v` is given) in the form `[f NNN] <actor> <description>`, followed by a result summary line with winner, reason, end frame and final HP. With `--json`, it SHALL print the exact event log JSON. `--frames` SHALL set the frame budget (default from config, must be ≥ 1). If either script is invalid, it SHALL print validation errors as `pf validate` does and exit 1.
+`pf sim <a.pf> <b.pf> [--json] [--frames N] [--hp N] [-v]` SHALL simulate a round with `a` as p1 and `b` as p2. By default it SHALL print a human-readable text log to stdout: one line per event (excluding `check` events unless `-v` is given) in the form `[f NNN] <actor> <description>`, followed by a result summary line with winner, reason, end frame and final HP. With `--json`, it SHALL print the exact event log JSON. `--frames` SHALL set the frame budget and `--hp` each fighter's starting HP (defaults from config, each must be ≥ 1). Event lines pad the frame to at least three digits. If either script is invalid, it SHALL print validation errors as `pf validate` does and exit 1.
 
 #### Scenario: Text output
 - **WHEN** `pf sim scripts/rushdown.pf scripts/turtle.pf` is run
-- **THEN** stdout contains event lines such as `[f 045] p1 kick blocked by p2` and ends with a result line such as `result: p2 wins by timeout at f599 (hp 71-88)`
+- **THEN** stdout contains event lines such as `[f 045] p1 kick blocked by p2` and ends with a result line such as `result: p2 wins by timeout at f1199 (hp 71-88)`
 
 #### Scenario: JSON output is the log
 - **WHEN** `pf sim a.pf b.pf --json` is run twice
@@ -48,7 +48,7 @@ Defines the `pf` command-line tool used to validate scripts, simulate a round be
 - **THEN** its validation errors are printed and it is excluded from the matrix
 
 ### Requirement: pf serve
-`pf serve [--addr HOST:PORT] [--data DIR]` SHALL start the HTTP API server. `--addr` defaults to `127.0.0.1:8080` and `--data` defaults to `./data`, which SHALL be created if missing. It SHALL log one line on startup naming the listen address and data directory. On SIGINT or SIGTERM it SHALL shut down gracefully, letting in-flight requests finish, and exit 0. An unusable address or data directory SHALL print an error to stderr and exit 2.
+`pf serve [--addr HOST:PORT] [--data DIR] [--frames N] [--hp N]` SHALL start the HTTP API server. `--addr` defaults to `127.0.0.1:8080` and `--data` defaults to `./data`, which SHALL be created if missing. `--frames` and `--hp` SHALL set the frame budget and starting HP of every round the server simulates (defaults from config, each must be ≥ 1). It SHALL log one line on startup naming the listen address, data directory, frame budget and HP. On SIGINT or SIGTERM it SHALL shut down gracefully, letting in-flight requests finish, and exit 0. An unusable address or data directory SHALL print an error to stderr and exit 2.
 
 #### Scenario: Default bind is local
 - **WHEN** `pf serve` is run with no flags

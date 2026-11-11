@@ -17,7 +17,7 @@ func TestLogHeader(t *testing.T) {
 	if err := json.Unmarshal(l.JSON(), &doc); err != nil {
 		t.Fatal(err)
 	}
-	if doc["format_version"] != "1" || doc["config_version"] != cfg.Version || doc["frame_budget"] != float64(600) {
+	if doc["format_version"] != "1" || doc["config_version"] != cfg.Version || doc["frame_budget"] != float64(1200) {
 		t.Errorf("header %v %v %v", doc["format_version"], doc["config_version"], doc["frame_budget"])
 	}
 	players := doc["players"].([]any)

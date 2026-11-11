@@ -9,7 +9,11 @@ import (
 // run simulates a (p1) vs b (p2) with the default config, optionally modified.
 func run(t *testing.T, a, b string, mods ...func(*Config)) *Log {
 	t.Helper()
+	// Mechanic tests are written against 100 HP and a 600-frame round, so
+	// they don't depend on the default round settings; the defaults
+	// themselves are covered by the config, log and golden-log tests.
 	cfg := DefaultConfig()
+	cfg.MaxHP, cfg.FrameBudget = 100, 600
 	for _, m := range mods {
 		m(&cfg)
 	}

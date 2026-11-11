@@ -150,7 +150,7 @@ If a fighter is interrupted while running a handler, the handler SHALL be abando
 When the main program finishes, a `script_end` event SHALL be emitted once and the fighter SHALL idle for the rest of the round. A fighter idling after its script has ended SHALL still run `on_hit`/`on_block` when interrupted, then return to idling.
 
 #### Scenario: Finite script idles
-- **WHEN** a script is `kick` in a 600-frame round
+- **WHEN** a script is `kick` in a 1200-frame round
 - **THEN** after the kick's 18 frames the fighter emits `script_end` and is in the idle state for the remaining frames
 
 #### Scenario: Handler runs after script end

@@ -1,4 +1,4 @@
-# Prompt Fighter — Engine Rules (config `2026.11-3`, log format `1`)
+# Prompt Fighter — Engine Rules (config `2026.11-4`, log format `1`)
 
 This is the reference for how the Phase 1 simulation engine behaves. It records every rule, including each decision taken where the build spec was silent; those are marked **[gap-fill]**. All tunables live in `sim.DefaultConfig()`. Changing any default bumps the config version. Open balance questions are tracked in [`ISSUES.md`](ISSUES.md).
 
@@ -9,8 +9,8 @@ This is the reference for how the Phase 1 simulation engine behaves. It records 
 | stage | x = 0..100 units |
 | start positions | p1 x=30, p2 x=70, y=0 |
 | fighter half-width | 2. Centres stay in [2, 98] and are never closer than 4 **[gap-fill]** |
-| HP | 100 each |
-| frame budget | 600 frames (`pf sim --frames N` overrides it) |
+| HP | 200 each (`pf sim --hp N` and `pf serve --hp N` override it) |
+| frame budget | 1200 frames, 20 seconds at 60 fps (`pf sim --frames N` and `pf serve --frames N` override it) |
 | arithmetic | integers only. No floats, randomness or map-order dependence |
 
 A round ends at the end of the first frame on which any fighter's HP reaches 0 (**KO**), or when the frame budget runs out (**timeout**).
@@ -190,7 +190,7 @@ The 5th-hit knockdown is a safety cap that the default frame data doesn't reach.
 ## 7. Event log
 
 The log is a single JSON object with these fields:
-- `format_version`, `config_version`, `frame_budget`
+- `format_version`, `config_version`, `frame_budget`, `max_hp` (starting HP of each fighter)
 - `players`: `[{id, name, script}]` × 2
 - `result`: `{winner: "p1"|"p2"|null, reason: ko|double_ko|timeout, end_frame, hp: [p1, p2]}`
 - `frames`

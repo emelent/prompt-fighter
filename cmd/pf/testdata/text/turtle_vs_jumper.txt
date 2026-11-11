@@ -1,31 +1,56 @@
-[f 049] p2 jump_kick hits p1 for 10 (combo 1, hp 90)
+[f 049] p2 jump_kick hits p1 for 10 (combo 1, hp 190)
 [f 063] p1 enters on_hit
-[f 075] p2 jump_kick hits p1 for 10 (combo 1, hp 80)
+[f 075] p2 jump_kick hits p1 for 10 (combo 1, hp 180)
 [f 089] p1 enters on_hit
-[f 101] p2 jump_kick hits p1 for 10 (combo 1, hp 70)
+[f 101] p2 jump_kick hits p1 for 10 (combo 1, hp 170)
 [f 115] p1 enters on_hit
-[f 127] p2 jump_kick hits p1 for 10 (combo 1, hp 60)
+[f 127] p2 jump_kick hits p1 for 10 (combo 1, hp 160)
 [f 141] p1 enters on_hit
-[f 153] p2 jump_kick hits p1 for 10 (combo 1, hp 50)
+[f 153] p2 jump_kick hits p1 for 10 (combo 1, hp 150)
 [f 167] p1 enters on_hit
-[f 174] p1 kick is stale (x6, range 10)
 [f 176] p2 jump_kick is stale (x6, range 8)
-[f 179] p2 jump_kick hits p1 for 10 (combo 1, hp 40)
+[f 179] p2 jump_kick hits p1 for 10 (combo 1, hp 140)
 [f 193] p1 enters on_hit
-[f 200] p1 kick is stale (x7, range 8)
 [f 202] p2 jump_kick is stale (x7, range 7)
-[f 205] p2 jump_kick hits p1 for 10 (combo 1, hp 30)
+[f 205] p2 jump_kick hits p1 for 10 (combo 1, hp 130)
 [f 219] p1 enters on_hit
-[f 226] p1 kick is stale (x8, range 6)
 [f 228] p2 jump_kick is stale (x8, range 5)
-[f 231] p2 jump_kick hits p1 for 10 (combo 1, hp 20)
+[f 231] p2 jump_kick hits p1 for 10 (combo 1, hp 120)
 [f 245] p1 enters on_hit
-[f 252] p1 kick is stale (x9, range 4)
 [f 254] p2 jump_kick is stale (x9, range 4)
-[f 257] p2 jump_kick hits p1 for 10 (combo 1, hp 10)
+[f 257] p2 jump_kick hits p1 for 10 (combo 1, hp 110)
 [f 271] p1 enters on_hit
-[f 278] p1 kick is stale (x10, range 4)
 [f 280] p2 jump_kick is stale (x10, range 4)
-[f 283] p1 KO
-[f 283] p2 jump_kick hits p1 for 10 (combo 1, hp 0)
-result: p2 wins by ko at f283 (hp 0-100)
+[f 283] p2 jump_kick hits p1 for 10 (combo 1, hp 100)
+[f 297] p1 enters on_hit
+[f 306] p2 jump_kick is stale (x11, range 4)
+[f 309] p2 jump_kick hits p1 for 10 (combo 1, hp 90)
+[f 323] p1 enters on_hit
+[f 332] p2 jump_kick is stale (x12, range 4)
+[f 335] p2 jump_kick hits p1 for 10 (combo 1, hp 80)
+[f 349] p1 enters on_hit
+[f 358] p2 jump_kick is stale (x13, range 4)
+[f 361] p2 jump_kick hits p1 for 10 (combo 1, hp 70)
+[f 375] p1 enters on_hit
+[f 384] p2 jump_kick is stale (x14, range 4)
+[f 387] p2 jump_kick hits p1 for 10 (combo 1, hp 60)
+[f 401] p1 enters on_hit
+[f 410] p2 jump_kick is stale (x15, range 4)
+[f 413] p2 jump_kick hits p1 for 10 (combo 1, hp 50)
+[f 427] p1 enters on_hit
+[f 436] p2 jump_kick is stale (x16, range 4)
+[f 439] p2 jump_kick hits p1 for 10 (combo 1, hp 40)
+[f 453] p1 enters on_hit
+[f 462] p2 jump_kick is stale (x17, range 4)
+[f 465] p2 jump_kick hits p1 for 10 (combo 1, hp 30)
+[f 479] p1 enters on_hit
+[f 488] p2 jump_kick is stale (x18, range 4)
+[f 491] p2 jump_kick hits p1 for 10 (combo 1, hp 20)
+[f 505] p1 enters on_hit
+[f 514] p2 jump_kick is stale (x19, range 4)
+[f 517] p2 jump_kick hits p1 for 10 (combo 1, hp 10)
+[f 531] p1 enters on_hit
+[f 540] p2 jump_kick is stale (x20, range 4)
+[f 543] p1 KO
+[f 543] p2 jump_kick hits p1 for 10 (combo 1, hp 0)
+result: p2 wins by ko at f543 (hp 0-200)

@@ -1,31 +1,59 @@
-[f 032] p2 kick hits p1 for 9 (combo 1, hp 91)
+[f 032] p2 kick hits p1 for 9 (combo 1, hp 191)
 [f 046] p1 enters on_hit
-[f 049] p2 punch hits p1 for 5 (combo 1, hp 86)
+[f 049] p2 punch hits p1 for 5 (combo 1, hp 186)
 [f 063] p1 enters on_hit
-[f 064] p2 kick hits p1 for 9 (combo 1, hp 77)
+[f 064] p2 kick hits p1 for 9 (combo 1, hp 177)
 [f 078] p1 enters on_hit
-[f 081] p2 punch hits p1 for 5 (combo 1, hp 72)
+[f 081] p2 punch hits p1 for 5 (combo 1, hp 172)
 [f 095] p1 enters on_hit
-[f 096] p2 kick hits p1 for 9 (combo 1, hp 63)
+[f 096] p2 kick hits p1 for 9 (combo 1, hp 163)
 [f 110] p1 enters on_hit
-[f 113] p2 punch hits p1 for 5 (combo 1, hp 58)
+[f 113] p2 punch hits p1 for 5 (combo 1, hp 158)
 [f 127] p1 enters on_hit
-[f 128] p2 kick hits p1 for 9 (combo 1, hp 49)
+[f 128] p2 kick hits p1 for 9 (combo 1, hp 149)
 [f 142] p1 enters on_hit
-[f 145] p2 punch hits p1 for 5 (combo 1, hp 44)
+[f 145] p2 punch hits p1 for 5 (combo 1, hp 144)
 [f 159] p1 enters on_hit
-[f 160] p2 kick hits p1 for 9 (combo 1, hp 35)
+[f 160] p2 kick hits p1 for 9 (combo 1, hp 135)
 [f 174] p1 enters on_hit
-[f 177] p2 punch hits p1 for 5 (combo 1, hp 30)
+[f 177] p2 punch hits p1 for 5 (combo 1, hp 130)
 [f 191] p1 enters on_hit
-[f 192] p2 kick hits p1 for 9 (combo 1, hp 21)
+[f 192] p2 kick hits p1 for 9 (combo 1, hp 121)
 [f 206] p1 enters on_hit
-[f 209] p2 punch hits p1 for 5 (combo 1, hp 16)
+[f 209] p2 punch hits p1 for 5 (combo 1, hp 116)
 [f 223] p1 enters on_hit
-[f 224] p2 kick hits p1 for 9 (combo 1, hp 7)
+[f 224] p2 kick hits p1 for 9 (combo 1, hp 107)
 [f 238] p1 enters on_hit
-[f 241] p2 punch hits p1 for 5 (combo 1, hp 2)
+[f 241] p2 punch hits p1 for 5 (combo 1, hp 102)
 [f 255] p1 enters on_hit
-[f 256] p1 KO
-[f 256] p2 kick hits p1 for 9 (combo 1, hp 0)
-result: p2 wins by ko at f256 (hp 0-100)
+[f 256] p2 kick hits p1 for 9 (combo 1, hp 93)
+[f 270] p1 enters on_hit
+[f 273] p2 punch hits p1 for 5 (combo 1, hp 88)
+[f 287] p1 enters on_hit
+[f 288] p2 kick hits p1 for 9 (combo 1, hp 79)
+[f 302] p1 enters on_hit
+[f 305] p2 punch hits p1 for 5 (combo 1, hp 74)
+[f 319] p1 enters on_hit
+[f 320] p2 kick hits p1 for 9 (combo 1, hp 65)
+[f 334] p1 enters on_hit
+[f 337] p2 punch hits p1 for 5 (combo 1, hp 60)
+[f 351] p1 enters on_hit
+[f 352] p2 kick hits p1 for 9 (combo 1, hp 51)
+[f 366] p1 enters on_hit
+[f 369] p2 punch hits p1 for 5 (combo 1, hp 46)
+[f 383] p1 enters on_hit
+[f 384] p2 kick hits p1 for 9 (combo 1, hp 37)
+[f 398] p1 enters on_hit
+[f 401] p2 punch hits p1 for 5 (combo 1, hp 32)
+[f 415] p1 enters on_hit
+[f 416] p2 kick hits p1 for 9 (combo 1, hp 23)
+[f 430] p1 enters on_hit
+[f 433] p2 punch hits p1 for 5 (combo 1, hp 18)
+[f 447] p1 enters on_hit
+[f 448] p2 kick hits p1 for 9 (combo 1, hp 9)
+[f 462] p1 enters on_hit
+[f 465] p2 punch hits p1 for 5 (combo 1, hp 4)
+[f 479] p1 enters on_hit
+[f 480] p1 KO
+[f 480] p2 kick hits p1 for 9 (combo 1, hp 0)
+result: p2 wins by ko at f480 (hp 0-200)

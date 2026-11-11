@@ -70,6 +70,8 @@ export interface Log {
   format_version: string;
   config_version: string;
   frame_budget: number;
+  /** Starting HP of each fighter. Missing from logs before config 2026.11-4, which used 100. */
+  max_hp?: number;
   players: [Player, Player];
   result: Result;
   frames: Frame[];

@@ -25,13 +25,16 @@ type Options struct {
 	MaxSims int           // concurrent simulations; default runtime.NumCPU()
 	SimWait time.Duration // how long a request waits for a simulation slot; default 5s
 	MaxBody int64         // request body limit in bytes; default 64 KiB
+	// FrameBudget and MaxHP override the round length and starting HP of
+	// every simulation; zero keeps the engine default.
+	FrameBudget int
+	MaxHP       int
 }
 
 const (
 	defaultMaxBody = 64 << 10
 	defaultSimWait = 5 * time.Second
 	maxNameBytes   = 40
-	maxSimFrames   = 600
 )
 
 // Server serves the API. It implements http.Handler.
@@ -72,6 +75,12 @@ func New(opts Options) (*Server, error) {
 		sims:  make(chan struct{}, opts.MaxSims),
 		mux:   http.NewServeMux(),
 		locks: map[string]*sync.Mutex{},
+	}
+	if opts.FrameBudget > 0 {
+		s.cfg.FrameBudget = opts.FrameBudget
+	}
+	if opts.MaxHP > 0 {
+		s.cfg.MaxHP = opts.MaxHP
 	}
 	s.route("/healthz", s.handleHealth, http.MethodGet)
 	s.route("/validate", s.handleValidate, http.MethodPost)
@@ -323,8 +332,9 @@ func (s *Server) handleSim(w http.ResponseWriter, r *http.Request) *apiError {
 	}
 	frames := s.cfg.FrameBudget
 	if req.Frames != nil {
-		if *req.Frames < 1 || *req.Frames > maxSimFrames {
-			return errBadRequest("frames must be between 1 and %d (got %d)", maxSimFrames, *req.Frames)
+		// A practice round is never longer than this server's match rounds.
+		if *req.Frames < 1 || *req.Frames > s.cfg.FrameBudget {
+			return errBadRequest("frames must be between 1 and %d (got %d)", s.cfg.FrameBudget, *req.Frames)
 		}
 		frames = *req.Frames
 	}

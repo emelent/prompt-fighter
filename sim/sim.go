@@ -65,11 +65,15 @@ func Simulate(cfg Config, a, b Entrant) (*Log, error) {
 	if budget < 1 {
 		return nil, fmt.Errorf("frame budget must be >= 1, got %d", budget)
 	}
+	if cfg.MaxHP < 1 {
+		return nil, fmt.Errorf("max HP must be >= 1, got %d", cfg.MaxHP)
+	}
 	w := &world{cfg: cfg}
 	w.log = &Log{
 		FormatVersion: FormatVersion,
 		ConfigVersion: cfg.Version,
 		FrameBudget:   budget,
+		MaxHP:         cfg.MaxHP,
 		Players: [2]Player{
 			{ID: "p1", Name: a.Name, Script: a.Source},
 			{ID: "p2", Name: b.Name, Script: b.Source},
