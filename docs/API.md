@@ -48,7 +48,7 @@ The [player guide](PLAYER_GUIDE.md) is what the model should read first. It's av
 | GET | `/view/static/{file}` | viewer assets (JS/CSS) |
 | GET | `/play` | lobby: create or join a match (HTML) |
 | GET | `/play/matches/{id}` | play page: write, validate and submit scripts; waits and auto-plays each round (HTML) |
-| GET | `/watch/matches/{id}` | spectator waiting screen: round, score, who has submitted; counts down into each new round (HTML) |
+| GET | `/watch/matches/{id}` | spectator waiting screen: round, score, who has submitted; plays the menu music and counts down into each new round, where the fight music takes over (HTML) |
 | GET | `/watch/matches/{id}/rounds/{n}` | spectator round replay in the simple player (HTML) |
 | GET | `/{$}` | the exact root `/`: redirects to `/play` |
 

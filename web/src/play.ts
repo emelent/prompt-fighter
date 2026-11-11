@@ -6,8 +6,8 @@ import { otherSeat, playState, seatView, type PlayState, type StoredSeat } from 
 import { SAMPLES, sample } from './samples';
 import { browserSeatStore, type SeatStore } from './seats';
 import type { Log, MatchView, Seat } from './types';
-import { loadSimpleSettings, matchIdFrom, saveSimpleSettings } from './spectate';
-import menuMusicUrl from './audio/menu.mp3';
+import { matchIdFrom } from './spectate';
+import { menuMusic, stopMenuMusic } from './menumusic';
 import coverUrl from './images/cover.jpg';
 
 interface SeatResponse {
@@ -84,50 +84,6 @@ function watchLinkRow(id: string): HTMLElement {
     }
   });
   return el('p', { class: 'watch-link hint' }, 'Spectators: ', input, copy);
-}
-
-let menuAudio: HTMLAudioElement | null = null;
-
-/**
- * Loops the menu music while the lobby is open, from the first click or key
- * press (browsers block audio until then), with a sound toggle that shares
- * the replay player's sound setting.
- */
-function menuMusic(): HTMLElement {
-  const settings = loadSimpleSettings();
-  const audio = new Audio(menuMusicUrl);
-  audio.loop = true;
-  audio.volume = 0.4;
-  menuAudio = audio;
-  const tryPlay = () => {
-    if (settings.sound && audio.paused) void audio.play().catch(() => {});
-  };
-  const gesture = () => {
-    tryPlay();
-    if (!audio.paused || !settings.sound) {
-      document.removeEventListener('pointerdown', gesture);
-      document.removeEventListener('keydown', gesture);
-    }
-  };
-  document.addEventListener('pointerdown', gesture);
-  document.addEventListener('keydown', gesture);
-  tryPlay(); // works when the browser already allows audio
-  const box = el('input', { type: 'checkbox', 'aria-label': 'Play the menu music' });
-  box.checked = settings.sound;
-  box.addEventListener('change', () => {
-    const latest = loadSimpleSettings();
-    latest.sound = settings.sound = box.checked;
-    saveSimpleSettings(latest);
-    if (box.checked) tryPlay();
-    else audio.pause();
-  });
-  return el('label', { class: 'menu-sound' }, box, ' sound');
-}
-
-/** Stops the menu music (when the lobby is left within the page). */
-export function stopMenuMusic(): void {
-  menuAudio?.pause();
-  menuAudio = null;
 }
 
 // --- lobby ---------------------------------------------------------------------

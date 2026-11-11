@@ -3,6 +3,7 @@
 // into each newly played round. Spectators only read: no POSTs are sent.
 import { alertBox, el, fetchJSON, show } from './dom';
 import { POLL_BACKOFF_MS, POLL_MS } from './match';
+import { menuMusic } from './menumusic';
 import { COUNTDOWN_SECONDS, Countdown, lastPlayed, nextToWatch, parseAfter, waitingState, type WaitingState } from './spectate';
 import type { MatchView, RoundView } from './types';
 
@@ -83,7 +84,9 @@ export function watchPage(id: string): void {
   let counting = 0; // the round being counted down to, or 0
   const status = el('div', { class: 'watch-status', 'aria-live': 'polite' });
   const body = el('div', { class: 'watch-body' }, el('p', {}, `Loading match ${id}…`));
-  show(el('div', { class: 'watch' }, el('h1', {}, `Watching match ${id}`), status, body));
+  // The menu music plays while waiting; opening a round navigates away, and
+  // the round's fight music takes over there.
+  show(el('div', { class: 'watch' }, el('div', { class: 'lobby-head' }, el('h1', {}, `Watching match ${id}`), menuMusic()), status, body));
 
   const render = (view: MatchView) => {
     const s = waitingState(view, location.origin);
