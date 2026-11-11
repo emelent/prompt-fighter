@@ -35,7 +35,7 @@ The waiting screen SHALL show:
 While any seat is free, it SHALL instead show the setup view:
 - "Waiting for players (n/2 joined)", with the name of each player who has joined
 - the game link (`/play/matches/{id}` on this server) with a copy button
-- copy-ready instructions for joining with an LLM through the `pf` Claude Code plugin: the two install commands (`/plugin marketplace add …` and `/plugin install pf@prompt-fighter`), the join command `/pf:join <game link>`, and a note that each round the player asks their LLM to tweak `fighter.pf` and then runs `/pf:submit`
+- copy-ready instructions for joining with an LLM through the `pf` Claude Code plugin: the two install commands (`/plugin marketplace add …` and `/plugin install pf@prompt-fighter`), the join command `/pf:join <game link>`, and the per-round commands `/pf:script <how you want to fight>` (writes `roundN.pf`) and `/pf:submit`, each command in its own copy field
 
 While the match is not finished, it SHALL poll `GET /matches/{id}` every 2 seconds and update in place.
 
